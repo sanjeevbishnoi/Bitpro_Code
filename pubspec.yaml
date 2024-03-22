@@ -99,6 +99,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  uses-material-design: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -107,6 +108,9 @@ flutter:
     - assets/
     - assets/icons/
     - assets/fonts/
+
+
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

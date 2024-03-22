@@ -368,7 +368,9 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                           color: const Color(0xffE2E2E2),
                           child: Column(
                             children: [
-                              TopBar(pageName: 'Receipt',),
+                              TopBar(
+                                pageName: 'Receipt',
+                              ),
                               Expanded(
                                 child: Row(
                                   children: [
@@ -469,7 +471,9 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                     .selectedIndex ==
                                                                 -1
                                                             ? Colors.grey[400]
-                                                            : const Color.fromARGB(255, 255, 255, 255),
+                                                            : const Color
+                                                                .fromARGB(255,
+                                                                255, 255, 255),
                                                       ),
                                                     )
                                                   ],
@@ -1363,7 +1367,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                                           ),
                                                                                         ))),
                                                                                 GridColumn(
-                                                                                  maximumWidth: 300,
+                                                                                    maximumWidth: 300,
                                                                                     allowEditing: false,
                                                                                     columnName: 'productName',
                                                                                     label: Container(
@@ -1697,7 +1701,6 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                               double.maxFinite,
                                                           decoration:
                                                               BoxDecoration(
-                                                            
                                                             border: Border.all(
                                                                 width: 0.5),
                                                             borderRadius:
@@ -1706,10 +1709,10 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                         4),
                                                           ),
                                                           child: Column(
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            children: [
-                                                              
-                                                            ],
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [],
                                                           ),
                                                         ),
                                                       ),
@@ -3856,7 +3859,6 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                           MainAxisAlignment
                                                                               .center,
                                                                       children: [
-                                                                        
                                                                         Text(
                                                                             staticTextTranslate(
                                                                                 'Cash'),
@@ -3903,7 +3905,6 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                           MainAxisAlignment
                                                                               .center,
                                                                       children: [
-                                                                        
                                                                         Text(
                                                                             staticTextTranslate(
                                                                                 'Credit Card'),
@@ -3923,11 +3924,17 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                             .circular(4),
                                                                     gradient: const LinearGradient(
                                                                         end: Alignment.bottomLeft,
-                                                                        
                                                                         colors: [
-                                                                          Color.fromARGB(255, 211, 164, 8),
-                                                                          Color.fromARGB(255, 124, 27, 116),
-                                                                         
+                                                                          Color.fromARGB(
+                                                                              255,
+                                                                              211,
+                                                                              164,
+                                                                              8),
+                                                                          Color.fromARGB(
+                                                                              255,
+                                                                              124,
+                                                                              27,
+                                                                              116),
                                                                         ],
                                                                         begin: Alignment.topCenter)),
                                                             height: 42,
@@ -3950,8 +3957,12 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                           MainAxisAlignment
                                                                               .center,
                                                                       children: [
-                                                                        
-                                                                        Image.asset('assets/icons/tamara.png', width: 120,)
+                                                                        Image
+                                                                            .asset(
+                                                                          'assets/icons/tamara.png',
+                                                                          width:
+                                                                              120,
+                                                                        )
                                                                       ],
                                                                     )),
                                                           ),
@@ -3967,9 +3978,16 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                     gradient: const LinearGradient(
                                                                         end: Alignment.bottomCenter,
                                                                         colors: [
-                                                                           Color.fromARGB(255, 30, 199, 171),
-                                                                          Color.fromARGB(255, 30, 199, 171),
-                                                                          
+                                                                          Color.fromARGB(
+                                                                              255,
+                                                                              30,
+                                                                              199,
+                                                                              171),
+                                                                          Color.fromARGB(
+                                                                              255,
+                                                                              30,
+                                                                              199,
+                                                                              171),
                                                                         ],
                                                                         begin: Alignment.topCenter)),
                                                             height: 42,
@@ -3992,7 +4010,12 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                           MainAxisAlignment
                                                                               .center,
                                                                       children: [
-                                                                        Image.asset('assets/icons/tabby.png', width: 80,)
+                                                                        Image
+                                                                            .asset(
+                                                                          'assets/icons/tabby.png',
+                                                                          width:
+                                                                              80,
+                                                                        )
                                                                       ],
                                                                     )),
                                                           ),
@@ -4034,7 +4057,6 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                           MainAxisAlignment
                                                                               .center,
                                                                       children: [
-                                                                        
                                                                         Text(
                                                                             staticTextTranslate(
                                                                                 'Credit'),
@@ -4968,7 +4990,6 @@ class ReceiptDataSource extends DataGridSource {
         cells: row.getCells().map<Widget>((e) {
           return Container(
             alignment: Alignment.center,
-            
             padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 3),
             child: Text(
               e.value.toString(),
