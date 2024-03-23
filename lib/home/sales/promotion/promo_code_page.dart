@@ -1,15 +1,19 @@
 import 'dart:io';
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_sales/fb_promo_code_db_service.dart';
 import 'package:bitpro_hive/services/firestore_api/firebase_db_service.dart';
 import 'package:bitpro_hive/services/hive/hive_sales_db_service/hive_promo_code_db_serice.dart';
+import 'package:bitpro_hive/widget/filter_container.dart';
 import 'package:bitpro_hive/widget/string_related/get_id_number.dart';
+import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:excel/excel.dart' hide Border;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:bitpro_hive/model/promo_code_data.dart';
@@ -95,473 +99,358 @@ class _PromoCodePageState extends State<PromoCodePage> {
         backgroundColor: homeBgColor,
         body: SafeArea(
           child: Container(
-            color: homeBgColor,
-            padding: const EdgeInsets.fromLTRB(5, 0, 5, 2),
-            child: Row(
+            child: Column(
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 0,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Colors.blue,
-                            darkBlueColor,
-                          ],
-                        ),
-                      ),
-                      margin: const EdgeInsets.only(left: 0),
-                      padding: const EdgeInsets.all(0),
-                      width: 170,
-                      height: 45,
-                      child: const Center(
-                        child: Text(
-                          'BitPro',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 28,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.back_square,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Back'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.add_square4,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Create'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () async {
-                          importBarcodeData();
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.refresh5,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Refresh'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () async {
-                          setState(() {
-                            loading = true;
-                          });
-                          await fbFetchData();
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(
-                              size: 19,
-                              Icons.delete_forever,
-                              color: allPromotionDataLst.isEmpty
-                                  ? Colors.grey
-                                  : const Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Delete All'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: allPromotionDataLst.isEmpty
-                                        ? Colors.grey
-                                        : const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () {
-                          if (allPromotionDataLst.isNotEmpty) {
-                            deleteAllConfirmation();
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 0,
+                TopBar(
+                  pageName: 'Promotions',
                 ),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
-                      const SizedBox(
-                        height: 0,
-                      ),
-                      SizedBox(
-                        height: 35,
-                        width: 370,
-                        child: Row(children: [
-                          const SizedBox(width: 10),
-                          const Icon(
-                            Iconsax.discount_circle,
-                            size: 17,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            staticTextTranslate('Promotion'),
-                            style: TextStyle(
-                              fontSize: getMediumFontSize,
-                              color: const Color.fromARGB(255, 0, 0, 0),
+                      Container(
+                        color: const Color.fromARGB(255, 43, 43, 43),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SideMenuButton(
+                              label: 'Back',
+                              iconPath: 'assets/icons/back.png',
+                              buttonFunction: () {
+                                Navigator.pop(context);
+                              },
                             ),
-                          )
-                        ]),
+                            SideMenuButton(
+                              label: 'Create',
+                              iconPath: 'assets/icons/plus.png',
+                              buttonFunction: () async {
+                                importBarcodeData();
+                              },
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            SideMenuButton(
+                              label: 'Refresh',
+                              iconPath: 'assets/icons/refresh.png',
+                              buttonFunction: () async {
+                                setState(() {
+                                  loading = true;
+                                });
+                                await fbFetchData();
+                              },
+                            ),
+                            SideMenuButton(
+                              label: 'Delete All',
+                              iconPath: 'assets/icons/view.png',
+                              buttonFunction: () {
+                                if (allPromotionDataLst.isNotEmpty) {
+                                  deleteAllConfirmation();
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(
-                        height: 5,
+                        width: 0,
                       ),
                       Expanded(
-                        child: SizedBox(
-                          width: double.maxFinite,
-                          height: 120,
-                          child: Card(
-                              shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                      color: Colors.grey, width: 0.5),
-                                  borderRadius: BorderRadius.circular(4)),
-                              elevation: 0,
-                              color: Colors.white,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(0.0),
-                                    child: ButtonBarSuper(
-                                      buttonTextTheme: ButtonTextTheme.primary,
-                                      wrapType: WrapType.fit,
-                                      wrapFit: WrapFit.min,
-                                      lineSpacing: 20,
-                                      alignment: engSelectedLanguage
-                                          ? WrapSuperAlignment.left
-                                          : WrapSuperAlignment.right,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                width: double.maxFinite,
+                                height: 120,
+                                child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        side: const BorderSide(
+                                            color: Colors.grey, width: 0.5),
+                                        borderRadius: BorderRadius.circular(4)),
+                                    elevation: 0,
+                                    color: Colors.white,
+                                    child: Column(
                                       children: [
-                                        Container(
-                                          width: 230,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey,
-                                                  width: 0.5),
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          padding: const EdgeInsets.only(
-                                              right: 10, bottom: 3),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              IconButton(
-                                                padding: const EdgeInsets.only(
-                                                    top: 3),
-                                                onPressed: () {
-                                                  customerIdController.clear();
-
-                                                  promoDataSource =
-                                                      PromoDataSource(
-                                                          promoData:
-                                                              allPromotionDataLst);
-                                                  setState(() {});
-                                                },
-                                                splashRadius: 1,
-                                                icon: Icon(
+                                        FilterContainer(fiterFields: [
+                                          Container(
+                                            width: 230,
+                                            height: 32,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.grey,
+                                                    width: 0.5),
+                                                color: const Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                borderRadius:
+                                                    BorderRadius.circular(4)),
+                                            padding: const EdgeInsets.only(
+                                                right: 10, bottom: 3),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                IconButton(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 3),
+                                                  onPressed: () {
                                                     customerIdController
-                                                            .text.isEmpty
-                                                        ? CupertinoIcons.search
-                                                        : Icons.clear,
-                                                    size: 18,
-                                                    color: customerIdController
-                                                            .text.isEmpty
-                                                        ? Colors.grey[600]
-                                                        : Colors.black),
-                                              ),
-                                              Flexible(
-                                                child: TextField(
-                                                  controller:
-                                                      customerIdController,
-                                                  decoration: InputDecoration(
-                                                    hintText:
-                                                        staticTextTranslate(
-                                                            'Promo#'),
-                                                    hintStyle: TextStyle(
-                                                        color:
-                                                            Colors.grey[600]),
-                                                    contentPadding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 15,
-                                                            right: 5),
-                                                    border: InputBorder.none,
-                                                  ),
-                                                  onChanged: (val) {
-                                                    searchById(val);
+                                                        .clear();
+
+                                                    promoDataSource =
+                                                        PromoDataSource(
+                                                            promoData:
+                                                                allPromotionDataLst);
+                                                    setState(() {});
                                                   },
+                                                  splashRadius: 1,
+                                                  icon: Icon(
+                                                      customerIdController
+                                                              .text.isEmpty
+                                                          ? CupertinoIcons
+                                                              .search
+                                                          : Icons.clear,
+                                                      size: 18,
+                                                      color:
+                                                          customerIdController
+                                                                  .text.isEmpty
+                                                              ? Colors.grey[600]
+                                                              : Colors.black),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  if (loading) Expanded(child: showLoading()),
-                                  if (!loading)
-                                    Expanded(
-                                      child: SfDataGridTheme(
-                                        data: SfDataGridThemeData(
-                                            headerColor:
-                                                const Color(0xffdddfe8),
-                                            headerHoverColor:
-                                                const Color(0xffdddfe8),
-                                            selectionColor: loginBgColor),
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              height: 2,
-                                              width: double.infinity,
-                                              color: Colors.blue,
+                                                Flexible(
+                                                  child: TextField(
+                                                    controller:
+                                                        customerIdController,
+                                                    decoration: InputDecoration(
+                                                      hintText:
+                                                          staticTextTranslate(
+                                                              'Promo#'),
+                                                      hintStyle: TextStyle(
+                                                          color:
+                                                              Colors.grey[600]),
+                                                      contentPadding:
+                                                          const EdgeInsets.only(
+                                                              bottom: 15,
+                                                              right: 5),
+                                                      border: InputBorder.none,
+                                                    ),
+                                                    onChanged: (val) {
+                                                      searchById(val);
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            Expanded(
-                                              child: SfDataGrid(
-                                                gridLinesVisibility:
-                                                    GridLinesVisibility.both,
-                                                headerGridLinesVisibility:
-                                                    GridLinesVisibility.both,
-                                                headerRowHeight: 25,
-                                                isScrollbarAlwaysShown: true,
-                                                onQueryRowHeight: (details) {
-                                                  // Set the row height as 70.0 to the column header row.
-                                                  return details.rowIndex == 0
-                                                      ? 25.0
-                                                      : 24.0;
-                                                },
-                                                rowHeight: 24,
-                                                allowSorting: true,
-                                                allowTriStateSorting: true,
-                                                controller: dataGridController,
-                                                selectionMode:
-                                                    SelectionMode.single,
-                                                source: promoDataSource!,
-                                                columnWidthMode:
-                                                    ColumnWidthMode.fill,
-                                                onSelectionChanged:
-                                                    (addedRows, removedRows) {
-                                                  setState(() {});
-                                                },
-                                                columns: <GridColumn>[
-                                                  GridColumn(
-                                                      columnName:
-                                                          'serialNumberForStyleColor',
-                                                      visible: false,
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(0.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: Colors.white,
-                                                          child: Text(
-                                                            'serialNumberForStyleColor',
-                                                            style: TextStyle(
-                                                              fontSize:
-                                                                  getMediumFontSize,
-                                                            ),
-                                                          ))),
-                                                  GridColumn(
-                                                      columnName: 'promo#',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Promo#'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      columnName: 'barcode',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Barcode'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      columnName: 'percentage',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Percentage'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      columnName:
-                                                          'start date/time',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          child: Text(
-                                                            staticTextTranslate(
-                                                                'Start Date/Time'),
-                                                            style: TextStyle(
-                                                              fontSize:
-                                                                  getMediumFontSize,
-                                                            ),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ))),
-                                                  GridColumn(
-                                                      columnName:
-                                                          'end date/time',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'End Date/Time'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
+                                          ),
+                                        ]),
+                                        if (loading)
+                                          Expanded(child: showLoading()),
+                                        if (!loading)
+                                          Expanded(
+                                            child: SfDataGridTheme(
+                                              data: SfDataGridThemeData(
+                                                headerColor:
+                                                    const Color(0xffF1F1F1),
+                                                sortIcon: const Icon(Icons
+                                                    .arrow_drop_down_rounded),
+                                                headerHoverColor:
+                                                    const Color(0xffdddfe8),
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  Expanded(
+                                                    child: SfDataGrid(
+                                                      gridLinesVisibility:
+                                                          GridLinesVisibility
+                                                              .both,
+                                                      headerGridLinesVisibility:
+                                                          GridLinesVisibility
+                                                              .both,
+                                                      
+                                                      isScrollbarAlwaysShown:
+                                                          true,
+                                                      onQueryRowHeight:
+                                                          (details) {
+                                                        // Set the row height as 70.0 to the column header row.
+                                                        return details
+                                                                    .rowIndex ==
+                                                                0
+                                                            ? 25.0
+                                                            : 25.0;
+                                                      },
+                                                      rowHeight: 25,
+                                                      headerRowHeight: 25,
+                                                      allowSorting: true,
+                                                      allowTriStateSorting:
+                                                          true,
+                                                      controller:
+                                                          dataGridController,
+                                                      selectionMode:
+                                                          SelectionMode.single,
+                                                      source: promoDataSource!,
+                                                      columnWidthMode:
+                                                          ColumnWidthMode.fill,
+                                                      onSelectionChanged:
+                                                          (addedRows,
+                                                              removedRows) {
+                                                        setState(() {});
+                                                      },
+                                                      columns: <GridColumn>[
+                                                        GridColumn(
+                                                            columnName:
+                                                                'serialNumberForStyleColor',
+                                                            visible: false,
+                                                            label: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        0.0),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child: Text(
+                                                                  'serialNumberForStyleColor',
+                                                                  style:
+                                                                      GoogleFonts
+                                                                          .roboto(
+                                                                    fontSize:
+                                                                        getMediumFontSize +
+                                                                            2,
+                                                                  ),
+                                                                ))),
+                                                        GridColumn(
+                                                            columnName:
+                                                                'promo#',
+                                                            label: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        1.0),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child: Text(
+                                                                  staticTextTranslate(
+                                                                      'Promo#'),
+                                                                  style:
+                                                                      GoogleFonts
+                                                                          .roboto(
+                                                                    fontSize:
+                                                                        getMediumFontSize +
+                                                                            2,
+                                                                  ),
+                                                                ))),
+                                                        GridColumn(
+                                                            columnName:
+                                                                'barcode',
+                                                            label: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        2.0),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child: Text(
+                                                                  staticTextTranslate(
+                                                                      'Barcode'),
+                                                                  style:
+                                                                      GoogleFonts
+                                                                          .roboto(
+                                                                    fontSize:
+                                                                        getMediumFontSize +
+                                                                            2,
+                                                                  ),
+                                                                ))),
+                                                        GridColumn(
+                                                            columnName:
+                                                                'percentage',
+                                                            label: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        2.0),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child: Text(
+                                                                  staticTextTranslate(
+                                                                      'Percentage'),
+                                                                  style:
+                                                                      GoogleFonts
+                                                                          .roboto(
+                                                                    fontSize:
+                                                                        getMediumFontSize +
+                                                                            2,
+                                                                  ),
+                                                                ))),
+                                                        GridColumn(
+                                                            columnName:
+                                                                'start date/time',
+                                                            label: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        2.0),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child: Text(
+                                                                  staticTextTranslate(
+                                                                      'Start Date/Time'),
+                                                                  style:
+                                                                      GoogleFonts
+                                                                          .roboto(
+                                                                    fontSize:
+                                                                        getMediumFontSize +
+                                                                            2,
+                                                                  ),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ))),
+                                                        GridColumn(
+                                                            columnName:
+                                                                'end date/time',
+                                                            label: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        2.0),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child: Text(
+                                                                  staticTextTranslate(
+                                                                      'End Date/Time'),
+                                                                  style:
+                                                                      GoogleFonts
+                                                                          .roboto(
+                                                                    fontSize:
+                                                                        getMediumFontSize +
+                                                                            2,
+                                                                  ),
+                                                                ))),
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                ],
-                              )),
+                                          )
+                                      ],
+                                    )),
+                              ),
+                            )
+                          ],
                         ),
                       )
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -1446,7 +1335,7 @@ class PromoDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         color: row.getCells()[0].value.isEven
-            ? const Color.fromARGB(255, 246, 247, 255)
+            ? const Color(0xffF1F1F1)
             : Colors.white,
         cells: row.getCells().map<Widget>((e) {
           return Container(
@@ -1454,10 +1343,9 @@ class PromoDataSource extends DataGridSource {
             padding: const EdgeInsets.all(3.0),
             child: Text(
               e.value.toString(),
-              style: TextStyle(
-                  fontSize: getMediumFontSize,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400),
+              style: GoogleFonts.roboto(
+                fontSize: getMediumFontSize + 2,
+              ),
             ),
           );
         }).toList());

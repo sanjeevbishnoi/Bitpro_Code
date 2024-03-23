@@ -308,7 +308,7 @@ class _CustomerCreateEditPageState extends State<CustomerCreateEditPage> {
                                           }),
                                         ),
                                         const SizedBox(
-                                          height: 50,
+                                          height: 30,
                                         ),
                                         BTextField(
                                           label: 'Phone 01',

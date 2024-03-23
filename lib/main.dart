@@ -40,6 +40,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
+  
   final bool setFullScreen;
   const MyApp({Key? key, this.setFullScreen = false}) : super(key: key);
 
@@ -101,7 +102,7 @@ class _MyAppState extends State<MyApp> {
               unselectedItemColor: Color.fromARGB(255, 39, 39, 39),
             ),
               useMaterial3: false,
-              primarySwatch: Colors.blue,
+              primarySwatch: Colors.blueGrey,
               fontFamily: 'Cisco'),
           home: customTopNavBar(Wrapper()),
           builder: (context, child) {
