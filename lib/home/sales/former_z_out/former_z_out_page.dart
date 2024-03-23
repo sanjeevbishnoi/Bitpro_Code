@@ -1,8 +1,12 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_sales/fb_former_z_out_db_service.dart';
 import 'package:bitpro_hive/services/hive/hive_sales_db_service/hive_former_z_out_db_service.dart';
+import 'package:bitpro_hive/widget/filter_container.dart';
+import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:bitpro_hive/model/receipt/db_receipt_data.dart';
@@ -142,580 +146,488 @@ class _FormerZOutPageState extends State<FormerZOutPage> {
         body: SafeArea(
           child: Container(
             color: homeBgColor,
-            padding: const EdgeInsets.fromLTRB(5, 0, 5, 2),
-            child: Row(
+            child: Column(
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 0,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Colors.blue,
-                            darkBlueColor,
-                          ],
-                        ),
-                      ),
-                      margin: const EdgeInsets.only(left: 0),
-                      padding: const EdgeInsets.all(0),
-                      width: 170,
-                      height: 45,
-                      child: const Center(
-                        child: Text(
-                          'BitPro',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 28,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.back_square,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Back'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.eye,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('View'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () async {},
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.refresh5,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Refresh'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () async {
-                          setState(() {
-                            loading = true;
-                          });
-                          await fbFetchData();
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.calendar_1,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Date Range'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Dialog(
-                                  child: SizedBox(
-                                    width: 400,
-                                    height: 380,
-                                    child: SfDateRangePicker(
-                                        onSelectionChanged:
-                                            (DateRangePickerSelectionChangedArgs
-                                                args) {
-                                          if (args.value is PickerDateRange) {
-                                            rangeStartDate =
-                                                args.value.startDate;
-                                            rangeEndDate = args.value.endDate;
-                                            setState(() {});
-                                          }
-                                        },
-                                        onCancel: () {
-                                          Navigator.pop(context);
-                                        },
-                                        onSubmit: (var p0) {
-                                          filterAccordingSelectedDate();
-                                          Navigator.pop(context);
-                                        },
-                                        cancelText: 'CANCEL',
-                                        confirmText: 'OK',
-                                        showTodayButton: false,
-                                        showActionButtons: true,
-                                        view: DateRangePickerView.month,
-                                        selectionMode:
-                                            DateRangePickerSelectionMode.range),
-                                  ),
-                                );
-                              });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 0,
+                TopBar(
+                  pageName: 'Former ZOut',
                 ),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
-                      const SizedBox(
-                        height: 0,
-                      ),
-                      SizedBox(
-                        height: 20,
-                        width: 370,
-                        child: Row(children: [
-                          const SizedBox(width: 10),
-                          const Icon(
-                            Iconsax.book,
-                            size: 18,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            staticTextTranslate('Former Zout'),
-                            style: TextStyle(
-                              fontSize: getMediumFontSize,
-                              color: const Color.fromARGB(255, 0, 0, 0),
+                      Container(
+                        color: const Color.fromARGB(255, 43, 43, 43),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SideMenuButton(
+                              label: 'Back',
+                              iconPath: 'assets/icons/back.png',
+                              buttonFunction: () {
+                                Navigator.pop(context);
+                              },
                             ),
-                          )
-                        ]),
-                      ),
-                      const SizedBox(
-                        height: 10,
+                            SideMenuButton(
+                              label: 'Refresh',
+                              iconPath: 'assets/icons/refresh.png',
+                              buttonFunction: () async {
+                                setState(() {
+                                  loading = true;
+                                });
+                                await fbFetchData();
+                              },
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            SideMenuButton(
+                              label: 'Date Range',
+                              iconPath: 'assets/icons/date.png',
+                              buttonFunction: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return Dialog(
+                                        child: SizedBox(
+                                          width: 400,
+                                          height: 380,
+                                          child: SfDateRangePicker(
+                                              onSelectionChanged:
+                                                  (DateRangePickerSelectionChangedArgs
+                                                      args) {
+                                                if (args.value
+                                                    is PickerDateRange) {
+                                                  rangeStartDate =
+                                                      args.value.startDate;
+                                                  rangeEndDate =
+                                                      args.value.endDate;
+                                                  setState(() {});
+                                                }
+                                              },
+                                              onCancel: () {
+                                                Navigator.pop(context);
+                                              },
+                                              onSubmit: (var p0) {
+                                                filterAccordingSelectedDate();
+                                                Navigator.pop(context);
+                                              },
+                                              cancelText: 'CANCEL',
+                                              confirmText: 'OK',
+                                              showTodayButton: false,
+                                              showActionButtons: true,
+                                              view: DateRangePickerView.month,
+                                              selectionMode:
+                                                  DateRangePickerSelectionMode
+                                                      .range),
+                                        ),
+                                      );
+                                    });
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                       Expanded(
-                        child: SizedBox(
-                          width: double.maxFinite,
-                          child: Card(
-                              shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                      width: 0.5, color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(4)),
-                              elevation: 0,
-                              color: Colors.white,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(0.0),
-                                    child: ButtonBarSuper(
-                                      buttonTextTheme: ButtonTextTheme.primary,
-                                      wrapType: WrapType.fit,
-                                      wrapFit: WrapFit.min,
-                                      lineSpacing: 20,
-                                      alignment: engSelectedLanguage
-                                          ? WrapSuperAlignment.left
-                                          : WrapSuperAlignment.right,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                width: double.maxFinite,
+                                child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        side: const BorderSide(
+                                            width: 0.5, color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(4)),
+                                    elevation: 0,
+                                    color: Colors.grey[200],
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Container(
-                                          width: 230,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey,
-                                                  width: 0.5),
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          padding: const EdgeInsets.only(
-                                              right: 10, bottom: 3),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              IconButton(
-                                                padding: const EdgeInsets.only(
-                                                    top: 3),
-                                                onPressed: () {
-                                                  customerIdController.clear();
-
-                                                  customerDataSource =
-                                                      FormerZoutDataSource(
-                                                          formerZOutData:
-                                                              formerZoutDataLst);
-                                                  setState(() {});
-                                                },
-                                                splashRadius: 1,
-                                                icon: Icon(
+                                        FilterContainer(fiterFields: [
+                                          Container(
+                                            width: 230,
+                                            height: 32,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.grey,
+                                                    width: 0.5),
+                                                color: const Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                            padding: const EdgeInsets.only(
+                                                right: 10, bottom: 3),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                IconButton(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 3),
+                                                  onPressed: () {
                                                     customerIdController
-                                                            .text.isEmpty
-                                                        ? CupertinoIcons.search
-                                                        : Icons.clear,
-                                                    size: 18,
-                                                    color: customerIdController
-                                                            .text.isEmpty
-                                                        ? Colors.grey[600]
-                                                        : Colors.black),
-                                              ),
-                                              Flexible(
-                                                child: TextField(
-                                                  controller:
-                                                      customerIdController,
-                                                  decoration: InputDecoration(
-                                                    hintText:
-                                                        staticTextTranslate(
-                                                            'Zout#'),
-                                                    hintStyle: TextStyle(
-                                                        color:
-                                                            Colors.grey[600]),
-                                                    contentPadding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 15,
-                                                            right: 5),
-                                                    border: InputBorder.none,
-                                                  ),
-                                                  onChanged: (val) {
-                                                    searchById(val);
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 0,
-                                        ),
-                                        Container(
-                                          width: 230,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey,
-                                                  width: 0.5),
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          padding: const EdgeInsets.only(
-                                              right: 10, bottom: 3),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              IconButton(
-                                                padding: const EdgeInsets.only(
-                                                    top: 3),
-                                                onPressed: () {
-                                                  customerNameController
-                                                      .clear();
+                                                        .clear();
 
-                                                  customerDataSource =
-                                                      FormerZoutDataSource(
-                                                          formerZOutData:
-                                                              formerZoutDataLst);
-                                                  setState(() {});
-                                                },
-                                                splashRadius: 1,
-                                                icon: Icon(
-                                                    customerNameController
-                                                            .text.isEmpty
-                                                        ? CupertinoIcons.search
-                                                        : Icons.clear,
-                                                    size: 18,
-                                                    color:
-                                                        customerNameController
-                                                                .text.isEmpty
-                                                            ? Colors.grey[600]
-                                                            : Colors.black),
-                                              ),
-                                              Flexible(
-                                                child: TextField(
+                                                    customerDataSource =
+                                                        FormerZoutDataSource(
+                                                            formerZOutData:
+                                                                formerZoutDataLst);
+                                                    setState(() {});
+                                                  },
+                                                  splashRadius: 1,
+                                                  icon: Icon(
+                                                      customerIdController
+                                                              .text.isEmpty
+                                                          ? CupertinoIcons
+                                                              .search
+                                                          : Icons.clear,
+                                                      size: 18,
+                                                      color:
+                                                          customerIdController
+                                                                  .text.isEmpty
+                                                              ? Colors.grey[600]
+                                                              : Colors.black),
+                                                ),
+                                                Flexible(
+                                                  child: TextField(
                                                     controller:
-                                                        customerNameController,
-                                                    onChanged: (val) {
-                                                      searchByCustomerName(val);
-                                                    },
+                                                        customerIdController,
                                                     decoration: InputDecoration(
                                                       hintText:
                                                           staticTextTranslate(
-                                                              'Cashier'),
+                                                              'Zout#'),
                                                       hintStyle: TextStyle(
                                                           color:
                                                               Colors.grey[600]),
                                                       contentPadding:
                                                           const EdgeInsets.only(
-                                                              bottom: 13,
+                                                              bottom: 15,
                                                               right: 5),
                                                       border: InputBorder.none,
-                                                    )),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  if (loading)
-                                    Expanded(
-                                      child: Center(
-                                        child: showLoading(),
-                                      ),
-                                    ),
-                                  if (!loading)
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Container(
-                                            width: 600,
-                                            decoration: BoxDecoration(
-                                                color: homeBgColor,
-                                                border: Border.all(
-                                                    color: const Color.fromARGB(
-                                                        255, 226, 226, 226),
-                                                    width: 0.0),
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height -
-                                                130,
-                                            child: SfDataGridTheme(
-                                              data: SfDataGridThemeData(
-                                                  headerColor:
-                                                      const Color(0xffdddfe8),
-                                                  headerHoverColor:
-                                                      const Color(0xffdddfe8),
-                                                  selectionColor: loginBgColor),
-                                              child: SfDataGrid(
-                                                gridLinesVisibility:
-                                                    GridLinesVisibility.both,
-                                                headerRowHeight: 25,
-                                                headerGridLinesVisibility:
-                                                    GridLinesVisibility.both,
-                                                isScrollbarAlwaysShown: true,
-                                                onQueryRowHeight: (details) {
-                                                  // Set the row height as 70.0 to the column header row.
-                                                  return details.rowIndex == 0
-                                                      ? 25.0
-                                                      : 23.0;
-                                                },
-                                                allowSorting: true,
-                                                allowTriStateSorting: true,
-                                                controller: dataGridController,
-                                                selectionMode:
-                                                    SelectionMode.single,
-                                                allowFiltering: true,
-                                                source: customerDataSource!,
-                                                columnWidthMode: ColumnWidthMode
-                                                    .lastColumnFill,
-                                                onSelectionChanged:
-                                                    (addedRows, removedRows) {
-                                                  setState(() {});
-                                                },
-                                                columns: <GridColumn>[
-                                                  GridColumn(
-                                                      columnName:
-                                                          'serialNumberForStyleColor',
-                                                      visible: false,
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(0.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: Colors.white,
-                                                          child: Text(
-                                                            'serialNumberForStyleColor',
-                                                            style: TextStyle(
-                                                              fontSize:
-                                                                  getMediumFontSize,
-                                                            ),
-                                                          ))),
-                                                  GridColumn(
-                                                      columnName: 'zout#',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Z out #'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      columnName: 'total',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Total'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      columnName:
-                                                          'cashier_name',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Cashier Name'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      columnName: 'over/short',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          child: Text(
-                                                            staticTextTranslate(
-                                                                'Over / Short'),
-                                                            style: TextStyle(
-                                                              fontSize:
-                                                                  getMediumFontSize,
-                                                            ),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ))),
-                                                ],
-                                              ),
+                                                    ),
+                                                    onChanged: (val) {
+                                                      searchById(val);
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                           const SizedBox(
-                                            width: 10,
+                                            width: 0,
                                           ),
-                                          if (dataGridController
-                                                  .selectedIndex !=
-                                              -1)
-                                            detailsScreen()
-                                        ],
-                                      ),
-                                    )
-                                ],
-                              )),
+                                          Container(
+                                            width: 230,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.grey,
+                                                    width: 0.5),
+                                                color: const Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                            padding: const EdgeInsets.only(
+                                                right: 10, bottom: 3),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                IconButton(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 3),
+                                                  onPressed: () {
+                                                    customerNameController
+                                                        .clear();
+
+                                                    customerDataSource =
+                                                        FormerZoutDataSource(
+                                                            formerZOutData:
+                                                                formerZoutDataLst);
+                                                    setState(() {});
+                                                  },
+                                                  splashRadius: 1,
+                                                  icon: Icon(
+                                                      customerNameController
+                                                              .text.isEmpty
+                                                          ? CupertinoIcons
+                                                              .search
+                                                          : Icons.clear,
+                                                      size: 18,
+                                                      color:
+                                                          customerNameController
+                                                                  .text.isEmpty
+                                                              ? Colors.grey[600]
+                                                              : Colors.black),
+                                                ),
+                                                Flexible(
+                                                  child: TextField(
+                                                      controller:
+                                                          customerNameController,
+                                                      onChanged: (val) {
+                                                        searchByCustomerName(
+                                                            val);
+                                                      },
+                                                      decoration:
+                                                          InputDecoration(
+                                                        hintText:
+                                                            staticTextTranslate(
+                                                                'Cashier'),
+                                                        hintStyle: TextStyle(
+                                                            color: Colors
+                                                                .grey[600]),
+                                                        contentPadding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                bottom: 13,
+                                                                right: 5),
+                                                        border:
+                                                            InputBorder.none,
+                                                      )),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ]),
+                                        ButtonBarSuper(
+                                          buttonTextTheme:
+                                              ButtonTextTheme.primary,
+                                          wrapType: WrapType.fit,
+                                          wrapFit: WrapFit.min,
+                                          lineSpacing: 20,
+                                          alignment: engSelectedLanguage
+                                              ? WrapSuperAlignment.left
+                                              : WrapSuperAlignment.right,
+                                          children: [],
+                                        ),
+                                        if (loading)
+                                          Expanded(
+                                            child: Center(
+                                              child: showLoading(),
+                                            ),
+                                          ),
+                                        if (!loading)
+                                          SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Container(
+                                                  width: 600,
+                                                  decoration: BoxDecoration(
+                                                      color: homeBgColor,
+                                                      border: Border.all(
+                                                          color:  Colors.black, 
+                                                          width: 0.3),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4)),
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height -
+                                                      160,
+                                                  child: SfDataGridTheme(
+                                                    data: SfDataGridThemeData(
+                                                        headerColor:
+                                                            const Color(
+                                                                0xffF1F1F1),
+                                                        sortIcon: const Icon(Icons
+                                                            .arrow_drop_down_rounded),
+                                                        headerHoverColor:
+                                                            const Color(
+                                                                0xffdddfe8),
+                                                        selectionColor:
+                                                            loginBgColor),
+                                                    child: SfDataGrid(
+                                                      gridLinesVisibility:
+                                                          GridLinesVisibility
+                                                              .both,
+                                                      headerRowHeight: 25,
+                                                      headerGridLinesVisibility:
+                                                          GridLinesVisibility
+                                                              .both,
+                                                      isScrollbarAlwaysShown:
+                                                          true,
+                                                      onQueryRowHeight:
+                                                          (details) {
+                                                        // Set the row height as 70.0 to the column header row.
+                                                        return details
+                                                                    .rowIndex ==
+                                                                0
+                                                            ? 25.0
+                                                            : 25.0;
+                                                      },
+                                                      rowHeight: 25,
+                                                      allowSorting: true,
+                                                      allowTriStateSorting:
+                                                          true,
+                                                      controller:
+                                                          dataGridController,
+                                                      selectionMode:
+                                                          SelectionMode.single,
+                                                      allowFiltering: true,
+                                                      source:
+                                                          customerDataSource!,
+                                                      columnWidthMode:
+                                                          ColumnWidthMode
+                                                              .lastColumnFill,
+                                                      onSelectionChanged:
+                                                          (addedRows,
+                                                              removedRows) {
+                                                        setState(() {});
+                                                      },
+                                                      columns: <GridColumn>[
+                                                        GridColumn(
+                                                          
+
+                                                             columnName:
+                                                                'serialNumberForStyleColor',
+                                                            visible: false,
+                                                            label: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        0.0),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child: Text(
+                                                                  'serialNumberForStyleColor',
+                                                                  style:
+                                                                      GoogleFonts
+                                                                          .roboto(
+                                                                    fontSize:
+                                                                        getMediumFontSize +
+                                                                            2,
+                                                                  ),
+                                                                ))),
+                                                        GridColumn(
+                                                            columnName: 'zout#',
+                                                            label: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        1.0),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child: Text(
+                                                                  staticTextTranslate(
+                                                                      'Z out #'),
+                                                                  style:
+                                                                      GoogleFonts
+                                                                          .roboto(
+                                                                    fontSize:
+                                                                        getMediumFontSize +
+                                                                            2,
+                                                                  ),
+                                                                ))),
+                                                        GridColumn(
+                                                            columnName: 'total',
+                                                            label: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        1.0),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child: Text(
+                                                                  staticTextTranslate(
+                                                                      'Total'),
+                                                                  style:
+                                                                      GoogleFonts
+                                                                          .roboto(
+                                                                    fontSize:
+                                                                        getMediumFontSize +
+                                                                            2,
+                                                                  ),
+                                                                ))),
+                                                        GridColumn(
+                                                            columnName:
+                                                                'cashier_name',
+                                                            label: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        1.0),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child: Text(
+                                                                  staticTextTranslate(
+                                                                      'Cashier Name'),
+                                                                  style:
+                                                                      GoogleFonts
+                                                                          .roboto(
+                                                                    fontSize:
+                                                                        getMediumFontSize +
+                                                                            2,
+                                                                  ),
+                                                                ))),
+                                                        GridColumn(
+                                                            columnName:
+                                                                'over/short',
+                                                            label: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        1.0),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child: Text(
+                                                                  staticTextTranslate(
+                                                                      'Over / Short'),
+                                                                  style:
+                                                                      GoogleFonts
+                                                                          .roboto(
+                                                                    fontSize:
+                                                                        getMediumFontSize +
+                                                                            2,
+                                                                  ),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ))),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                if (dataGridController
+                                                        .selectedIndex !=
+                                                    -1)
+                                                  detailsScreen()
+                                              ],
+                                            ),
+                                          )
+                                      ],
+                                    )),
+                              ),
+                            )
+                          ],
                         ),
                       )
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -744,26 +656,26 @@ class _FormerZOutPageState extends State<FormerZOutPage> {
             border: Border.all(color: Colors.grey, width: 0.5),
             color: Colors.white,
             borderRadius: BorderRadius.circular(4)),
-        height: MediaQuery.of(context).size.height - 130,
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+        height: MediaQuery.of(context).size.height - 162,
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         child: Column(
           children: [
             Row(
               children: [
-                Text(staticTextTranslate('Zout: '),
-                    style: TextStyle(
-                        fontSize: getMediumFontSize + 3,
-                        fontWeight: FontWeight.w600)),
+                Text(
+                  staticTextTranslate('Zout: '),
+                  style: GoogleFonts.roboto(
+                    fontSize: getMediumFontSize + 5, fontWeight: FontWeight.bold
+                  ),
+                ),
                 const SizedBox(
                   height: 0,
                 ),
                 Text(
                   formerZOutData.formerZoutNo,
-                  style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      decorationStyle: TextDecorationStyle.dashed,
-                      fontSize: getMediumFontSize + 5,
-                      fontWeight: FontWeight.w600),
+                  style: GoogleFonts.roboto(
+                    fontSize: getMediumFontSize + 5,fontWeight: FontWeight.bold
+                  ),
                 ),
               ],
             ),
@@ -858,7 +770,7 @@ class _FormerZOutPageState extends State<FormerZOutPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(
-                        height: 60,
+                        height: 20,
                       ),
                       Text(staticTextTranslate('Credit Card Total On System'),
                           style: TextStyle(
@@ -1007,10 +919,9 @@ class FormerZoutDataSource extends DataGridSource {
             padding: const EdgeInsets.all(1.0),
             child: Text(
               e.value.toString(),
-              style: TextStyle(
-                  fontSize: getMediumFontSize,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400),
+              style: GoogleFonts.roboto(
+                fontSize: getMediumFontSize + 2,
+              ),
             ),
           );
         }).toList());

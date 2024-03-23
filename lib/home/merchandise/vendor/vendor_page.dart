@@ -854,7 +854,7 @@ class VendorDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         color: row.getCells()[0].value.isEven
-             ? const Color.fromARGB(255, 246, 247, 255)
+             ? const Color(0xffF1F1F1)
             : Colors.white,
         cells: row.getCells().map<Widget>((e) {
           return Container(
