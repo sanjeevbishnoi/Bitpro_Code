@@ -3,7 +3,6 @@ import 'dart:convert';
 
 class DbReceiptData {
   String receiptNo;
-  String subTotal;
   String createdBy;
   String selectedCustomerID;
   String discountPercentage;
@@ -16,15 +15,18 @@ class DbReceiptData {
   String taxPer;
   String taxValue;
 
-  ReceiptTendor tendor;
   String docId;
   String receiptType;
   String referenceNo;
-
   String selectedStoreDocId;
+
+  String receiptTotal;
+  String receiptDue;
+  String receiptBalance;
+  Map<dynamic, dynamic> allPaymentMethodAmountsInfo;
   DbReceiptData(
       {required this.receiptNo,
-      required this.subTotal,
+      required this.receiptTotal,
       required this.createdBy,
       required this.selectedCustomerID,
       required this.discountPercentage,
@@ -34,17 +36,18 @@ class DbReceiptData {
       required this.selectedItems,
       required this.taxPer,
       required this.taxValue,
-      required this.tendor,
       required this.docId,
       required this.receiptType,
       required this.referenceNo,
-      required this.selectedStoreDocId});
+      required this.receiptDue,
+      required this.receiptBalance,
+      required this.selectedStoreDocId,
+      required this.allPaymentMethodAmountsInfo});
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
     result.addAll({'receiptNo': receiptNo});
-    result.addAll({'subTotal': subTotal});
     result.addAll({'createdBy': createdBy});
     result.addAll({'selectedCustomerID': selectedCustomerID});
     result.addAll({'discountPercentage': discountPercentage});
@@ -54,40 +57,21 @@ class DbReceiptData {
     result.addAll({'selectedItems': selectedItems});
     result.addAll({'taxPer': taxPer});
     result.addAll({'taxValue': taxValue});
-    result.addAll({'tendor': tendor.toMap()});
     result.addAll({'docId': docId});
     result.addAll({'receiptType': receiptType});
     result.addAll({'referenceNo': referenceNo});
     result.addAll({'selectedStoreDocId': selectedStoreDocId});
+
+    result.addAll({'receiptTotal': receiptTotal});
+    result.addAll({'receiptDue': receiptDue});
+    result.addAll({'receiptBalance': receiptBalance});
+    result.addAll({'allPaymentMethodAmountsInfo': allPaymentMethodAmountsInfo});
     return result;
   }
-
-  // Map<String, dynamic> toMapNewFirebase() {
-  //   final result = <String, dynamic>{};
-
-  //   result.addAll({'receiptNo': receiptNo});
-  //   result.addAll({'subTotal': subTotal});
-  //   result.addAll({'createdBy': createdBy});
-  //   result.addAll({'selectedCustomerID': selectedCustomerID});
-  //   result.addAll({'discountPercentage': discountPercentage});
-  //   result.addAll({'discountValue': discountValue});
-  //   result.addAll({'createdDate': createdDate.millisecondsSinceEpoch});
-  //   result.addAll({'totalQty': totalQty});
-  //   result.addAll({'selectedItems': selectedItems});
-  //   result.addAll({'taxPer': taxPer});
-  //   result.addAll({'taxValue': taxValue});
-  //   result.addAll({'tendor': tendor.toMap()});
-  //   result.addAll({'docId': docId});
-  //   result.addAll({'receiptType': receiptType});
-  //   result.addAll({'referenceNo': referenceNo});
-  //   result.addAll({'selectedStoreDocId': selectedStoreDocId});
-  //   return result;
-  // }
 
   factory DbReceiptData.fromMap(Map<dynamic, dynamic> map) {
     return DbReceiptData(
         receiptNo: map['receiptNo'] ?? '',
-        subTotal: map['subTotal'] ?? '',
         createdBy: map['createdBy'] ?? '',
         selectedCustomerID: map['selectedCustomerID'] ?? '',
         discountPercentage: map['discountPercentage'] ?? '',
@@ -98,57 +82,19 @@ class DbReceiptData {
         selectedItems: List<dynamic>.from(map['selectedItems']),
         taxPer: map['taxPer'] ?? '',
         taxValue: map['taxValue'] ?? '',
-        tendor: ReceiptTendor.fromMap(map['tendor']),
         docId: map['docId'] ?? '',
         receiptType: map['receiptType'] ?? 'Regular',
         referenceNo: map['referenceNo'] ?? '',
-        selectedStoreDocId: map['selectedStoreDocId']);
+        selectedStoreDocId: map['selectedStoreDocId'],
+        //
+        receiptTotal: map['receiptTotal'] ?? '',
+        receiptDue: map['receiptDue'] ?? '',
+        receiptBalance: map['receiptBalance'] ?? '',
+        allPaymentMethodAmountsInfo: map['allPaymentMethodAmountsInfo'] ?? {});
   }
 
   String toJson() => json.encode(toMap());
 
   factory DbReceiptData.fromJson(String source) =>
       DbReceiptData.fromMap(json.decode(source));
-}
-
-class ReceiptTendor {
-  String cash;
-  String credit;
-  String creditCard;
-  String remainingAmount;
-  String balance;
-  ReceiptTendor({
-    required this.cash,
-    required this.credit,
-    required this.creditCard,
-    required this.remainingAmount,
-    required this.balance,
-  });
-
-  Map<String, dynamic> toMap() {
-    final result = <String, dynamic>{};
-
-    result.addAll({'cash': cash});
-    result.addAll({'credit': credit});
-    result.addAll({'creditCard': creditCard});
-    result.addAll({'remainingAmount': remainingAmount});
-    result.addAll({'balance': balance});
-
-    return result;
-  }
-
-  factory ReceiptTendor.fromMap(Map<dynamic, dynamic> map) {
-    return ReceiptTendor(
-      cash: map['cash'] ?? '0',
-      credit: map.containsKey('credit') ? map['credit'] ?? '0' : '0',
-      creditCard: map['creditCard'] ?? '0',
-      remainingAmount: map['remainingAmount'] ?? '0',
-      balance: map['balance'] ?? '0',
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory ReceiptTendor.fromJson(String source) =>
-      ReceiptTendor.fromMap(json.decode(source));
 }

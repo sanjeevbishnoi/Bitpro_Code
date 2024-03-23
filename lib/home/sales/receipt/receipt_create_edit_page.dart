@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:bitpro_hive/home/sales/receipt/create_receipt_widgets/tendor_amount_dialog.dart';
 import 'package:bitpro_hive/model/store_data.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_sales/fb_customer_db_service.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_sales/fb_receipt_db_service.dart';
@@ -8,6 +9,7 @@ import 'package:bitpro_hive/services/hive/hive_merchandise_db_service/inventory_
 import 'package:bitpro_hive/services/hive/hive_sales_db_service/hive_promo_code_db_serice.dart';
 import 'package:bitpro_hive/services/hive/hive_settings/hive_store_db_service.dart';
 import 'package:bitpro_hive/services/hive/import_data_exel/local_receipt_data_excel.dart';
+import 'package:bitpro_hive/shared/constant_data.dart';
 import 'package:bitpro_hive/widget/string_related/get_id_number.dart';
 import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:excel/excel.dart' hide Border;
@@ -65,57 +67,41 @@ class CreateEditReceiptPage extends StatefulWidget {
 }
 
 class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
-  String tax = '10';
-  String createdBy = '';
-  bool viewMode = false;
-  DbReceiptData? selectedDbReceiptData;
   final GlobalKey<SfDataGridState> _key = GlobalKey<SfDataGridState>();
-  CustomerData? selectedCustomerData;
-
-  var formKey = GlobalKey<FormState>();
-  bool loading = true;
-  bool uploading = false;
-  final TextEditingController _f1VendorTypeAheadController =
+  final TextEditingController _scanOrEnterBarcodeTypeAheadController =
       TextEditingController();
-  final TextEditingController _f2VendorTypeAheadController =
-      TextEditingController();
-
-  final TextEditingController _billToCustomerTypeAheadController =
-      TextEditingController();
-  File? productImage;
-  final TextEditingController barcodeFilterController = TextEditingController();
-  final TextEditingController vendorInvoiceFilterController =
-      TextEditingController();
-  ReceiptDataSource? receiptDataSource;
-  DataGridController dataGridController = DataGridController();
-  bool showDateError = false;
-  String voucherNo = '';
-  List selectedLocalReceiptData = []; //LocalReceiptData
-  ScrollController scrollController = ScrollController();
-
-  late List<CustomerData> customerDataLst;
-
-  String cash = '0';
-  String creditCard = '0';
-  String auth = '0';
-  String credit = '0';
-  String due = '0';
-  String referenceNo = '';
-
   FocusNode scanBarcodeFocusNode = FocusNode();
-
-  bool reloadOnBack = false;
+  final TextEditingController _searchForItemsTypeAheadController =
+      TextEditingController();
+  final TextEditingController _searchCustomerTypeAheadController =
+      TextEditingController();
+  DataGridController dataGridController = DataGridController();
+  List selectedLocalReceiptData = []; //LocalReceiptData
+  late List<CustomerData> customerDataLst;
   String regularReturnDropDown = 'Regular';
 
+  String tax = '10';
+  bool viewMode = false;
+  bool reloadDataOnPop = false;
+  DbReceiptData? selectedDbReceiptData;
+  CustomerData? selectedCustomerData;
+  ReceiptDataSource? receiptDataSource;
   List<PromoData> allPromotionDataLst = [];
-  String userMaxDiscount = '';
-
   List<InventoryData> allInventoryDataLst = [];
-
+  //receipt payment setting fields
+  Map<dynamic, dynamic> paymentTypeList = {};
+  Map<dynamic, dynamic> allPaymentMethodAmountsInfo = {};
+  String userMaxDiscount = '';
   String selectedProductImg = '';
-
   List<StoreData> allStoresData = [];
   late StoreData selectedStoreData;
+
+  //need to check
+  String createdBy = '';
+  bool loading = true;
+  bool uploading = false;
+  String referenceNo = '';
+
   getData() async {
     allPromotionDataLst = await HivePromoDbService().fetchPromoData();
     allInventoryDataLst =
@@ -159,7 +145,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
     //updating tax
     var box = Hive.box('bitpro_app');
     Map? userTaxesData = box.get('user_taxes_settings');
-
+    paymentTypeList = box.get('payment_type_list') ?? {};
     if (userTaxesData != null) {
       tax = userTaxesData['taxPercentage'].toString();
     }
@@ -174,18 +160,8 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
     if (widget.viewMode && widget.selectedDbReceiptData != null) {
       viewMode = widget.viewMode;
       tax = widget.selectedDbReceiptData!.taxPer;
-      cash = widget.selectedDbReceiptData!.tendor.cash;
-      creditCard = widget.selectedDbReceiptData!.tendor.creditCard;
-      auth = '';
-
-      credit = double.tryParse(widget.selectedDbReceiptData!.tendor.credit) ==
-                  null ||
-              double.parse(widget.selectedDbReceiptData!.tendor.credit) == 0
-          ? '0'
-          : double.tryParse(widget.selectedDbReceiptData!.tendor.credit)
-              .toString();
-
-      due = widget.selectedDbReceiptData!.tendor.remainingAmount;
+      allPaymentMethodAmountsInfo =
+          widget.selectedDbReceiptData!.allPaymentMethodAmountsInfo;
       selectedDbReceiptData = widget.selectedDbReceiptData!;
 
       if (widget.selectedDbReceiptData!.selectedCustomerID.isNotEmpty) {
@@ -196,7 +172,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
           selectedCustomerData = widget.customerDataLst.firstWhere((element) =>
               element.customerId ==
               widget.selectedDbReceiptData!.selectedCustomerID);
-          _billToCustomerTypeAheadController.text =
+          _searchCustomerTypeAheadController.text =
               selectedCustomerData!.customerName;
         } else {
           // showToast('Customer not found', context);
@@ -309,19 +285,18 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
         selectedLocalReceiptData, widget.userData.maxDiscount, context);
   }
 
-  void _createNewHomework(String name) {
+  void _shortcutKeyOnTap(String name) {
     if (name == 'openTendor' && !viewMode) {
-      tendorDialog();
+      tenderDialog();
     } else if (name == 'printUpdatedOnTap' && !viewMode) {
-      printAndUploadOnTap(print: true);
+      printAndUploadOnTap();
     } else if (name == 'updatedOnTap' && !viewMode) {
-      printAndUploadOnTap(print: false);
+      printAndUploadOnTap(updateOnly: true);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print(customerDataLst.length);
     return ValueListenableBuilder<Box>(
         valueListenable: Hive.box('bitpro_app').listenable(),
         builder: (context, box, widget) {
@@ -356,7 +331,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                   ReceiptCallbackShortcutsIntent:
                       CallbackAction<ReceiptCallbackShortcutsIntent>(
                           onInvoke: (ReceiptCallbackShortcutsIntent intent) =>
-                              _createNewHomework(intent.name)),
+                              _shortcutKeyOnTap(intent.name)),
                 },
                 child: Scaffold(
                   backgroundColor: homeBgColor,
@@ -424,7 +399,8 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                   } else {
                                                     showDiscardChangesDialog(
                                                         context,
-                                                        receipt: reloadOnBack);
+                                                        receipt:
+                                                            reloadDataOnPop);
                                                   }
                                                 },
                                               )),
@@ -667,125 +643,9 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                     )
                                                   ],
                                                 ),
-                                                onPressed: () async {
-                                                  setState(() {
-                                                    uploading = true;
-                                                  });
-
-                                                  if (selectedLocalReceiptData
-                                                      .isNotEmpty) {
-                                                    DbReceiptData dbReceiptData =
-                                                        DbReceiptData(
-                                                            referenceNo:
-                                                                referenceNo,
-                                                            taxPer: tax,
-                                                            receiptType:
-                                                                regularReturnDropDown,
-                                                            docId:
-                                                                getRandomString(
-                                                                    20),
-                                                            taxValue:
-                                                                calculateTaxValue(),
-                                                            totalQty:
-                                                                calculateTotalQty(),
-                                                            receiptNo: viewMode
-                                                                ? selectedDbReceiptData!
-                                                                    .receiptNo
-                                                                : '10001',
-                                                            subTotal:
-                                                                calculateSubTotal(),
-                                                            createdBy:
-                                                                createdBy,
-                                                            selectedStoreDocId:
-                                                                selectedStoreData
-                                                                    .docId,
-                                                            selectedItems:
-                                                                selectedLocalReceiptData
-                                                                    .map(
-                                                                        (e) => {
-                                                                              'cost': e.cost,
-                                                                              'barcode': e.barcode,
-                                                                              'itemCode': e.itemCode,
-                                                                              'productName': e.productName,
-                                                                              'qty': e.qty,
-                                                                              'orgPrice': e.orgPrice,
-                                                                              'discountValue': e.discountValue,
-                                                                              'discountPercentage': e.discountPercentage,
-                                                                              'priceWt': e.priceWt,
-                                                                              'total': e.total
-                                                                            })
-                                                                    .toList(),
-                                                            selectedCustomerID:
-                                                                selectedCustomerData !=
-                                                                        null
-                                                                    ? selectedCustomerData!
-                                                                        .customerId
-                                                                    : '',
-                                                            discountPercentage:
-                                                                calculateDiscountPercentage(),
-                                                            discountValue:
-                                                                calculateTotalDiscountValue(),
-                                                            createdDate:
-                                                                DateTime.now(),
-                                                            tendor: ReceiptTendor(
-                                                                cash: cash,
-                                                                credit: credit,
-                                                                creditCard:
-                                                                    creditCard,
-                                                                remainingAmount:
-                                                                    calculateDueAmount(),
-                                                                balance:
-                                                                    calculateBalanceAmount()));
-                                                    String tenered =
-                                                        (double.parse(cash) +
-                                                                double.parse(
-                                                                    creditCard))
-                                                            .toStringAsFixed(2);
-                                                    String subt =
-                                                        calculateSubTotal();
-                                                    String change =
-                                                        regularReturnDropDown ==
-                                                                'Regular'
-                                                            ? calculateBalanceAmount()
-                                                            : subt;
-                                                    // var box = Hive.box('bitpro_app');
-
-                                                    // // var p = box.get('active_printer');
-                                                    // List<Printer> pinters =
-                                                    //     await Printing.listPrinters();
-
-                                                    // var activePrinter =
-                                                    //     box.get('active_printer');
-                                                    // Printer? selectedPrinter;
-                                                    // if (activePrinter != null) {
-                                                    //   for (var t in pinters) {
-                                                    //     if (t.name ==
-                                                    //         Printer.fromMap(activePrinter)
-                                                    //             .name) {
-                                                    //       selectedPrinter = t;
-                                                    //     }
-                                                    //   }
-                                                    // }
-
-                                                    // if (selectedPrinter != null) {
-                                                    await printReceipt(
-                                                        context,
-                                                        dbReceiptData,
-                                                        calculateTaxValue(),
-                                                        selectedCustomerData,
-                                                        // selectedPrinter,
-                                                        tenered,
-                                                        change);
-                                                    // } else {
-                                                    //   showToast(
-                                                    //       staticTextTranslate(
-                                                    //           'Select a printer from printing settings'),
-                                                    //       context);
-                                                    // }
-                                                    setState(() {
-                                                      uploading = false;
-                                                    });
-                                                  }
+                                                onPressed: () {
+                                                  printAndUploadOnTap(
+                                                      printOnly: true);
                                                 },
                                               ),
                                             ),
@@ -1098,7 +958,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                 ),
                                                 onPressed: () =>
                                                     printAndUploadOnTap(
-                                                        print: false),
+                                                        updateOnly: true),
                                               ),
                                             ),
                                           const SizedBox(
@@ -1295,7 +1155,6 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                               rowHeight: 27,
                                                                               gridLinesVisibility: GridLinesVisibility.horizontal,
                                                                               allowTriStateSorting: true,
-                                                                              verticalScrollController: scrollController,
                                                                               selectionMode: SelectionMode.single,
                                                                               navigationMode: GridNavigationMode.cell,
                                                                               headerGridLinesVisibility: GridLinesVisibility.both,
@@ -1567,7 +1426,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                                     child: Row(
                                                                                       children: [
                                                                                         const SizedBox(width: 10),
-                                                                                        Flexible(child: Text(_billToCustomerTypeAheadController.text, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: getMediumFontSize))),
+                                                                                        Flexible(child: Text(_searchCustomerTypeAheadController.text, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: getMediumFontSize))),
                                                                                       ],
                                                                                     ),
                                                                                   )
@@ -1575,7 +1434,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                                     getImmediateSuggestions: false,
                                                                                     textFieldConfiguration: TextFieldConfiguration(
                                                                                       style: GoogleFonts.roboto(color: const Color.fromARGB(255, 0, 0, 0), fontSize: getMediumFontSize + 2),
-                                                                                      controller: _billToCustomerTypeAheadController,
+                                                                                      controller: _searchCustomerTypeAheadController,
                                                                                       decoration: InputDecoration(
                                                                                         hintText: staticTextTranslate('Search customer'),
                                                                                         hintStyle: GoogleFonts.roboto(color: Colors.grey[600], fontSize: getMediumFontSize + 2),
@@ -1602,7 +1461,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                                     },
                                                                                     onSuggestionSelected: (CustomerData e) {
                                                                                       selectedCustomerData = e;
-                                                                                      _billToCustomerTypeAheadController.text = e.customerName;
+                                                                                      _searchCustomerTypeAheadController.text = e.customerName;
 
                                                                                       setState(() {});
                                                                                     },
@@ -1729,443 +1588,279 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                     .circular(
                                                                         4)),
                                                         width: 300,
-                                                        child: Form(
-                                                          key: formKey,
-                                                          child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Container(
-                                                                  height: 35,
-                                                                  width: double
-                                                                      .maxFinite,
-                                                                  padding: const EdgeInsets
-                                                                      .symmetric(
-                                                                      horizontal:
-                                                                          15,
-                                                                      vertical:
-                                                                          5),
-                                                                  decoration: const BoxDecoration(
-                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(4), topRight: Radius.circular(4)),
-                                                                      gradient: LinearGradient(
-                                                                          end: Alignment.bottomCenter,
-                                                                          colors: [
-                                                                            Color.fromARGB(
-                                                                                255,
-                                                                                66,
-                                                                                66,
-                                                                                66),
-                                                                            Color.fromARGB(
-                                                                                255,
-                                                                                0,
-                                                                                0,
-                                                                                0),
-                                                                          ],
-                                                                          begin: Alignment.topCenter)),
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Text(
-                                                                        'Totals',
-                                                                        style: GoogleFonts.roboto(
-                                                                            fontSize:
-                                                                                16,
-                                                                            fontWeight:
-                                                                                FontWeight.w400,
-                                                                            color: Colors.white),
-                                                                      )
-                                                                    ],
-                                                                  ),
+                                                        child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Container(
+                                                                height: 35,
+                                                                width: double
+                                                                    .maxFinite,
+                                                                padding: const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        15,
+                                                                    vertical:
+                                                                        5),
+                                                                decoration: const BoxDecoration(
+                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(4), topRight: Radius.circular(4)),
+                                                                    gradient: LinearGradient(
+                                                                        end: Alignment.bottomCenter,
+                                                                        colors: [
+                                                                          Color.fromARGB(
+                                                                              255,
+                                                                              66,
+                                                                              66,
+                                                                              66),
+                                                                          Color.fromARGB(
+                                                                              255,
+                                                                              0,
+                                                                              0,
+                                                                              0),
+                                                                        ],
+                                                                        begin: Alignment.topCenter)),
+                                                                child: Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      'Totals',
+                                                                      style: GoogleFonts.roboto(
+                                                                          fontSize:
+                                                                              16,
+                                                                          fontWeight: FontWeight
+                                                                              .w400,
+                                                                          color:
+                                                                              Colors.white),
+                                                                    )
+                                                                  ],
                                                                 ),
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(
-                                                                          10.0),
-                                                                  child: Column(
-                                                                    children: [
-                                                                      Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                        children: [
-                                                                          Text(
-                                                                            staticTextTranslate('Total Qty.'),
-                                                                            style:
-                                                                                GoogleFonts.roboto(fontSize: getMediumFontSize + 1, fontWeight: FontWeight.w500),
-                                                                          ),
-                                                                          const SizedBox(
-                                                                            height:
-                                                                                0,
-                                                                          ),
-                                                                          Text(
-                                                                            calculateTotalQty(),
-                                                                            style:
-                                                                                GoogleFonts.roboto(fontSize: getMediumFontSize + 1, fontWeight: FontWeight.w500),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            10,
-                                                                      ),
-                                                                      Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                        children: [
-                                                                          Text(
-                                                                            staticTextTranslate('Discount %'),
-                                                                            style:
-                                                                                GoogleFonts.roboto(fontSize: getMediumFontSize + 1, fontWeight: FontWeight.w500),
-                                                                          ),
-                                                                          Text(
-                                                                            calculateDiscountPercentage(),
-                                                                            style:
-                                                                                GoogleFonts.roboto(fontSize: getMediumFontSize + 1, fontWeight: FontWeight.w500),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            10,
-                                                                      ),
-                                                                      Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                        children: [
-                                                                          Text(
-                                                                            staticTextTranslate('Discount \$'),
-                                                                            style:
-                                                                                GoogleFonts.roboto(fontSize: getMediumFontSize + 1, fontWeight: FontWeight.w500),
-                                                                          ),
-                                                                          const SizedBox(
-                                                                            height:
-                                                                                0,
-                                                                          ),
-                                                                          Text(
-                                                                            calculateTotalDiscountValue(),
-                                                                            style:
-                                                                                GoogleFonts.roboto(fontSize: getMediumFontSize + 1, fontWeight: FontWeight.w500),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            10,
-                                                                      ),
-                                                                      Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                        children: [
-                                                                          Text(
-                                                                            staticTextTranslate('Total before Tax'),
-                                                                            style:
-                                                                                GoogleFonts.roboto(fontSize: getMediumFontSize + 1, fontWeight: FontWeight.w500),
-                                                                          ),
-                                                                          const SizedBox(
-                                                                            height:
-                                                                                0,
-                                                                          ),
-                                                                          Text(
-                                                                            calculateTotalBeforeTax(),
-                                                                            style:
-                                                                                GoogleFonts.roboto(fontSize: getMediumFontSize + 1, fontWeight: FontWeight.w500),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            10,
-                                                                      ),
-                                                                      Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                        children: [
-                                                                          Text(
-                                                                            tax.isEmpty
-                                                                                ? staticTextTranslate('Tax')
-                                                                                : '${staticTextTranslate("Tax")} ($tax%)',
-                                                                            style:
-                                                                                GoogleFonts.roboto(fontSize: getMediumFontSize + 1, fontWeight: FontWeight.w500),
-                                                                          ),
-                                                                          const SizedBox(
-                                                                            height:
-                                                                                0,
-                                                                          ),
-                                                                          Text(
-                                                                            tax.isEmpty
-                                                                                ? '0'
-                                                                                : calculateTaxValue(),
-                                                                            style:
-                                                                                GoogleFonts.roboto(fontSize: getMediumFontSize + 1, fontWeight: FontWeight.w500),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            5,
-                                                                      ),
-                                                                      Text(
-                                                                        staticTextTranslate(
-                                                                            '---------------------------------------------------'),
-                                                                        style: GoogleFonts.roboto(
-                                                                            fontSize: getMediumFontSize +
-                                                                                1,
-                                                                            fontWeight:
-                                                                                FontWeight.w500),
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            5,
-                                                                      ),
-
-                                                                      Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                        children: [
-                                                                          Text(
-                                                                            staticTextTranslate('TOTAL'),
-                                                                            style:
-                                                                                GoogleFonts.roboto(fontSize: getMediumFontSize + 3, fontWeight: FontWeight.bold),
-                                                                          ),
-                                                                          const SizedBox(
-                                                                            height:
-                                                                                6,
-                                                                          ),
-                                                                          Text(
-                                                                            regularReturnDropDown == 'Regular'
-                                                                                ? calculateSubTotal()
-                                                                                : '-${calculateSubTotal()}',
-                                                                            style: GoogleFonts.roboto(
-                                                                                fontSize: getExtraLargeFontSize + 3,
-                                                                                color: regularReturnDropDown == 'Regular' ? Colors.black : Colors.red[800],
-                                                                                fontWeight: FontWeight.bold),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            10,
-                                                                      ),
-                                                                      Container(
-                                                                        decoration: BoxDecoration(
-                                                                            borderRadius: BorderRadius.circular(4),
-                                                                            gradient: const LinearGradient(
-                                                                                end: Alignment.bottomCenter,
-                                                                                colors: [
-                                                                                  Color(0xff092F53),
-                                                                                  Color(0xff284F70),
-                                                                                ],
-                                                                                begin: Alignment.topCenter)),
-                                                                        height:
-                                                                            42,
-                                                                        child: ElevatedButton(
-                                                                            style: ElevatedButton.styleFrom(backgroundColor: viewMode ? Colors.grey : Colors.transparent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
-                                                                            onPressed: () {
-                                                                              if (!viewMode) {
-                                                                                tendorDialog();
-                                                                              }
-                                                                            },
-                                                                            child: Row(
-                                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                                              children: [
-                                                                                const Icon(
-                                                                                  Iconsax.money_2,
-                                                                                  size: 20,
-                                                                                ),
-                                                                                const SizedBox(
-                                                                                  width: 10,
-                                                                                ),
-                                                                                Text(staticTextTranslate('Tender'), style: TextStyle(fontSize: getMediumFontSize)),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        10.0),
+                                                                child: Column(
+                                                                  children: [
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        Text(
+                                                                          staticTextTranslate(
+                                                                              'Total Qty.'),
+                                                                          style: GoogleFonts.roboto(
+                                                                              fontSize: getMediumFontSize + 1,
+                                                                              fontWeight: FontWeight.w500),
+                                                                        ),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              0,
+                                                                        ),
+                                                                        Text(
+                                                                          calculateTotalQty(),
+                                                                          style: GoogleFonts.roboto(
+                                                                              fontSize: getMediumFontSize + 1,
+                                                                              fontWeight: FontWeight.w500),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          10,
+                                                                    ),
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        Text(
+                                                                          staticTextTranslate(
+                                                                              'Discount %'),
+                                                                          style: GoogleFonts.roboto(
+                                                                              fontSize: getMediumFontSize + 1,
+                                                                              fontWeight: FontWeight.w500),
+                                                                        ),
+                                                                        Text(
+                                                                          calculateDiscountPercentage(),
+                                                                          style: GoogleFonts.roboto(
+                                                                              fontSize: getMediumFontSize + 1,
+                                                                              fontWeight: FontWeight.w500),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          10,
+                                                                    ),
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        Text(
+                                                                          staticTextTranslate(
+                                                                              'Discount \$'),
+                                                                          style: GoogleFonts.roboto(
+                                                                              fontSize: getMediumFontSize + 1,
+                                                                              fontWeight: FontWeight.w500),
+                                                                        ),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              0,
+                                                                        ),
+                                                                        Text(
+                                                                          calculateTotalDiscountValue(),
+                                                                          style: GoogleFonts.roboto(
+                                                                              fontSize: getMediumFontSize + 1,
+                                                                              fontWeight: FontWeight.w500),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          10,
+                                                                    ),
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        Text(
+                                                                          staticTextTranslate(
+                                                                              'Total before Tax'),
+                                                                          style: GoogleFonts.roboto(
+                                                                              fontSize: getMediumFontSize + 1,
+                                                                              fontWeight: FontWeight.w500),
+                                                                        ),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              0,
+                                                                        ),
+                                                                        Text(
+                                                                          calculateTotalBeforeTax(),
+                                                                          style: GoogleFonts.roboto(
+                                                                              fontSize: getMediumFontSize + 1,
+                                                                              fontWeight: FontWeight.w500),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          10,
+                                                                    ),
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        Text(
+                                                                          tax.isEmpty
+                                                                              ? staticTextTranslate('Tax')
+                                                                              : '${staticTextTranslate("Tax")} ($tax%)',
+                                                                          style: GoogleFonts.roboto(
+                                                                              fontSize: getMediumFontSize + 1,
+                                                                              fontWeight: FontWeight.w500),
+                                                                        ),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              0,
+                                                                        ),
+                                                                        Text(
+                                                                          tax.isEmpty
+                                                                              ? '0'
+                                                                              : calculateTaxValue(),
+                                                                          style: GoogleFonts.roboto(
+                                                                              fontSize: getMediumFontSize + 1,
+                                                                              fontWeight: FontWeight.w500),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height: 5,
+                                                                    ),
+                                                                    Text(
+                                                                      staticTextTranslate(
+                                                                          '---------------------------------------------------'),
+                                                                      style: GoogleFonts.roboto(
+                                                                          fontSize: getMediumFontSize +
+                                                                              1,
+                                                                          fontWeight:
+                                                                              FontWeight.w500),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height: 5,
+                                                                    ),
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        Text(
+                                                                          staticTextTranslate(
+                                                                              'TOTAL'),
+                                                                          style: GoogleFonts.roboto(
+                                                                              fontSize: getMediumFontSize + 3,
+                                                                              fontWeight: FontWeight.bold),
+                                                                        ),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              6,
+                                                                        ),
+                                                                        Text(
+                                                                          regularReturnDropDown == 'Regular'
+                                                                              ? calculateReceiptTotal()
+                                                                              : '-${calculateReceiptTotal()}',
+                                                                          style: GoogleFonts.roboto(
+                                                                              fontSize: getExtraLargeFontSize + 3,
+                                                                              color: regularReturnDropDown == 'Regular' ? Colors.black : Colors.red[800],
+                                                                              fontWeight: FontWeight.bold),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          10,
+                                                                    ),
+                                                                    Container(
+                                                                      decoration: BoxDecoration(
+                                                                          borderRadius: BorderRadius.circular(4),
+                                                                          gradient: const LinearGradient(
+                                                                              end: Alignment.bottomCenter,
+                                                                              colors: [
+                                                                                Color(0xff092F53),
+                                                                                Color(0xff284F70),
                                                                               ],
-                                                                            )),
-                                                                      ),
-                                                                      // const SizedBox(
-                                                                      //   height:
-                                                                      //       20,
-                                                                      // ),
-                                                                      // Column(
-                                                                      //   children: [
-                                                                      //     Row(
-                                                                      //       mainAxisAlignment:
-                                                                      //           MainAxisAlignment.spaceBetween,
-                                                                      //       children: [
-                                                                      //         Row(
-                                                                      //           children: [
-                                                                      //             const SizedBox(width: 5),
-                                                                      //             Text(
-                                                                      //               staticTextTranslate('Cash'),
-                                                                      //               style: TextStyle(fontSize: getMediumFontSize + 2, fontWeight: FontWeight.w500),
-                                                                      //             ),
-                                                                      //           ],
-                                                                      //         ),
-                                                                      //         Row(
-                                                                      //           children: [
-                                                                      //             Text(
-                                                                      //               cash,
-                                                                      //               style: TextStyle(fontSize: getLargeFontSize + 2, fontWeight: FontWeight.w500),
-                                                                      //             ),
-                                                                      //             const SizedBox(
-                                                                      //               width: 10,
-                                                                      //             )
-                                                                      //           ],
-                                                                      //         ),
-                                                                      //       ],
-                                                                      //     ),
-                                                                      //     const SizedBox(
-                                                                      //       height:
-                                                                      //           10,
-                                                                      //     ),
-                                                                      //     Row(
-                                                                      //       mainAxisAlignment:
-                                                                      //           MainAxisAlignment.spaceBetween,
-                                                                      //       children: [
-                                                                      //         Row(
-                                                                      //           children: [
-                                                                      //             const SizedBox(width: 5),
-                                                                      //             Text(
-                                                                      //               staticTextTranslate('Credit'),
-                                                                      //               style: TextStyle(fontSize: getMediumFontSize + 2, fontWeight: FontWeight.w500),
-                                                                      //             ),
-                                                                      //           ],
-                                                                      //         ),
-                                                                      //         Row(
-                                                                      //           children: [
-                                                                      //             Text(
-                                                                      //               credit,
-                                                                      //               style: TextStyle(fontSize: getLargeFontSize + 2, fontWeight: FontWeight.w500),
-                                                                      //             ),
-                                                                      //             const SizedBox(
-                                                                      //               width: 10,
-                                                                      //             )
-                                                                      //           ],
-                                                                      //         ),
-                                                                      //       ],
-                                                                      //     ),
-                                                                      //     const SizedBox(
-                                                                      //       height:
-                                                                      //           10,
-                                                                      //     ),
-                                                                      //     Row(
-                                                                      //       mainAxisAlignment:
-                                                                      //           MainAxisAlignment.spaceBetween,
-                                                                      //       children: [
-                                                                      //         Row(
-                                                                      //           children: [
-                                                                      //             const SizedBox(width: 5),
-                                                                      //             Text(
-                                                                      //               staticTextTranslate('Credit Card'),
-                                                                      //               style: TextStyle(fontSize: getMediumFontSize + 2, fontWeight: FontWeight.w500),
-                                                                      //             ),
-                                                                      //           ],
-                                                                      //         ),
-                                                                      //         Row(
-                                                                      //           children: [
-                                                                      //             Text(
-                                                                      //               creditCard,
-                                                                      //               style: TextStyle(fontSize: getLargeFontSize + 2, fontWeight: FontWeight.w500),
-                                                                      //             ),
-                                                                      //             const SizedBox(
-                                                                      //               width: 10,
-                                                                      //             )
-                                                                      //           ],
-                                                                      //         ),
-                                                                      //       ],
-                                                                      //     ),
-                                                                      //     const SizedBox(
-                                                                      //       height:
-                                                                      //           10,
-                                                                      //     ),
-                                                                      //     Row(
-                                                                      //       mainAxisAlignment:
-                                                                      //           MainAxisAlignment.spaceBetween,
-                                                                      //       children: [
-                                                                      //         Row(
-                                                                      //           children: [
-                                                                      //             const SizedBox(width: 5),
-                                                                      //             Text(
-                                                                      //               staticTextTranslate('Due Amount'),
-                                                                      //               style: TextStyle(fontSize: getMediumFontSize + 2, fontWeight: FontWeight.w500),
-                                                                      //             ),
-                                                                      //           ],
-                                                                      //         ),
-                                                                      //         Row(
-                                                                      //           children: [
-                                                                      //             Text(
-                                                                      //               viewMode ? due : calculateDueAmount(),
-                                                                      //               style: TextStyle(fontSize: getLargeFontSize + 2, fontWeight: FontWeight.w500),
-                                                                      //             ),
-                                                                      //             const SizedBox(
-                                                                      //               width: 10,
-                                                                      //             )
-                                                                      //           ],
-                                                                      //         ),
-                                                                      //       ],
-                                                                      //     ),
-                                                                      //     const SizedBox(
-                                                                      //       height:
-                                                                      //           10,
-                                                                      //     ),
-                                                                      //     Row(
-                                                                      //       mainAxisAlignment:
-                                                                      //           MainAxisAlignment.spaceBetween,
-                                                                      //       children: [
-                                                                      //         Row(
-                                                                      //           children: [
-                                                                      //             const SizedBox(width: 5),
-                                                                      //             Text(
-                                                                      //               staticTextTranslate('Balance'),
-                                                                      //               style: TextStyle(
-                                                                      //                 fontSize: getMediumFontSize + 2,
-                                                                      //                 fontWeight: FontWeight.w500,
-                                                                      //               ),
-                                                                      //             ),
-                                                                      //           ],
-                                                                      //         ),
-                                                                      //         Row(
-                                                                      //           children: [
-                                                                      //             Text(
-                                                                      //               calculateBalanceAmount(),
-                                                                      //               style: TextStyle(fontSize: getLargeFontSize + 2, fontWeight: FontWeight.w500),
-                                                                      //             ),
-                                                                      //             const SizedBox(
-                                                                      //               width: 10,
-                                                                      //             )
-                                                                      //           ],
-                                                                      //         ),
-                                                                      //       ],
-                                                                      //     ),
-                                                                      //     const SizedBox(
-                                                                      //       height:
-                                                                      //           20,
-                                                                      //     )
-                                                                      //   ],
-                                                                      // ),
-                                                                      // if (!viewMode)
-                                                                      //   SizedBox(
-                                                                      //     height:
-                                                                      //         43,
-                                                                      //     child: ElevatedButton(
-                                                                      //         style: ElevatedButton.styleFrom(backgroundColor: selectedLocalReceiptData.isNotEmpty && double.parse(calculateDueAmount()) == 0 ? darkBlueColor : Colors.grey, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
-                                                                      //         onPressed: () => printAndUploadOnTap(print: true),
-                                                                      //         child: Row(
-                                                                      //           mainAxisAlignment: MainAxisAlignment.center,
-                                                                      //           children: [
-                                                                      //             const Icon(
-                                                                      //               Iconsax.archive,
-                                                                      //               size: 20,
-                                                                      //             ),
-                                                                      //             const SizedBox(
-                                                                      //               width: 10,
-                                                                      //             ),
-                                                                      //             Text(staticTextTranslate('Print & Update'), style: TextStyle(fontSize: getMediumFontSize)),
-                                                                      //           ],
-                                                                      //         )),
-                                                                      //   ),
-                                                                    ],
-                                                                  ),
-                                                                )
-                                                              ]),
-                                                        ),
+                                                                              begin: Alignment.topCenter)),
+                                                                      height:
+                                                                          42,
+                                                                      child: ElevatedButton(
+                                                                          style: ElevatedButton.styleFrom(backgroundColor: viewMode ? Colors.grey : Colors.transparent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
+                                                                          onPressed: () {
+                                                                            if (!viewMode) {
+                                                                              tenderDialog();
+                                                                            }
+                                                                          },
+                                                                          child: Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.center,
+                                                                            children: [
+                                                                              const Icon(
+                                                                                Iconsax.money_2,
+                                                                                size: 20,
+                                                                              ),
+                                                                              const SizedBox(
+                                                                                width: 10,
+                                                                              ),
+                                                                              Text(staticTextTranslate('Tender'), style: TextStyle(fontSize: getMediumFontSize)),
+                                                                            ],
+                                                                          )),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              )
+                                                            ]),
                                                       ),
                                                     ],
                                                   ),
@@ -2226,97 +1921,91 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
     setState(() {});
   }
 
-  printAndUploadOnTap({required bool print}) async {
+  printAndUploadOnTap({bool updateOnly = false, bool printOnly = false}) async {
     if (selectedLocalReceiptData.isNotEmpty &&
         double.parse(calculateDueAmount()) == 0) {
       setState(() {
         uploading = true;
       });
-      // List<DbReceiptData> dbReceiptDataLst =
-      //     await FbReceiptDbService(context: context).fetchAllReceiptData();
 
-      // dbReceiptDataLst.sort(
-      //     (a, b) => int.parse(b.receiptNo).compareTo(int.parse(a.receiptNo)));
       DbReceiptData dbReceiptData = DbReceiptData(
-          referenceNo: referenceNo,
-          selectedStoreDocId: selectedStoreData.docId,
-          receiptType: regularReturnDropDown,
-          taxPer: tax,
-          taxValue: calculateTaxValue(),
-          totalQty: calculateTotalQty(),
-          receiptNo: widget.currentReceiptId,
-          // dbReceiptDataLst.isEmpty
-          //     ? '10001'
-          //     : (int.parse(dbReceiptDataLst.first.receiptNo) + 1).toString(),
-          subTotal: calculateSubTotal(),
-          createdBy: createdBy,
-          docId: getRandomString(20),
-          selectedItems: selectedLocalReceiptData
-              .map((e) => {
-                    'cost': e.cost,
-                    'barcode': e.barcode,
-                    'itemCode': e.itemCode,
-                    'productName': e.productName,
-                    'qty': e.qty,
-                    'orgPrice': e.orgPrice,
-                    'discountValue': e.discountValue,
-                    'discountPercentage': e.discountPercentage,
-                    'priceWt': e.priceWt,
-                    'total': e.total
-                  })
-              .toList(),
-          selectedCustomerID: selectedCustomerData == null
-              ? ''
-              : selectedCustomerData!.customerId,
-          discountPercentage: calculateDiscountPercentage(),
-          discountValue: calculateTotalDiscountValue(),
-          createdDate: DateTime.now(),
-          tendor: ReceiptTendor(
-              cash: cash,
-              credit: credit,
-              creditCard: creditCard,
-              remainingAmount: calculateDueAmount(),
-              balance: calculateBalanceAmount()));
-      //change window calculations
-      bool showChangeWindow = cash != '0' ? true : false;
-      String tenered =
-          (double.parse(cash) + double.parse(creditCard)).toStringAsFixed(2);
-      String subt = calculateSubTotal();
-      String change =
-          regularReturnDropDown == 'Regular' ? calculateBalanceAmount() : subt;
-      //printing
+        referenceNo: referenceNo,
+        selectedStoreDocId: selectedStoreData.docId,
+        receiptType: regularReturnDropDown,
+        taxPer: tax,
+        taxValue: calculateTaxValue(),
+        totalQty: calculateTotalQty(),
+        receiptNo: widget.currentReceiptId,
+        createdBy: createdBy,
+        docId: getRandomString(20),
+        selectedItems: selectedLocalReceiptData
+            .map((e) => {
+                  'cost': e.cost,
+                  'barcode': e.barcode,
+                  'itemCode': e.itemCode,
+                  'productName': e.productName,
+                  'qty': e.qty,
+                  'orgPrice': e.orgPrice,
+                  'discountValue': e.discountValue,
+                  'discountPercentage': e.discountPercentage,
+                  'priceWt': e.priceWt,
+                  'total': e.total
+                })
+            .toList(),
+        selectedCustomerID: selectedCustomerData == null
+            ? ''
+            : selectedCustomerData!.customerId,
+        discountPercentage: calculateDiscountPercentage(),
+        discountValue: calculateTotalDiscountValue(),
+        createdDate: DateTime.now(),
+        //
+        receiptTotal: calculateReceiptTotal(),
+        allPaymentMethodAmountsInfo: allPaymentMethodAmountsInfo,
+        receiptBalance: calculateBalanceAmount(),
+        receiptDue: calculateDueAmount(),
+      );
 
-      if (print) {
+      //change window calculations
+      bool showChangeWindow = true; // cash != '0' ? true : false;
+      String tenered = calculateTenderedAmount();
+      String receiptTotal = calculateReceiptTotal();
+      String change = regularReturnDropDown == 'Regular'
+          ? calculateBalanceAmount()
+          : receiptTotal;
+
+      //printing
+      if (updateOnly == false) {
         await printReceipt(context, dbReceiptData, calculateTaxValue(),
             selectedCustomerData, tenered, change);
       }
-      //saving receipt
-      await FbReceiptDbService(context: context).addUpdateReceipt(
-          receiptDataLst: [dbReceiptData],
-          allInventoryDataLst: allInventoryDataLst);
 
-      //resetting data
-      scanBarcodeFocusNode.requestFocus();
-      selectedCustomerData = null;
-      _billToCustomerTypeAheadController.clear();
-      selectedLocalReceiptData = [];
-      cash = '0';
-      creditCard = '0';
-      credit = '0';
-      auth = '0';
-      receiptDataSource =
-          ReceiptDataSource([], widget.userData.maxDiscount, context);
-      referenceNo = '';
-      var box = Hive.box('bitpro_app');
-      box.put('receipt_data', []);
-      regularReturnDropDown = 'Regular';
-      if (showChangeWindow) {
-        changeWindowDialog(subt, tenered, change);
+      if (printOnly == false) {
+        //saving receipt
+        await FbReceiptDbService(context: context).addUpdateReceipt(
+            receiptDataLst: [dbReceiptData],
+            allInventoryDataLst: allInventoryDataLst);
+
+        //resetting data
+        scanBarcodeFocusNode.requestFocus();
+        selectedCustomerData = null;
+        _searchCustomerTypeAheadController.clear();
+        selectedLocalReceiptData = [];
+        allPaymentMethodAmountsInfo = {};
+        receiptDataSource =
+            ReceiptDataSource([], widget.userData.maxDiscount, context);
+        referenceNo = '';
+        var box = Hive.box('bitpro_app');
+        box.put('receipt_data', []);
+        regularReturnDropDown = 'Regular';
+        if (showChangeWindow) {
+          changeWindowDialog(receiptTotal, tenered, change);
+        }
       }
-
       setState(() {
         uploading = false;
-        reloadOnBack = true;
+        if (printOnly == false) {
+          reloadDataOnPop = true;
+        }
       });
     }
   }
@@ -2891,1631 +2580,635 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
   }
 
   String calculateDueAmount() {
-    double t = double.parse(calculateSubTotal());
+    double t = double.parse(calculateReceiptTotal());
 
-    double paid = 0;
-    if (credit == '0') {
-      paid = double.parse(cash) + double.parse(creditCard);
-    } else {
-      paid = double.parse(credit);
-    }
-    if (paid < t) {
-      return (t - paid).toStringAsFixed(2);
+    double tenderedAmt = double.parse(calculateTenderedAmount());
+
+    if (tenderedAmt < t) {
+      return (t - tenderedAmt).toStringAsFixed(2);
     } else {
       return '0';
     }
+  }
+
+  String calculateTenderedAmount() {
+    double amt = 0;
+
+    for (var v in allPaymentMethodAmountsInfo.values) {
+      amt += double.parse(v);
+    }
+
+    return amt == 0 ? '0' : amt.toStringAsFixed(2);
   }
 
   String calculateBalanceAmount() {
-    double t = double.parse(calculateSubTotal());
+    double totalAmt = double.parse(calculateReceiptTotal());
+    double tenderedAmt = double.parse(calculateTenderedAmount());
 
-    double paid = 0;
-    if (credit == '0') {
-      paid = double.parse(cash) + double.parse(creditCard);
-    } else {
-      paid = double.parse(credit);
-    }
-    if (paid > t) {
-      return (paid - t).toStringAsFixed(2);
+    if (tenderedAmt > totalAmt) {
+      return (tenderedAmt - totalAmt).toStringAsFixed(2);
     } else {
       return '0';
     }
   }
 
-  tendorDialog() {
-    bool payWithCredit = credit != '0' ? true : false;
-    TextEditingController cashTextEditingController =
-        TextEditingController(text: cash);
-    TextEditingController creditCardTextEditingController =
-        TextEditingController(text: creditCard);
-    TextEditingController authTextEditingController =
-        TextEditingController(text: auth);
-    TextEditingController creditTextEditingController =
-        TextEditingController(text: credit);
-
-    bool showOverFlowError0 = false;
-    bool showOverFlowError = false;
-    bool showOverFlowError2 = false;
-
-    FocusNode cashFouchNode = FocusNode();
-    FocusNode creditCardFouchNode = FocusNode();
-    FocusNode authFouchNode = FocusNode();
-    cashFouchNode.requestFocus();
-    cashTextEditingController.selection = TextSelection(
-        baseOffset: 0, extentOffset: cashTextEditingController.text.length);
+  tenderDialog() {
     showDialog(
         context: context,
         builder: (context) => StatefulBuilder(builder: (context2, setState2) {
-              return Shortcuts(
-                shortcuts: <LogicalKeySet, Intent>{
-                  LogicalKeySet(LogicalKeyboardKey.enter):
-                      const ReceiptCallbackShortcutsIntent(name: 'Tendor Ok'),
-                  LogicalKeySet(LogicalKeyboardKey.tab):
-                      const ReceiptCallbackShortcutsIntent(
-                          name: 'Switch Focus'),
-                },
-                child: Actions(
-                  actions: <Type, Action<Intent>>{
-                    ReceiptCallbackShortcutsIntent:
-                        CallbackAction<ReceiptCallbackShortcutsIntent>(
-                            onInvoke: (ReceiptCallbackShortcutsIntent intent) {
-                      // print(intent.name);
-
-                      if (intent.name == 'Tendor Ok') {
-                        Navigator.pop(context2);
-                      } else if (intent.name == 'Switch Focus') {
-                        cashFouchNode.nextFocus();
-                        if (cashFouchNode.hasFocus) {
-                          creditCardTextEditingController.selection =
-                              TextSelection(
-                                  baseOffset: 0,
-                                  extentOffset: creditCardTextEditingController
-                                      .text.length);
-                        }
-                      }
-                      return '';
-                    }),
-                  },
-                  child: Focus(
-                    autofocus: true,
-                    child: Dialog(
-                      backgroundColor: homeBgColor,
-                      child: SizedBox(
-                          height: 650,
-                          width: 650,
-                          child: Column(children: [
-                            Container(
-                              height: 50,
-                              width: double.maxFinite,
-                              padding: const EdgeInsets.all(15),
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(3),
-                                    topRight: Radius.circular(3)),
-                                gradient: LinearGradient(
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      Color.fromARGB(255, 66, 66, 66),
-                                      Color.fromARGB(255, 0, 0, 0),
-                                    ],
-                                    begin: Alignment.topCenter),
-                              ),
-                              child: Text(
-                                'Tender Transaction',
-                                style: GoogleFonts.roboto(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white),
-                              ),
-                            ),
-                            // Expanded(
-                            //   child: Padding(
-                            //     padding: const EdgeInsets.all(4.0),
-                            //     child: Row(
-                            //       children: [
-                            //         Card(
-                            //           child: Padding(
-                            //             padding: const EdgeInsets.all(8.0),
-                            //             child: SizedBox(
-                            //               width: 250,
-                            //               child: Column(
-                            //                   crossAxisAlignment:
-                            //                       CrossAxisAlignment.start,
-                            //                   children: [
-                            //                     Text(
-                            //                         staticTextTranslate(
-                            //                             'Tender'),
-                            //                         style: TextStyle(
-                            //                             fontSize:
-                            //                                 getMediumFontSize,
-                            //                             fontWeight:
-                            //                                 FontWeight.bold)),
-                            //                     const SizedBox(
-                            //                       height: 15,
-                            //                     ),
-                            //                     Text(
-                            //                         staticTextTranslate('Cash'),
-                            //                         style: TextStyle(
-                            //                           fontSize:
-                            //                               getMediumFontSize,
-                            //                         )),
-                            //                     const SizedBox(
-                            //                       height: 5,
-                            //                     ),
-                            //                     SizedBox(
-                            //                       width: 250,
-                            //                       child: TextFormField(
-                            //                           focusNode: cashFouchNode,
-                            //                           controller:
-                            //                               cashTextEditingController,
-                            //                           enabled: !payWithCredit,
-                            //                           autovalidateMode:
-                            //                               AutovalidateMode
-                            //                                   .onUserInteraction,
-                            //                           validator: (val) {
-                            //                             if (val!.isEmpty ||
-                            //                                 double.tryParse(
-                            //                                         val) ==
-                            //                                     null) {
-                            //                               return staticTextTranslate(
-                            //                                   'Enter a valid number');
-                            //                             }
-                            //                             return null;
-                            //                           },
-                            //                           style: TextStyle(
-                            //                               fontSize:
-                            //                                   getMediumFontSize +
-                            //                                       2),
-                            //                           decoration: const InputDecoration(
-                            //                               isDense: true,
-                            //                               contentPadding:
-                            //                                   EdgeInsets
-                            //                                       .symmetric(
-                            //                                           vertical:
-                            //                                               13,
-                            //                                           horizontal:
-                            //                                               15),
-                            //                               border:
-                            //                                   OutlineInputBorder()),
-                            //                           onTap: () {
-                            //                             cashTextEditingController
-                            //                                     .selection =
-                            //                                 TextSelection(
-                            //                                     baseOffset: 0,
-                            //                                     extentOffset:
-                            //                                         cashTextEditingController
-                            //                                             .text
-                            //                                             .length);
-                            //                           },
-                            //                           onChanged: (val) {
-                            //                             var oldV = cash;
-                            //                             if (val.isNotEmpty &&
-                            //                                 double.tryParse(
-                            //                                         val) !=
-                            //                                     null) {
-                            //                               setState(() {
-                            //                                 cash = val;
-                            //                               });
-                            //                               setState2(() {});
-                            //                               if (creditCard !=
-                            //                                       '0' &&
-                            //                                   calculateBalanceAmount() !=
-                            //                                       '0') {
-                            //                                 showOverFlowError0 =
-                            //                                     true;
-                            //                                 cash = oldV;
-                            //                               } else {
-                            //                                 showOverFlowError0 =
-                            //                                     false;
-                            //                               }
-
-                            //                               setState2(() {});
-                            //                               setState(() {});
-                            //                             }
-                            //                           }),
-                            //                     ),
-                            //                     const SizedBox(
-                            //                       height: 5,
-                            //                     ),
-                            //                     if (showOverFlowError0)
-                            //                       Text(
-                            //                           staticTextTranslate(
-                            //                               'Enter amount equal to the total'),
-                            //                           style: TextStyle(
-                            //                               fontSize:
-                            //                                   getSmallFontSize,
-                            //                               color:
-                            //                                   Colors.red[700])),
-                            //                     const SizedBox(
-                            //                       height: 5,
-                            //                     ),
-                            //                     SizedBox(
-                            //                       width: 250,
-                            //                       child: Row(
-                            //                         mainAxisAlignment:
-                            //                             MainAxisAlignment
-                            //                                 .spaceBetween,
-                            //                         children: [
-                            //                           Column(
-                            //                             crossAxisAlignment:
-                            //                                 CrossAxisAlignment
-                            //                                     .start,
-                            //                             children: [
-                            //                               Text(
-                            //                                   staticTextTranslate(
-                            //                                       'Credit Card'),
-                            //                                   style: TextStyle(
-                            //                                     fontSize:
-                            //                                         getMediumFontSize,
-                            //                                   )),
-                            //                               const SizedBox(
-                            //                                 height: 5,
-                            //                               ),
-                            //                               SizedBox(
-                            //                                 width: 120,
-                            //                                 child:
-                            //                                     TextFormField(
-                            //                                         focusNode:
-                            //                                             creditCardFouchNode,
-                            //                                         enabled:
-                            //                                             !payWithCredit,
-                            //                                         controller:
-                            //                                             creditCardTextEditingController,
-                            //                                         autovalidateMode:
-                            //                                             AutovalidateMode
-                            //                                                 .onUserInteraction,
-                            //                                         validator:
-                            //                                             (val) {
-                            //                                           if (val!.isEmpty ||
-                            //                                               double.tryParse(val) ==
-                            //                                                   null) {
-                            //                                             return staticTextTranslate(
-                            //                                                 'Enter a valid number');
-                            //                                           }
-
-                            //                                           return null;
-                            //                                         },
-                            //                                         style: const TextStyle(
-                            //                                             fontSize:
-                            //                                                 16),
-                            //                                         decoration: const InputDecoration(
-                            //                                             isDense:
-                            //                                                 true,
-                            //                                             contentPadding: EdgeInsets.symmetric(
-                            //                                                 vertical:
-                            //                                                     13,
-                            //                                                 horizontal:
-                            //                                                     15),
-                            //                                             border:
-                            //                                                 OutlineInputBorder()),
-                            //                                         onTap: () {
-                            //                                           creditCardTextEditingController.selection = TextSelection(
-                            //                                               baseOffset:
-                            //                                                   0,
-                            //                                               extentOffset: creditCardTextEditingController
-                            //                                                   .text
-                            //                                                   .length);
-                            //                                         },
-                            //                                         onFieldSubmitted:
-                            //                                             (v) {},
-                            //                                         onChanged:
-                            //                                             (val) {
-                            //                                           var oldV =
-                            //                                               creditCard;
-                            //                                           if (val.isNotEmpty &&
-                            //                                               double.tryParse(val) !=
-                            //                                                   null) {
-                            //                                             setState(
-                            //                                                 () {
-                            //                                               creditCard =
-                            //                                                   val;
-                            //                                             });
-                            //                                             setState2(
-                            //                                                 () {});
-                            //                                             if (calculateBalanceAmount() !=
-                            //                                                 '0') {
-                            //                                               showOverFlowError =
-                            //                                                   true;
-                            //                                               creditCard =
-                            //                                                   oldV;
-                            //                                             } else {
-                            //                                               showOverFlowError =
-                            //                                                   false;
-                            //                                             }
-
-                            //                                             setState2(
-                            //                                                 () {});
-                            //                                             setState(
-                            //                                                 () {});
-                            //                                           }
-                            //                                         }),
-                            //                               ),
-                            //                             ],
-                            //                           ),
-                            //                           Column(
-                            //                             crossAxisAlignment:
-                            //                                 CrossAxisAlignment
-                            //                                     .start,
-                            //                             children: [
-                            //                               Text(
-                            //                                   staticTextTranslate(
-                            //                                       'Auth #'),
-                            //                                   style: TextStyle(
-                            //                                     fontSize:
-                            //                                         getMediumFontSize,
-                            //                                   )),
-                            //                               const SizedBox(
-                            //                                 height: 5,
-                            //                               ),
-                            //                               SizedBox(
-                            //                                 width: 120,
-                            //                                 child:
-                            //                                     TextFormField(
-                            //                                         focusNode:
-                            //                                             authFouchNode,
-                            //                                         enabled:
-                            //                                             !payWithCredit,
-                            //                                         autovalidateMode:
-                            //                                             AutovalidateMode
-                            //                                                 .onUserInteraction,
-                            //                                         validator:
-                            //                                             (val) {
-                            //                                           if (val!.isEmpty ||
-                            //                                               double.tryParse(val) ==
-                            //                                                   null) {
-                            //                                             return staticTextTranslate(
-                            //                                                 'Enter a valid number');
-                            //                                           }
-                            //                                           return null;
-                            //                                         },
-                            //                                         controller:
-                            //                                             authTextEditingController,
-                            //                                         style: const TextStyle(
-                            //                                             fontSize:
-                            //                                                 16),
-                            //                                         decoration: const InputDecoration(
-                            //                                             isDense:
-                            //                                                 true,
-                            //                                             contentPadding: EdgeInsets.symmetric(
-                            //                                                 vertical:
-                            //                                                     13,
-                            //                                                 horizontal:
-                            //                                                     15),
-                            //                                             border:
-                            //                                                 OutlineInputBorder()),
-                            //                                         onChanged:
-                            //                                             (val) {
-                            //                                           if (val.isNotEmpty &&
-                            //                                               double.tryParse(val) !=
-                            //                                                   null) {
-                            //                                             setState(
-                            //                                                 () {
-                            //                                               auth =
-                            //                                                   val;
-                            //                                             });
-                            //                                             setState2(
-                            //                                                 () {});
-                            //                                           }
-                            //                                         }),
-                            //                               ),
-                            //                             ],
-                            //                           )
-                            //                         ],
-                            //                       ),
-                            //                     ),
-                            //                     const SizedBox(
-                            //                       height: 5,
-                            //                     ),
-                            //                     if (showOverFlowError)
-                            //                       Text(
-                            //                           staticTextTranslate(
-                            //                               'Enter amount equal to the subtotal'),
-                            //                           style: TextStyle(
-                            //                               fontSize:
-                            //                                   getSmallFontSize,
-                            //                               color:
-                            //                                   Colors.red[700])),
-                            //                     const SizedBox(
-                            //                       height: 5,
-                            //                     ),
-                            //                     Row(
-                            //                       children: [
-                            //                         Checkbox(
-                            //                             shape: RoundedRectangleBorder(
-                            //                                 side:
-                            //                                     const BorderSide(
-                            //                                         width: 0.7),
-                            //                                 borderRadius:
-                            //                                     BorderRadius
-                            //                                         .circular(
-                            //                                             3)),
-                            //                             value: payWithCredit,
-                            //                             onChanged: (v) {
-                            //                               if (v != null) {
-                            //                                 setState(() {
-                            //                                   payWithCredit = v;
-                            //                                   if (v) {
-                            //                                     cashTextEditingController
-                            //                                         .text = '0';
-                            //                                     cash = '0';
-                            //                                     creditCardTextEditingController
-                            //                                         .text = '0';
-                            //                                     creditCard =
-                            //                                         '0';
-                            //                                     authTextEditingController
-                            //                                         .text = '0';
-                            //                                     auth = '0';
-                            //                                   } else {
-                            //                                     creditTextEditingController
-                            //                                         .text = '0';
-                            //                                     credit = '0';
-                            //                                   }
-                            //                                   showOverFlowError0 =
-                            //                                       false;
-                            //                                   showOverFlowError =
-                            //                                       false;
-                            //                                   showOverFlowError2 =
-                            //                                       false;
-                            //                                 });
-                            //                                 setState2(() {});
-                            //                               }
-                            //                             }),
-                            //                         Text(
-                            //                             staticTextTranslate(
-                            //                                 'Pay Credit'),
-                            //                             style: TextStyle(
-                            //                               fontSize:
-                            //                                   getMediumFontSize,
-                            //                             )),
-                            //                       ],
-                            //                     ),
-                            //                     const SizedBox(
-                            //                       height: 15,
-                            //                     ),
-                            //                     if (payWithCredit)
-                            //                       Text(
-                            //                           staticTextTranslate(
-                            //                               'Credit'),
-                            //                           style: TextStyle(
-                            //                             fontSize:
-                            //                                 getMediumFontSize,
-                            //                           )),
-                            //                     const SizedBox(
-                            //                       height: 5,
-                            //                     ),
-                            //                     if (selectedCustomerData ==
-                            //                             null &&
-                            //                         payWithCredit)
-                            //                       Text(
-                            //                           staticTextTranslate(
-                            //                               'Please select a customer, for credit payment'),
-                            //                           style: TextStyle(
-                            //                               fontSize:
-                            //                                   getSmallFontSize,
-                            //                               color:
-                            //                                   Colors.red[700])),
-                            //                     if (selectedCustomerData ==
-                            //                             null &&
-                            //                         payWithCredit)
-                            //                       const SizedBox(
-                            //                         height: 15,
-                            //                       ),
-                            //                     if (payWithCredit)
-                            //                       SizedBox(
-                            //                         width: 250,
-                            //                         child: TextFormField(
-                            //                             autofocus: true,
-                            //                             enabled:
-                            //                                 selectedCustomerData !=
-                            //                                     null,
-                            //                             controller:
-                            //                                 creditTextEditingController,
-                            //                             autovalidateMode:
-                            //                                 AutovalidateMode
-                            //                                     .onUserInteraction,
-                            //                             validator: (val) {
-                            //                               if (val!.isEmpty ||
-                            //                                   double.tryParse(
-                            //                                           val) ==
-                            //                                       null) {
-                            //                                 return staticTextTranslate(
-                            //                                     'Enter a valid number');
-                            //                               }
-
-                            //                               return null;
-                            //                             },
-                            //                             style: TextStyle(
-                            //                                 fontSize:
-                            //                                     getMediumFontSize +
-                            //                                         2),
-                            //                             decoration: const InputDecoration(
-                            //                                 isDense: true,
-                            //                                 contentPadding:
-                            //                                     EdgeInsets
-                            //                                         .symmetric(
-                            //                                             vertical:
-                            //                                                 13,
-                            //                                             horizontal:
-                            //                                                 15),
-                            //                                 border:
-                            //                                     OutlineInputBorder()),
-                            //                             onChanged: (val) {
-                            //                               var oldV = credit;
-                            //                               if (val.isNotEmpty &&
-                            //                                   double.tryParse(
-                            //                                           val) !=
-                            //                                       null) {
-                            //                                 setState(() {
-                            //                                   credit = val;
-                            //                                 });
-                            //                                 setState2(() {});
-                            //                                 if (calculateBalanceAmount() !=
-                            //                                     '0') {
-                            //                                   credit = oldV;
-                            //                                   showOverFlowError2 =
-                            //                                       true;
-                            //                                 } else {
-                            //                                   showOverFlowError2 =
-                            //                                       false;
-                            //                                 }
-                            //                                 setState(() {});
-                            //                                 setState2(() {});
-                            //                               }
-                            //                             }),
-                            //                       ),
-                            //                     const SizedBox(
-                            //                       height: 5,
-                            //                     ),
-                            //                     if (showOverFlowError2 &&
-                            //                         payWithCredit)
-                            //                       Text(
-                            //                           staticTextTranslate(
-                            //                               'Enter amount equal to the subtotal'),
-                            //                           style: TextStyle(
-                            //                               fontSize:
-                            //                                   getSmallFontSize,
-                            //                               color:
-                            //                                   Colors.red[700])),
-                            //                   ]),
-                            //             ),
-                            //           ),
-                            //         ),
-                            //         const SizedBox(
-                            //           width: 5,
-                            //         ),
-                            //         Expanded(
-                            //           child: Card(
-                            //             child: Padding(
-                            //               padding: const EdgeInsets.all(8.0),
-                            //               child: Column(
-                            //                   crossAxisAlignment:
-                            //                       CrossAxisAlignment.start,
-                            //                   children: [
-                            //                     Text(
-                            //                       staticTextTranslate(
-                            //                           'SUBTOTAL'),
-                            //                     ),
-                            //                     const SizedBox(
-                            //                       height: 5,
-                            //                     ),
-                            //                     Text(
-                            //                       calculateSubTotal(),
-                            //                       style: TextStyle(
-                            //                           fontSize:
-                            //                               getExtraLargeFontSize,
-                            //                           fontWeight:
-                            //                               FontWeight.bold),
-                            //                     ),
-                            //                     const SizedBox(
-                            //                       height: 25,
-                            //                     ),
-                            //                     Row(
-                            //                       children: [
-                            //                         const CircleAvatar(
-                            //                           radius: 5,
-                            //                           backgroundColor:
-                            //                               Colors.brown,
-                            //                         ),
-                            //                         const SizedBox(
-                            //                           width: 10,
-                            //                         ),
-                            //                         Text(
-                            //                           staticTextTranslate(
-                            //                               'Cash'),
-                            //                           style: TextStyle(
-                            //                             fontSize:
-                            //                                 getMediumFontSize,
-                            //                           ),
-                            //                         ),
-                            //                         const Expanded(
-                            //                           child: SizedBox(
-                            //                             height: 2,
-                            //                           ),
-                            //                         ),
-                            //                         Text(
-                            //                           cash,
-                            //                           style: TextStyle(
-                            //                             fontWeight:
-                            //                                 FontWeight.bold,
-                            //                             fontSize:
-                            //                                 getMediumFontSize +
-                            //                                     2,
-                            //                           ),
-                            //                         ),
-                            //                       ],
-                            //                     ),
-                            //                     const Divider(),
-                            //                     Row(
-                            //                       children: [
-                            //                         const CircleAvatar(
-                            //                           radius: 5,
-                            //                           backgroundColor:
-                            //                               Colors.green,
-                            //                         ),
-                            //                         const SizedBox(
-                            //                           width: 10,
-                            //                         ),
-                            //                         Text(
-                            //                           staticTextTranslate(
-                            //                               'Credit Card'),
-                            //                           style: TextStyle(
-                            //                             fontSize:
-                            //                                 getMediumFontSize +
-                            //                                     2,
-                            //                           ),
-                            //                         ),
-                            //                         const Expanded(
-                            //                           child: SizedBox(
-                            //                             height: 2,
-                            //                           ),
-                            //                         ),
-                            //                         Text(
-                            //                           creditCard,
-                            //                           style: TextStyle(
-                            //                             fontWeight:
-                            //                                 FontWeight.bold,
-                            //                             fontSize:
-                            //                                 getMediumFontSize +
-                            //                                     2,
-                            //                           ),
-                            //                         ),
-                            //                       ],
-                            //                     ),
-                            //                     const Divider(),
-                            //                     Row(
-                            //                       children: [
-                            //                         const CircleAvatar(
-                            //                           radius: 5,
-                            //                           backgroundColor:
-                            //                               Colors.amber,
-                            //                         ),
-                            //                         const SizedBox(
-                            //                           width: 10,
-                            //                         ),
-                            //                         Text(
-                            //                           staticTextTranslate(
-                            //                               'Credit'),
-                            //                           style: TextStyle(
-                            //                             fontSize:
-                            //                                 getMediumFontSize +
-                            //                                     2,
-                            //                           ),
-                            //                         ),
-                            //                         const Expanded(
-                            //                           child: SizedBox(
-                            //                             height: 2,
-                            //                           ),
-                            //                         ),
-                            //                         Text(
-                            //                           credit,
-                            //                           style: TextStyle(
-                            //                             fontWeight:
-                            //                                 FontWeight.bold,
-                            //                             fontSize:
-                            //                                 getMediumFontSize +
-                            //                                     2,
-                            //                           ),
-                            //                         ),
-                            //                       ],
-                            //                     ),
-                            //                     const Divider(),
-                            //                     Row(
-                            //                       children: [
-                            //                         const CircleAvatar(
-                            //                           radius: 5,
-                            //                           backgroundColor:
-                            //                               Colors.blue,
-                            //                         ),
-                            //                         const SizedBox(
-                            //                           width: 10,
-                            //                         ),
-                            //                         Text(
-                            //                           staticTextTranslate(
-                            //                               'Due'),
-                            //                           style: TextStyle(
-                            //                             fontSize:
-                            //                                 getMediumFontSize,
-                            //                           ),
-                            //                         ),
-                            //                         const Expanded(
-                            //                           child: SizedBox(
-                            //                             height: 2,
-                            //                           ),
-                            //                         ),
-                            //                         Text(
-                            //                           calculateDueAmount(),
-                            //                           style: TextStyle(
-                            //                             fontWeight:
-                            //                                 FontWeight.bold,
-                            //                             fontSize:
-                            //                                 getMediumFontSize +
-                            //                                     2,
-                            //                           ),
-                            //                         ),
-                            //                       ],
-                            //                     ),
-                            //                     const Divider(),
-                            //                     Row(
-                            //                       children: [
-                            //                         const CircleAvatar(
-                            //                           radius: 5,
-                            //                           backgroundColor:
-                            //                               Colors.purple,
-                            //                         ),
-                            //                         const SizedBox(
-                            //                           width: 10,
-                            //                         ),
-                            //                         Text(
-                            //                           staticTextTranslate(
-                            //                               'Balance'),
-                            //                           style: TextStyle(
-                            //                             fontSize:
-                            //                                 getMediumFontSize,
-                            //                           ),
-                            //                         ),
-                            //                         const Expanded(
-                            //                           child: SizedBox(
-                            //                             height: 2,
-                            //                           ),
-                            //                         ),
-                            //                         Text(
-                            //                           calculateBalanceAmount(),
-                            //                           style: TextStyle(
-                            //                             fontWeight:
-                            //                                 FontWeight.bold,
-                            //                             fontSize:
-                            //                                 getMediumFontSize +
-                            //                                     2,
-                            //                           ),
-                            //                         ),
-                            //                       ],
-                            //                     ),
-                            //                     const Divider(),
-                            //                     const SizedBox(
-                            //                       height: 20,
-                            //                     ),
-                            //                     if (payWithCredit)
-                            //                       Text(
-                            //                           staticTextTranslate(
-                            //                               'Select Customer'),
-                            //                           style: TextStyle(
-                            //                               fontSize:
-                            //                                   getMediumFontSize)),
-                            //                     const SizedBox(
-                            //                       height: 5,
-                            //                     ),
-                            //                     if (payWithCredit)
-                            //                       Container(
-                            //                         padding:
-                            //                             const EdgeInsets.all(5),
-                            //                         height: 40,
-                            //                         decoration: BoxDecoration(
-                            //                             border: Border.all(
-                            //                                 width: 1,
-                            //                                 color: Colors.grey),
-                            //                             borderRadius:
-                            //                                 BorderRadius
-                            //                                     .circular(4)),
-                            //                         child:
-                            //                             DropdownButtonHideUnderline(
-                            //                           child: DropdownButton<
-                            //                               String>(
-                            //                             isExpanded: true,
-                            //                             items: customerDataLst
-                            //                                 .map((CustomerData
-                            //                                     value) {
-                            //                               return DropdownMenuItem<
-                            //                                   String>(
-                            //                                 value: value
-                            //                                     .customerId,
-                            //                                 child: Text(
-                            //                                     value
-                            //                                         .customerName,
-                            //                                     style: TextStyle(
-                            //                                         fontSize:
-                            //                                             getMediumFontSize)),
-                            //                               );
-                            //                             }).toList(),
-                            //                             value: selectedCustomerData ==
-                            //                                     null
-                            //                                 ? null
-                            //                                 : selectedCustomerData!
-                            //                                     .customerId,
-                            //                             onChanged: (val) {
-                            //                               int i = customerDataLst
-                            //                                   .indexWhere(
-                            //                                       (element) =>
-                            //                                           element
-                            //                                               .customerId ==
-                            //                                           val);
-                            //                               if (i != -1) {
-                            //                                 selectedCustomerData =
-                            //                                     customerDataLst
-                            //                                         .elementAt(
-                            //                                             i);
-                            //                                 _billToCustomerTypeAheadController
-                            //                                         .text =
-                            //                                     selectedCustomerData!
-                            //                                         .customerName;
-                            //                                 setState(() {});
-                            //                                 setState2(() {});
-                            //                               }
-                            //                             },
-                            //                           ),
-                            //                         ),
-                            //                       )
-                            //                   ]),
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   ),
-                            // ),
-                            Container(
-                              height: 368,
-                              child: Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Expanded(
-                                  child: Row(
+              return Dialog(
+                backgroundColor: homeBgColor,
+                child: SizedBox(
+                    height: 650,
+                    width: 650,
+                    child: Column(children: [
+                      Container(
+                        height: 50,
+                        width: double.maxFinite,
+                        padding: const EdgeInsets.all(15),
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(3),
+                              topRight: Radius.circular(3)),
+                          gradient: LinearGradient(
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color.fromARGB(255, 66, 66, 66),
+                                Color.fromARGB(255, 0, 0, 0),
+                              ],
+                              begin: Alignment.topCenter),
+                        ),
+                        child: Text(
+                          'Tender Transaction',
+                          style: GoogleFonts.roboto(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white),
+                        ),
+                      ),
+                      Container(
+                        height: 368,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Expanded(
+                            child: Row(
+                              children: [
+                                Column(
+                                  children: [
+                                    Container(
+                                      height: 50,
+                                      padding: const EdgeInsets.all(10),
+                                      width: 240,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(width: 0.4),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Text(
+                                        'Take Due: ${calculateDueAmount()}',
+                                        style: GoogleFonts.roboto(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: 240,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(width: 0.4),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: paymentTypeList.keys
+                                                .map((e) =>
+                                                    tendorPaymentMethodButton(
+                                                        e, setState2))
+                                                .toList()),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                    child: Container(
+                                  child: Column(
                                     children: [
-                                      Column(
-                                        children: [
+                                      Container(
+                                        height: 336,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(width: 0.4),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        child: Column(children: [
                                           Container(
-                                            height: 50,
-                                            padding: const EdgeInsets.all(10),
-                                            width: 240,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(width: 0.4),
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
+                                            height: 35,
+                                            width: double.maxFinite,
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 7, horizontal: 10),
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(4),
+                                                  topRight: Radius.circular(4)),
+                                              gradient: LinearGradient(
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [
+                                                    Color.fromARGB(
+                                                        255, 66, 66, 66),
+                                                    Color.fromARGB(
+                                                        255, 0, 0, 0),
+                                                  ],
+                                                  begin: Alignment.topCenter),
                                             ),
                                             child: Text(
-                                              'Take Due: 500.00',
+                                              'Payments',
                                               style: GoogleFonts.roboto(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 20,
-                                              ),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.white),
                                             ),
                                           ),
                                           const SizedBox(
-                                            height: 10,
+                                            height: 0,
                                           ),
-                                          Container(
-                                            width: 240,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(width: 0.4),
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Column(children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: SizedBox(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(4),
-                                                                    gradient: const LinearGradient(
-                                                                        end: Alignment.bottomCenter,
-                                                                        colors: [
-                                                                          Color(
-                                                                              0xff092F53),
-                                                                          Color(
-                                                                              0xff284F70),
-                                                                        ],
-                                                                        begin: Alignment.topCenter)),
-                                                            height: 42,
-                                                            width: 220,
-                                                            child:
-                                                                ElevatedButton(
-                                                                    style: ElevatedButton.styleFrom(
-                                                                        backgroundColor: viewMode
-                                                                            ? Colors
-                                                                                .grey
-                                                                            : Colors
-                                                                                .transparent,
-                                                                        shape: RoundedRectangleBorder(
-                                                                            borderRadius: BorderRadius.circular(
-                                                                                4))),
-                                                                    onPressed:
-                                                                        () {},
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        Text(
-                                                                            staticTextTranslate(
-                                                                                'Cash'),
-                                                                            style:
-                                                                                GoogleFonts.roboto(fontSize: getMediumFontSize)),
-                                                                      ],
-                                                                    )),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(4),
-                                                                    gradient: const LinearGradient(
-                                                                        end: Alignment.bottomCenter,
-                                                                        colors: [
-                                                                          Color(
-                                                                              0xff092F53),
-                                                                          Color(
-                                                                              0xff284F70),
-                                                                        ],
-                                                                        begin: Alignment.topCenter)),
-                                                            height: 42,
-                                                            width: 220,
-                                                            child:
-                                                                ElevatedButton(
-                                                                    style: ElevatedButton.styleFrom(
-                                                                        backgroundColor: viewMode
-                                                                            ? Colors
-                                                                                .grey
-                                                                            : Colors
-                                                                                .transparent,
-                                                                        shape: RoundedRectangleBorder(
-                                                                            borderRadius: BorderRadius.circular(
-                                                                                4))),
-                                                                    onPressed:
-                                                                        () {},
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        Text(
-                                                                            staticTextTranslate(
-                                                                                'Credit Card'),
-                                                                            style:
-                                                                                GoogleFonts.roboto(fontSize: getMediumFontSize)),
-                                                                      ],
-                                                                    )),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(4),
-                                                                    gradient: const LinearGradient(
-                                                                        end: Alignment.bottomLeft,
-                                                                        colors: [
-                                                                          Color.fromARGB(
-                                                                              255,
-                                                                              211,
-                                                                              164,
-                                                                              8),
-                                                                          Color.fromARGB(
-                                                                              255,
-                                                                              124,
-                                                                              27,
-                                                                              116),
-                                                                        ],
-                                                                        begin: Alignment.topCenter)),
-                                                            height: 42,
-                                                            width: 220,
-                                                            child:
-                                                                ElevatedButton(
-                                                                    style: ElevatedButton.styleFrom(
-                                                                        backgroundColor: viewMode
-                                                                            ? Colors
-                                                                                .grey
-                                                                            : Colors
-                                                                                .transparent,
-                                                                        shape: RoundedRectangleBorder(
-                                                                            borderRadius: BorderRadius.circular(
-                                                                                4))),
-                                                                    onPressed:
-                                                                        () {},
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        Image
-                                                                            .asset(
-                                                                          'assets/icons/tamara.png',
-                                                                          width:
-                                                                              120,
-                                                                        )
-                                                                      ],
-                                                                    )),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(4),
-                                                                    gradient: const LinearGradient(
-                                                                        end: Alignment.bottomCenter,
-                                                                        colors: [
-                                                                          Color.fromARGB(
-                                                                              255,
-                                                                              30,
-                                                                              199,
-                                                                              171),
-                                                                          Color.fromARGB(
-                                                                              255,
-                                                                              30,
-                                                                              199,
-                                                                              171),
-                                                                        ],
-                                                                        begin: Alignment.topCenter)),
-                                                            height: 42,
-                                                            width: 220,
-                                                            child:
-                                                                ElevatedButton(
-                                                                    style: ElevatedButton.styleFrom(
-                                                                        backgroundColor: viewMode
-                                                                            ? Colors
-                                                                                .grey
-                                                                            : Colors
-                                                                                .transparent,
-                                                                        shape: RoundedRectangleBorder(
-                                                                            borderRadius: BorderRadius.circular(
-                                                                                4))),
-                                                                    onPressed:
-                                                                        () {},
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        Image
-                                                                            .asset(
-                                                                          'assets/icons/tabby.png',
-                                                                          width:
-                                                                              80,
-                                                                        )
-                                                                      ],
-                                                                    )),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(4),
-                                                                    gradient: const LinearGradient(
-                                                                        end: Alignment.bottomCenter,
-                                                                        colors: [
-                                                                          Color(
-                                                                              0xff092F53),
-                                                                          Color(
-                                                                              0xff284F70),
-                                                                        ],
-                                                                        begin: Alignment.topCenter)),
-                                                            height: 42,
-                                                            width: 220,
-                                                            child:
-                                                                ElevatedButton(
-                                                                    style: ElevatedButton.styleFrom(
-                                                                        backgroundColor: viewMode
-                                                                            ? Colors
-                                                                                .grey
-                                                                            : Colors
-                                                                                .transparent,
-                                                                        shape: RoundedRectangleBorder(
-                                                                            borderRadius: BorderRadius.circular(
-                                                                                4))),
-                                                                    onPressed:
-                                                                        () {},
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        Text(
-                                                                            staticTextTranslate(
-                                                                                'Credit'),
-                                                                            style:
-                                                                                GoogleFonts.roboto(fontSize: getMediumFontSize)),
-                                                                      ],
-                                                                    )),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                        ],
-                                                      ),
+                                          for (var infoKey
+                                              in allPaymentMethodAmountsInfo
+                                                  .keys)
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                height: 50,
+                                                width: double.maxFinite,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 5,
+                                                        horizontal: 10),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    border:
+                                                        Border.all(width: 0.4),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4)),
+                                                child: Row(children: [
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      border:
+                                                          Border.all(width: 1),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4),
+                                                      gradient:
+                                                          const LinearGradient(
+                                                              end: Alignment
+                                                                  .bottomCenter,
+                                                              colors: [
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    207,
+                                                                    39,
+                                                                    39),
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    133,
+                                                                    14,
+                                                                    14),
+                                                              ],
+                                                              begin: Alignment
+                                                                  .topCenter),
+                                                    ),
+                                                    height: 40,
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .transparent),
+                                                      onPressed: () {
+                                                        allPaymentMethodAmountsInfo
+                                                            .remove(infoKey);
+                                                        setState2(() {});
+                                                      },
+                                                      child: const Text('X'),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Expanded(
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          infoKey,
+                                                          style: GoogleFonts.roboto(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: const Color
+                                                                  .fromARGB(255,
+                                                                  0, 0, 0)),
+                                                        ),
+                                                        Text(
+                                                          allPaymentMethodAmountsInfo[
+                                                              infoKey],
+                                                          style: GoogleFonts.roboto(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: const Color
+                                                                  .fromARGB(255,
+                                                                  0, 0, 0)),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                 ]),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(child: Container())
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Expanded(
-                                          child: Container(
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              height: 336,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(width: 0.4),
-                                                borderRadius:
-                                                    BorderRadius.circular(4),
                                               ),
-                                              child: Column(children: [
-                                                Container(
-                                                  height: 35,
-                                                  width: double.maxFinite,
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      vertical: 7,
-                                                      horizontal: 10),
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                            topLeft: Radius
-                                                                .circular(4),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    4)),
-                                                    gradient: LinearGradient(
-                                                        end: Alignment
-                                                            .bottomCenter,
-                                                        colors: [
-                                                          Color.fromARGB(
-                                                              255, 66, 66, 66),
-                                                          Color.fromARGB(
-                                                              255, 0, 0, 0),
-                                                        ],
-                                                        begin: Alignment
-                                                            .topCenter),
-                                                  ),
-                                                  child: Text(
-                                                    'Payments',
-                                                    style: GoogleFonts.roboto(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 0,
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Container(
-                                                    height: 50,
-                                                    width: double.maxFinite,
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        vertical: 5,
-                                                        horizontal: 10),
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        border: Border.all(
-                                                            width: 0.4),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4)),
-                                                    child: Row(children: [
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          border: Border.all(
-                                                              width: 1),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(4),
-                                                          gradient:
-                                                              const LinearGradient(
-                                                                  end: Alignment
-                                                                      .bottomCenter,
-                                                                  colors: [
-                                                                    Color
-                                                                        .fromARGB(
-                                                                            255,
-                                                                            207,
-                                                                            39,
-                                                                            39),
-                                                                    Color
-                                                                        .fromARGB(
-                                                                            255,
-                                                                            133,
-                                                                            14,
-                                                                            14),
-                                                                  ],
-                                                                  begin: Alignment
-                                                                      .topCenter),
-                                                        ),
-                                                        height: 40,
-                                                        child: ElevatedButton(
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                                  backgroundColor:
-                                                                      Colors
-                                                                          .transparent),
-                                                          onPressed: () {},
-                                                          child:
-                                                              const Text('X'),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Expanded(
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              'Cash',
-                                                              style: GoogleFonts.roboto(
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  color: const Color
-                                                                      .fromARGB(
-                                                                      255,
-                                                                      0,
-                                                                      0,
-                                                                      0)),
-                                                            ),
-                                                            Text(
-                                                              '500.00',
-                                                              style: GoogleFonts.roboto(
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  color: const Color
-                                                                      .fromARGB(
-                                                                      255,
-                                                                      0,
-                                                                      0,
-                                                                      0)),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ]),
-                                                  ),
-                                                ),
-                                              ]),
-                                            )
-                                          ],
-                                        ),
-                                      )),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                width: double.maxFinite,
-                                child: Padding(
-                                  padding: EdgeInsets.all(15),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        width: 350,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              "Invoice Total",
-                                              style: GoogleFonts.roboto(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600),
                                             ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            SizedBox(
-                                                height: 35,
-                                                width: 150,
-                                                child: TextField(
-                                                  decoration: InputDecoration(
-                                                      fillColor: Colors.white,
-                                                      filled: true,
-                                                      contentPadding:
-                                                          const EdgeInsets.all(
-                                                              5),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                width: 0.4),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4),
-                                                      ),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                width: 0.4),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4),
-                                                      )),
-                                                )),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        width: 350,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              "Tendered Amount",
-                                              style: GoogleFonts.roboto(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            SizedBox(
-                                                height: 35,
-                                                width: 150,
-                                                child: TextField(
-                                                  decoration: InputDecoration(
-                                                      fillColor: Colors.white,
-                                                      filled: true,
-                                                      contentPadding:
-                                                          const EdgeInsets.all(
-                                                              5),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                width: 0.4),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4),
-                                                      ),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                width: 0.4),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4),
-                                                      )),
-                                                )),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        width: 350,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              "Balance",
-                                              style: GoogleFonts.roboto(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            SizedBox(
-                                                height: 35,
-                                                width: 150,
-                                                child: TextField(
-                                                  decoration: InputDecoration(
-                                                      fillColor: Colors.white,
-                                                      filled: true,
-                                                      contentPadding:
-                                                          const EdgeInsets.all(
-                                                              5),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                width: 0.4),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4),
-                                                      ),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                width: 0.4),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4),
-                                                      )),
-                                                )),
-                                          ],
-                                        ),
+                                        ]),
                                       )
                                     ],
                                   ),
-                                ),
-                              ),
+                                )),
+                              ],
                             ),
-                            Container(
-                              height: 62,
-                              width: double.maxFinite,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 10),
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(0),
-                                    topRight: Radius.circular(0)),
-                                gradient: LinearGradient(
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      Colors.grey,
-                                      Colors.grey,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          width: double.maxFinite,
+                          child: Padding(
+                            padding: EdgeInsets.all(15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Container(
+                                  width: 350,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "Invoice Total",
+                                        style: GoogleFonts.roboto(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Container(
+                                          height: 35,
+                                          width: 150,
+                                          alignment: Alignment.centerLeft,
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              border: Border.all(
+                                                  color: Colors.grey.shade400),
+                                              borderRadius:
+                                                  BorderRadius.circular(6)),
+                                          child: Text(calculateReceiptTotal()))
                                     ],
-                                    begin: Alignment.topCenter),
-                              ),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '',
-                                      style: GoogleFonts.roboto(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.white),
-                                    ),
-                                    Row(children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                          gradient: const LinearGradient(
-                                              end: Alignment.bottomCenter,
-                                              colors: [
-                                                Color(0xff092F53),
-                                                Color(0xff284F70),
-                                              ],
-                                              begin: Alignment.topCenter),
-                                        ),
-                                        width: 120,
-                                        height: 42,
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.transparent),
-                                          onPressed: () {},
-                                          child: const Text('Cancel'),
-                                        ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  width: 350,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "Tendered Amount",
+                                        style: GoogleFonts.roboto(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600),
                                       ),
-                                      const SizedBox(
+                                      SizedBox(
                                         width: 10,
                                       ),
                                       Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                          gradient: const LinearGradient(
-                                              end: Alignment.bottomCenter,
-                                              colors: [
-                                                Color(0xff092F53),
-                                                Color(0xff284F70),
-                                              ],
-                                              begin: Alignment.topCenter),
-                                        ),
-                                        width: 120,
-                                        height: 42,
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.transparent),
-                                          onPressed: () {},
-                                          child: const Text('Update Only'),
-                                        ),
+                                          height: 35,
+                                          width: 150,
+                                          alignment: Alignment.centerLeft,
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              border: Border.all(
+                                                  color: Colors.grey.shade400),
+                                              borderRadius:
+                                                  BorderRadius.circular(6)),
+                                          child:
+                                              Text(calculateTenderedAmount()))
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  width: 350,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "Balance",
+                                        style: GoogleFonts.roboto(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600),
                                       ),
-                                      const SizedBox(
+                                      SizedBox(
                                         width: 10,
                                       ),
                                       Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                          gradient: const LinearGradient(
-                                              end: Alignment.bottomCenter,
-                                              colors: [
-                                                Color(0xff092F53),
-                                                Color(0xff284F70),
-                                              ],
-                                              begin: Alignment.topCenter),
-                                        ),
-                                        height: 42,
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.transparent),
-                                          onPressed: () =>
-                                              printAndUploadOnTap(print: true),
-                                          child: const Text('Print & Update'),
-                                        ),
-                                      ),
-                                    ])
-                                  ]),
+                                          height: 35,
+                                          width: 150,
+                                          alignment: Alignment.centerLeft,
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              border: Border.all(
+                                                  color: Colors.grey.shade400),
+                                              borderRadius:
+                                                  BorderRadius.circular(6)),
+                                          child: Text(calculateBalanceAmount()))
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
-                          ])),
-                    ),
-                  ),
-                ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 62,
+                        width: double.maxFinite,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10),
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(0),
+                              topRight: Radius.circular(0)),
+                          gradient: LinearGradient(
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.grey,
+                                Colors.grey,
+                              ],
+                              begin: Alignment.topCenter),
+                        ),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '',
+                                style: GoogleFonts.roboto(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.white),
+                              ),
+                              Row(children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    gradient: const LinearGradient(
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Color(0xff092F53),
+                                          Color(0xff284F70),
+                                        ],
+                                        begin: Alignment.topCenter),
+                                  ),
+                                  width: 120,
+                                  height: 42,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.transparent),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    gradient: const LinearGradient(
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Color(0xff092F53),
+                                          Color(0xff284F70),
+                                        ],
+                                        begin: Alignment.topCenter),
+                                  ),
+                                  width: 120,
+                                  height: 42,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.transparent),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      printAndUploadOnTap(updateOnly: true);
+                                    },
+                                    child: const Text('Update Only'),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    gradient: const LinearGradient(
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Color(0xff092F53),
+                                          Color(0xff284F70),
+                                        ],
+                                        begin: Alignment.topCenter),
+                                  ),
+                                  height: 42,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.transparent),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      printAndUploadOnTap();
+                                    },
+                                    child: const Text('Print & Update'),
+                                  ),
+                                ),
+                              ])
+                            ]),
+                      ),
+                    ])),
               );
             }));
+  }
+
+  Widget tendorPaymentMethodButton(String key, setState2) {
+    if (key == PaymentMethodKey().cash && paymentTypeList[key] != 0) {
+      return Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            gradient: const LinearGradient(
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xff092F53),
+                  Color(0xff284F70),
+                ],
+                begin: Alignment.topCenter)),
+        height: 42,
+        width: 220,
+        margin: EdgeInsets.only(bottom: 10),
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: viewMode ? Colors.grey : Colors.transparent,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4))),
+            onPressed: () async {
+              String? amount = await showTendorAmountDialog(context,
+                  paymentMathodKey: key,
+                  previousAmt: allPaymentMethodAmountsInfo[key] ?? '0');
+              allPaymentMethodAmountsInfo[key] = amount;
+              setState2(() {});
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(staticTextTranslate('Cash'),
+                    style: GoogleFonts.roboto(fontSize: getMediumFontSize)),
+              ],
+            )),
+      );
+    } else if (key == PaymentMethodKey().creditCard &&
+        paymentTypeList[key] != 0) {
+      return Container(
+        margin: EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            gradient: const LinearGradient(
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xff092F53),
+                  Color(0xff284F70),
+                ],
+                begin: Alignment.topCenter)),
+        height: 42,
+        width: 220,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: viewMode ? Colors.grey : Colors.transparent,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4))),
+            onPressed: () async {
+              String? amount = await showTendorAmountDialog(context,
+                  paymentMathodKey: key,
+                  previousAmt: allPaymentMethodAmountsInfo[key] ?? '0');
+              allPaymentMethodAmountsInfo[key] = amount;
+              setState2(() {});
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(staticTextTranslate('Credit Card'),
+                    style: GoogleFonts.roboto(fontSize: getMediumFontSize)),
+              ],
+            )),
+      );
+    } else if (key == PaymentMethodKey().tamara && paymentTypeList[key] != 0) {
+      return Container(
+        margin: EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            gradient: const LinearGradient(
+                end: Alignment.bottomLeft,
+                colors: [
+                  Color.fromARGB(255, 211, 164, 8),
+                  Color.fromARGB(255, 124, 27, 116),
+                ],
+                begin: Alignment.topCenter)),
+        height: 42,
+        width: 220,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: viewMode ? Colors.grey : Colors.transparent,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4))),
+            onPressed: () async {
+              String? amount = await showTendorAmountDialog(context,
+                  paymentMathodKey: key,
+                  previousAmt: allPaymentMethodAmountsInfo[key] ?? '0');
+              allPaymentMethodAmountsInfo[key] = amount;
+              setState2(() {});
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/icons/tamara.png',
+                  width: 120,
+                )
+              ],
+            )),
+      );
+    } else if (key == PaymentMethodKey().tabby && paymentTypeList[key] != 0) {
+      return Container(
+        margin: EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            gradient: const LinearGradient(
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color.fromARGB(255, 30, 199, 171),
+                  Color.fromARGB(255, 30, 199, 171),
+                ],
+                begin: Alignment.topCenter)),
+        height: 42,
+        width: 220,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: viewMode ? Colors.grey : Colors.transparent,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4))),
+            onPressed: () async {
+              String? amount = await showTendorAmountDialog(context,
+                  paymentMathodKey: key,
+                  previousAmt: allPaymentMethodAmountsInfo[key] ?? '0');
+              allPaymentMethodAmountsInfo[key] = amount;
+              setState2(() {});
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/icons/tabby.png',
+                  width: 80,
+                )
+              ],
+            )),
+      );
+    }
+    return SizedBox();
   }
 
   // String getLastItemImagePath() {
@@ -4602,7 +3295,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
     return t.toStringAsFixed(2);
   }
 
-  String calculateSubTotal() {
+  String calculateReceiptTotal() {
     double t = 0;
     for (LocalReceiptData v in selectedLocalReceiptData) {
       double d = 0;
@@ -4713,16 +3406,17 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                 IconButton(
                   padding: const EdgeInsets.only(top: 3),
                   onPressed: () {
-                    _f1VendorTypeAheadController.clear();
+                    _scanOrEnterBarcodeTypeAheadController.clear();
 
                     setState(() {});
                   },
                   splashRadius: 1,
-                  icon: _f1VendorTypeAheadController.text.isEmpty
+                  icon: _scanOrEnterBarcodeTypeAheadController.text.isEmpty
                       ? const Icon(Iconsax.scan_barcode, size: 19)
                       : Icon(Icons.clear,
                           size: 19,
-                          color: _f1VendorTypeAheadController.text.isEmpty
+                          color: _scanOrEnterBarcodeTypeAheadController
+                                  .text.isEmpty
                               ? Colors.grey[600]
                               : Colors.black),
                 ),
@@ -4730,7 +3424,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                     child: TextFormField(
                   enabled: !viewMode,
                   focusNode: scanBarcodeFocusNode,
-                  controller: _f1VendorTypeAheadController,
+                  controller: _scanOrEnterBarcodeTypeAheadController,
                   onChanged: (val) {
                     setState(() {});
                   },
@@ -4749,7 +3443,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                       InventoryData inv = res.first;
 
                       addSearcheSubmittedInvData(inv);
-                      _f1VendorTypeAheadController.clear();
+                      _scanOrEnterBarcodeTypeAheadController.clear();
                     } else {
                       showDialog(
                           context: context,
@@ -4794,17 +3488,17 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                 IconButton(
                   padding: const EdgeInsets.only(top: 3),
                   onPressed: () {
-                    _f2VendorTypeAheadController.clear();
+                    _searchForItemsTypeAheadController.clear();
 
                     setState(() {});
                   },
                   splashRadius: 1,
                   icon: Icon(
-                      _f2VendorTypeAheadController.text.isEmpty
+                      _searchForItemsTypeAheadController.text.isEmpty
                           ? CupertinoIcons.search
                           : Icons.clear,
                       size: 18,
-                      color: _f2VendorTypeAheadController.text.isEmpty
+                      color: _searchForItemsTypeAheadController.text.isEmpty
                           ? Colors.grey[600]
                           : Colors.black),
                 ),
@@ -4825,7 +3519,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                     child: TypeAheadFormField(
                       enabled: !viewMode,
                       textFieldConfiguration: TextFieldConfiguration(
-                        controller: _f2VendorTypeAheadController,
+                        controller: _searchForItemsTypeAheadController,
                         decoration: InputDecoration(
                           hintText: staticTextTranslate('Search for Items'),
                           hintStyle: TextStyle(color: Colors.grey[600]),
@@ -4931,13 +3625,6 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
           selectedLocalReceiptData, widget.userData.maxDiscount, context);
       setState(() {});
     }
-  }
-}
-
-class Test extends DataGridSource {
-  @override
-  DataGridRowAdapter? buildRow(DataGridRow row) {
-    throw UnimplementedError();
   }
 }
 

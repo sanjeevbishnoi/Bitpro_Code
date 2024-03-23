@@ -187,7 +187,8 @@ des0001A4ReceiptTemplate({
                                               ? ''
                                               : userSettingsData['companyName'],
                                           sellerTRN: seletedStoreData.vatNumber,
-                                          totalWithVat: dbReceiptData.subTotal,
+                                          totalWithVat:
+                                              dbReceiptData.receiptTotal,
                                           vatPrice: taxValue,
                                         )))),
                             pw.SizedBox(width: 10),
@@ -646,7 +647,8 @@ des0001A4ReceiptTemplate({
                         height: 4,
                       ),
                       pw.Text(
-                          dbReceiptData.subTotal + dbReceiptData.discountValue,
+                          dbReceiptData.receiptTotal +
+                              dbReceiptData.discountValue,
                           style:
                               pw.TextStyle(fontSize: 7, font: txtNormalFont)),
                       pw.SizedBox(
@@ -665,7 +667,7 @@ des0001A4ReceiptTemplate({
                         height: 4,
                       ),
                       pw.Text(
-                          (double.parse(dbReceiptData.subTotal) -
+                          (double.parse(dbReceiptData.receiptTotal) -
                                   double.parse(taxValue))
                               .toStringAsFixed(2),
                           style:
@@ -680,7 +682,7 @@ des0001A4ReceiptTemplate({
                         height: 20,
                       ),
                       pw.Text(
-                        dbReceiptData.subTotal,
+                        dbReceiptData.receiptTotal,
                         style: pw.TextStyle(
                             font: txtBoldFont,
                             fontSize: 8,

@@ -262,7 +262,9 @@ class _ReceiptPageState extends State<ReceiptPage> {
             child: Container(
               child: Column(
                 children: [
-                 const TopBar(pageName: 'Receipt',),
+                  const TopBar(
+                    pageName: 'Receipt',
+                  ),
                   Expanded(
                     child: Row(
                       children: [
@@ -1485,64 +1487,6 @@ class _ReceiptPageState extends State<ReceiptPage> {
     }
   }
 
-  String calculateCreditCardTotal() {
-    double t1 = 0;
-    double t2 = 0;
-    for (var r in dbReceiptDataLst) {
-      if (r.tendor.creditCard != '0') {
-        if (r.receiptType != 'Return') {
-          t1 += double.parse(r.tendor.creditCard);
-        } else {
-          t2 += double.parse(r.tendor.creditCard);
-        }
-      }
-    }
-    return ' : $t1(Regular) - $t2(Return) = ${t1 - t2}';
-  }
-
-  String calculateCreditTotal() {
-    double t1 = 0;
-    double t2 = 0;
-    for (var r in dbReceiptDataLst) {
-      if (r.tendor.credit != '0') {
-        if (r.receiptType != 'Return') {
-          t1 += double.parse(r.tendor.credit);
-        } else {
-          t2 += double.parse(r.tendor.credit);
-        }
-      }
-    }
-    return ' : $t1(Regular) - $t2(Return) = ${t1 - t2}';
-  }
-
-  String calculateCashTotal() {
-    double t1 = 0;
-    double t2 = 0;
-    for (var r in dbReceiptDataLst) {
-      if (r.tendor.cash != '0') {
-        if (r.receiptType != 'Return') {
-          t1 += double.parse(r.tendor.cash) - double.parse(r.tendor.balance);
-        } else {
-          t2 += double.parse(r.tendor.cash) - double.parse(r.tendor.balance);
-        }
-      }
-    }
-    return ' : $t1(Regular) - $t2(Return) = ${t1 - t2}';
-  }
-
-  String calculateTotal() {
-    double t1 = 0;
-    double t2 = 0;
-    for (var r in dbReceiptDataLst) {
-      if (r.receiptType != 'Return') {
-        t1 += double.parse(r.subTotal);
-      } else {
-        t2 += double.parse(r.subTotal);
-      }
-    }
-    return ' : $t1(Regular) - $t2(Return) = ${t1 - t2}';
-  }
-
   showRegisterClosedDialog() {
     showDialog(
         context: context,
@@ -1648,7 +1592,8 @@ class CustomerDataSource extends DataGridSource {
                               .firstWhere((element) =>
                                   element.customerId == e.selectedCustomerID)
                               .customerName),
-              DataGridCell<String>(columnName: 'orgTotal', value: e.subTotal),
+              DataGridCell<String>(
+                  columnName: 'orgTotal', value: e.receiptTotal),
               DataGridCell<String>(
                   columnName: 'disc%', value: e.discountPercentage),
               DataGridCell<String>(
@@ -1668,16 +1613,18 @@ class CustomerDataSource extends DataGridSource {
                   //  e.selectedStoreDocId
                   ),
               DataGridCell<String>(
-                  columnName: 'paymentType',
-                  value: e.tendor.credit != '0' && e.tendor.credit != '0.0'
-                      ? 'Credit'
-                      : e.tendor.cash != '0' && e.tendor.creditCard == '0'
-                          ? 'Cash'
-                          : e.tendor.cash == '0' && e.tendor.creditCard != '0'
-                              ? 'Credit Card'
-                              : 'Split'),
+                  columnName: 'paymentType', value: 'paymentType'
+
+                  // e.tendor.credit != '0' && e.tendor.credit != '0.0'
+                  //     ? 'Credit'
+                  //     : e.tendor.cash != '0' && e.tendor.creditCard == '0'
+                  //         ? 'Cash'
+                  //         : e.tendor.cash == '0' && e.tendor.creditCard != '0'
+                  //             ? 'Credit Card'
+                  //             : 'Split'
+                  ),
               DataGridCell<String>(
-                  columnName: 'receiptTotal', value: e.subTotal),
+                  columnName: 'receiptTotal', value: e.receiptTotal),
               DataGridCell<String>(
                   columnName: 'created date',
                   value: DateFormat.yMd().add_jm().format(e.createdDate)),

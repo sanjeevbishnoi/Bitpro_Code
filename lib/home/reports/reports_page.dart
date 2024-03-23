@@ -542,9 +542,9 @@ class _ReportsPageState extends State<ReportsPage> {
 
     for (var s in sortedDbReceiptDataLst) {
       if (s.receiptType == 'Return') {
-        salesTotalSalesWithTax -= double.parse(s.subTotal);
+        salesTotalSalesWithTax -= double.parse(s.receiptTotal);
       } else {
-        salesTotalSalesWithTax += double.parse(s.subTotal);
+        salesTotalSalesWithTax += double.parse(s.receiptTotal);
       }
     }
 
@@ -649,7 +649,7 @@ class _ReportsPageState extends State<ReportsPage> {
             // calculateVatTax(s.subTotal)
             );
         totalDiscount -= double.parse(s.discountValue);
-        total -= double.parse(s.subTotal);
+        total -= double.parse(s.receiptTotal);
       } else {
         totalQty += double.parse(s.totalQty);
         for (var i in s.selectedItems) {
@@ -659,7 +659,7 @@ class _ReportsPageState extends State<ReportsPage> {
             // calculateVatTax(s.subTotal)
             );
         totalDiscount += double.parse(s.discountValue);
-        total += double.parse(s.subTotal);
+        total += double.parse(s.receiptTotal);
       }
     }
 

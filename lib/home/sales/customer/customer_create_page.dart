@@ -290,7 +290,6 @@ class _CustomerCreateEditPageState extends State<CustomerCreateEditPage> {
                                           height: 5,
                                         ),
                                         BTextField(
-                                          boxHeigt: 80,
                                           textFieldHeight: 3,
                                           label: 'Address 1',
                                           initialValue: address1,

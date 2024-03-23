@@ -656,7 +656,7 @@ salesReportPage(
                                   alignment: pw.Alignment.centerRight,
                                   child: pw.Text(
                                     (d.receiptType == 'Return' ? '-' : '') +
-                                        d.subTotal,
+                                        d.receiptTotal,
                                     style: pw.TextStyle(
                                         fontSize: repFontSize,
                                         color: d.receiptType == 'Return'

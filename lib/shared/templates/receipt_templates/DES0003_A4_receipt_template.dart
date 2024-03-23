@@ -404,8 +404,8 @@ des0003A4ReceiptTemplate({
                                                               'companyName'],
                                                   sellerTRN: selectedStoreData
                                                       .vatNumber,
-                                                  totalWithVat:
-                                                      dbReceiptData.subTotal,
+                                                  totalWithVat: dbReceiptData
+                                                      .receiptTotal,
                                                   vatPrice: taxValue,
                                                 )))),
                                   ]),

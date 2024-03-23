@@ -1,6 +1,7 @@
 import 'package:barcode_image/barcode_image.dart';
 import 'package:bitpro_hive/model/store_data.dart';
 import 'package:bitpro_hive/shared/check_contain_arabic_letters.dart';
+import 'package:bitpro_hive/shared/constant_data.dart';
 import 'package:intl/intl.dart';
 import 'package:bitpro_hive/model/receipt/db_receipt_data.dart';
 import 'package:bitpro_hive/shared/global_variables/color.dart';
@@ -20,7 +21,7 @@ receipt80mmTemplate(
     required arabicNormalFont,
     required vatPercentage,
     required taxValue}) {
-  double totalBeforeDis = double.parse(dbReceiptData.subTotal) +
+  double totalBeforeDis = double.parse(dbReceiptData.receiptTotal) +
       double.parse(dbReceiptData.discountValue);
   return [
     pw.Container(
@@ -436,7 +437,7 @@ receipt80mmTemplate(
                 height: 4,
               ),
               pw.Text(
-                  (double.parse(dbReceiptData.subTotal) -
+                  (double.parse(dbReceiptData.receiptTotal) -
                           double.parse(taxValue))
                       .toStringAsFixed(2),
                   style: pw.TextStyle(fontSize: 8, font: txtBoldFont)),
@@ -449,7 +450,7 @@ receipt80mmTemplate(
                 height: 10,
               ),
               pw.Text(
-                dbReceiptData.subTotal,
+                dbReceiptData.receiptTotal,
                 style: pw.TextStyle(
                     font: txtBoldFont,
                     fontSize: 9,
@@ -556,17 +557,21 @@ receipt80mmTemplate(
               pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  pw.Text(dbReceiptData.tendor.cash,
+                  pw.Text(
+                      dbReceiptData
+                          .allPaymentMethodAmountsInfo[PaymentMethodKey().cash],
                       style: pw.TextStyle(fontSize: 7, font: txtBoldFont)),
                   pw.SizedBox(
                     height: 3,
                   ),
-                  pw.Text(dbReceiptData.tendor.creditCard,
+                  pw.Text(
+                      dbReceiptData.allPaymentMethodAmountsInfo[
+                          PaymentMethodKey().creditCard],
                       style: pw.TextStyle(fontSize: 7, font: txtBoldFont)),
                   pw.SizedBox(
                     height: 3,
                   ),
-                  pw.Text(dbReceiptData.tendor.balance,
+                  pw.Text(dbReceiptData.receiptBalance,
                       style: pw.TextStyle(fontSize: 7, font: txtBoldFont))
                 ],
               ),
@@ -653,7 +658,7 @@ receipt80mmTemplate(
                       ? ''
                       : userSettingsData['companyName'],
                   sellerTRN: seletedStoreData.vatNumber,
-                  totalWithVat: dbReceiptData.subTotal,
+                  totalWithVat: dbReceiptData.receiptTotal,
                   vatPrice: taxValue,
                 ))))
   ];

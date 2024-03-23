@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:bitpro_hive/model/store_data.dart';
 import 'package:bitpro_hive/services/hive/hive_settings/hive_store_db_service.dart';
+import 'package:bitpro_hive/shared/constant_data.dart';
 import 'package:hive/hive.dart';
 import 'package:bitpro_hive/model/user_data.dart';
 import 'package:bitpro_hive/model/user_group_data.dart';
@@ -101,6 +102,14 @@ class HiveUserDbService {
           'selectedStoreCode': 1,
           'workstationNumber': 1
         });
+        //receipt
+        await box.put('payment_type_list', {
+          PaymentMethodKey().cash: 1,
+          PaymentMethodKey().creditCard: 1,
+          PaymentMethodKey().tamara: 1,
+          PaymentMethodKey().tabby: 1
+        });
+
         return ud;
       } else {
         return UserData.fromMap(ud);

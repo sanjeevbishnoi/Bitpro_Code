@@ -670,7 +670,7 @@ des0002A4ReceiptTemplate({
                           padding: const pw.EdgeInsets.all(4),
                           alignment: pw.Alignment.centerRight,
                           child: pw.Text(
-                            (double.parse(dbReceiptData.subTotal) -
+                            (double.parse(dbReceiptData.receiptTotal) -
                                     double.parse(taxValue))
                                 .toStringAsFixed(2),
                             style: pw.TextStyle(
@@ -724,7 +724,7 @@ des0002A4ReceiptTemplate({
                                   color: PdfColors.grey400, width: .6)),
                           alignment: pw.Alignment.centerRight,
                           padding: const pw.EdgeInsets.all(4),
-                          child: pw.Text(dbReceiptData.subTotal,
+                          child: pw.Text(dbReceiptData.receiptTotal,
                               style: pw.TextStyle(
                                   font: txtBoldFont,
                                   fontSize: 8,
@@ -751,7 +751,7 @@ des0002A4ReceiptTemplate({
                               ? ''
                               : userSettingsData['companyName'],
                           sellerTRN: seletedStoreData.vatNumber,
-                          totalWithVat: dbReceiptData.subTotal,
+                          totalWithVat: dbReceiptData.receiptTotal,
                           vatPrice: taxValue,
                         )))),
             pw.SizedBox(

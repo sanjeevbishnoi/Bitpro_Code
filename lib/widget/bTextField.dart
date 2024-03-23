@@ -9,45 +9,54 @@ class BTextField extends StatelessWidget {
   final Function(String input) onChanged;
   final String? Function(String?)? validator;
   final bool autovalidate;
-  final double fieldWidth; 
+  final double fieldWidth;
   final AutovalidateMode autovalidateMode;
   final int textFieldHeight;
-  final double boxHeigt;
+  // final double boxHeigt;
   final bool textFieldReadOnly;
   final TextEditingController? controller;
   final WidgetBuilder? noItemsBuilder;
-  const BTextField(
-      {super.key,
-      required this.label,
-      required this.initialValue,
-      required this.onChanged,
-      this.validator,
-      this.autovalidate = false,
-      this.fieldWidth =240,
-      this.autovalidateMode = AutovalidateMode.disabled,
-      this.textFieldHeight = 1,
-      this.boxHeigt = 35,
-      this.textFieldReadOnly = false,
-      this.controller,
-      this.noItemsBuilder,
-      });
+  final bool enabled;
+  final bool autoFoucs;
+  const BTextField({
+    super.key,
+    required this.label,
+    this.initialValue,
+    required this.onChanged,
+    this.validator,
+    this.autovalidate = false,
+    this.autoFoucs = false,
+    this.enabled = true,
+    this.fieldWidth = 240,
+    this.autovalidateMode = AutovalidateMode.disabled,
+    this.textFieldHeight = 1,
+    // this.boxHeigt = 35,
+    this.textFieldReadOnly = false,
+    this.controller,
+    this.noItemsBuilder,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          staticTextTranslate(label),
-          style: GoogleFonts.roboto(
-            fontSize: 16,
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Text(
+            staticTextTranslate(label),
+            style: GoogleFonts.roboto(
+              fontSize: 16,
+            ),
           ),
         ),
         SizedBox(
-          height: boxHeigt,
+          // height: boxHeigt,
           width: fieldWidth,
           child: TextFormField(
-            
+            autofocus: autoFoucs,
+            enabled: enabled,
             controller: controller,
             readOnly: textFieldReadOnly,
             initialValue: initialValue,
@@ -56,6 +65,7 @@ class BTextField extends StatelessWidget {
               height: 1.5,
               fontSize: getMediumFontSize + 2,
             ),
+            validator: validator,
             decoration: const InputDecoration(
                 fillColor: Colors.white,
                 filled: true,

@@ -58,8 +58,10 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
   String calculateTotalPaid() {
     double t = 0;
     for (DbReceiptData d in dbReceiptDataLst) {
-      if (d.receiptType == 'Regular' && d.tendor.credit == '0') {
-        t += double.parse(d.subTotal);
+      if (d.receiptType == 'Regular'
+          // && d.tendor.credit == '0'
+          ) {
+        t += double.parse(d.receiptTotal);
       }
     }
     for (CustomerPaymentData v in currentCustomerPaymentLstData) {
@@ -73,9 +75,9 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
 
     for (DbReceiptData d in dbReceiptDataLst) {
       if (d.receiptType == 'Regular') {
-        regularT += double.parse(d.subTotal);
+        regularT += double.parse(d.receiptTotal);
       } else {
-        regularT -= double.parse(d.subTotal);
+        regularT -= double.parse(d.receiptTotal);
       }
     }
 
@@ -1750,19 +1752,21 @@ class VendorPaymentDataSource extends DataGridSource {
                       columnName: 'creadted date',
                       value: DateFormat.yMd().add_jm().format(e.dateTime)),
                   DataGridCell<String>(
-                      columnName: 'payment',
-                      value: e.dbReceiptData != null
-                          ? e.dbReceiptData!.tendor.credit != '0'
-                              ? 'Credit'
-                              : e.dbReceiptData!.tendor.cash != '0' &&
-                                      e.dbReceiptData!.tendor.creditCard == '0'
-                                  ? 'Cash'
-                                  : e.dbReceiptData!.tendor.cash == '0' &&
-                                          e.dbReceiptData!.tendor.creditCard !=
-                                              '0'
-                                      ? 'Credit Card'
-                                      : 'Split'
-                          : e.customerPaymentData!.paymentType),
+                    columnName: 'payment',
+                    value: 'payment_type',
+                  ),
+                  // e.dbReceiptData != null
+                  //     ? e.dbReceiptData!.tendor.credit != '0'
+                  //         ? 'Credit'
+                  //         : e.dbReceiptData!.tendor.cash != '0' &&
+                  //                 e.dbReceiptData!.tendor.creditCard == '0'
+                  //             ? 'Cash'
+                  //             : e.dbReceiptData!.tendor.cash == '0' &&
+                  //                     e.dbReceiptData!.tendor.creditCard !=
+                  //                         '0'
+                  //                 ? 'Credit Card'
+                  //                 : 'Split'
+                  // : e.customerPaymentData!.paymentType),
                   DataGridCell<String>(
                       columnName: 'comment',
                       value: e.dbReceiptData != null
@@ -1771,7 +1775,7 @@ class VendorPaymentDataSource extends DataGridSource {
                   DataGridCell<String>(
                       columnName: 'purchased amount',
                       value: e.dbReceiptData != null
-                          ? e.dbReceiptData!.subTotal
+                          ? e.dbReceiptData!.receiptTotal
                           : ''),
                   DataGridCell<String>(
                       columnName: 'paid amount',

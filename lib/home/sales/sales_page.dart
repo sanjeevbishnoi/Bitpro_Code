@@ -531,7 +531,7 @@ class _SalesPageState extends State<SalesPage> {
   String calculateCreditCardTotal(List<DbReceiptData> lst) {
     double t = 0;
     for (var l in lst) {
-      t += double.tryParse(l.tendor.creditCard) ?? 0;
+      t += double.tryParse(l.allPaymentMethodAmountsInfo['Credit Card']) ?? 0;
     }
     return t.toStringAsFixed(2);
   }
@@ -539,8 +539,8 @@ class _SalesPageState extends State<SalesPage> {
   String calculateCashTotal(List<DbReceiptData> lst) {
     double t = 0;
     for (var l in lst) {
-      var a = double.tryParse(l.tendor.cash) ?? 0;
-      var b = double.tryParse(l.tendor.balance) ?? 0;
+      var a = double.tryParse(l.allPaymentMethodAmountsInfo['Cash']) ?? 0;
+      var b = double.tryParse(l.receiptBalance) ?? 0;
 
       t += a - b;
     }

@@ -1124,7 +1124,7 @@ productTile(txtNormalFont, CustomerPaymentTempModel? customerPaymentData,
         ? ''
         : customerPaymentData.customerPaymentData!.comment;
     sales = customerPaymentData.dbReceiptData != null
-        ? customerPaymentData.dbReceiptData!.subTotal
+        ? customerPaymentData.dbReceiptData!.receiptTotal
         : '';
     paid = customerPaymentData.dbReceiptData != null
         ? ''

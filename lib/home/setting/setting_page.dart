@@ -20,7 +20,6 @@ import 'package:bitpro_hive/model/store_data.dart';
 import 'package:bitpro_hive/model/user_data.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_settings/fb_store_db_service.dart';
 import 'package:bitpro_hive/services/hive/hive_settings/hive_settings_db_service.dart';
-import 'package:bitpro_hive/shared/global_variables/color.dart';
 import 'package:bitpro_hive/shared/loading.dart';
 import 'package:bitpro_hive/shared/toast.dart';
 import '../../shared/global_variables/font_sizes.dart';
@@ -83,6 +82,9 @@ class _SettingsPageState extends State<SettingsPage> {
   bool alowDeleteStore = true;
   List<StoreData> storeDataList = [];
   late StoreData defaultSelectedStoreData;
+
+  //recipet tab fields
+  Map<dynamic, dynamic> paymentTypeList = {};
   @override
   void initState() {
     super.initState();
@@ -93,6 +95,7 @@ class _SettingsPageState extends State<SettingsPage> {
     await getPriterLst();
     await getUserData();
     await getLicenseData();
+    paymentTypeList = await box.get('payment_type_list') ?? {};
 
     setState(() {
       loading = false;
@@ -202,24 +205,27 @@ class _SettingsPageState extends State<SettingsPage> {
                       begin: Alignment.topCenter)),
               child: Row(
                 children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 0.6),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        currentTabIndex = 0;
+                      });
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 0.6),
                           borderRadius: BorderRadius.circular(0),
-                          gradient: const LinearGradient(
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Color(0xff092F53),
-                                Color(0xff284F70),
-                              ],
-                              begin: Alignment.topCenter)),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          currentTabIndex = 0;
-                        });
-                      },
+                          gradient: currentTabIndex != 0
+                              ? null
+                              : LinearGradient(
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Color(0xff092F53),
+                                    Color(0xff284F70),
+                                  ],
+                                  begin: Alignment.topCenter)),
                       child: Text(
                         staticTextTranslate('Company Details'),
                         style: GoogleFonts.roboto(
@@ -227,86 +233,147 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                   ),
-                 
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 0.6)
-                    ),
-                    height: 35,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          currentTabIndex = 1;
-                        });
-                      },
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        currentTabIndex = 1;
+                      });
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 0.6),
+                          gradient: currentTabIndex != 1
+                              ? null
+                              : LinearGradient(
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Color(0xff092F53),
+                                    Color(0xff284F70),
+                                  ],
+                                  begin: Alignment.topCenter)),
+                      height: 35,
                       child: Text(
                         staticTextTranslate('Printing'),
-                        style:
-                            GoogleFonts.roboto(fontSize: 16, color: Colors.white),
+                        style: GoogleFonts.roboto(
+                            fontSize: 16, color: Colors.white),
                       ),
                     ),
                   ),
-                  
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 0.6)
-                    ),
-                    height: 35,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          currentTabIndex = 2;
-                        });
-                      },
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        currentTabIndex = 2;
+                      });
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 0.6),
+                          gradient: currentTabIndex != 2
+                              ? null
+                              : LinearGradient(
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Color(0xff092F53),
+                                    Color(0xff284F70),
+                                  ],
+                                  begin: Alignment.topCenter)),
+                      height: 35,
                       child: Text(
                         staticTextTranslate('Taxes'),
-                        style:
-                            GoogleFonts.roboto(fontSize: 16, color: Colors.white),
+                        style: GoogleFonts.roboto(
+                            fontSize: 16, color: Colors.white),
                       ),
                     ),
                   ),
-                  
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 0.6)
-                    ),
-                    height: 35,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          currentTabIndex = 3;
-                        });
-                      },
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        currentTabIndex = 3;
+                      });
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 0.6),
+                          gradient: currentTabIndex != 3
+                              ? null
+                              : LinearGradient(
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Color(0xff092F53),
+                                    Color(0xff284F70),
+                                  ],
+                                  begin: Alignment.topCenter)),
+                      height: 35,
                       child: Center(
                         child: Text(
                           staticTextTranslate('License'),
-                          style:
-                              GoogleFonts.roboto(fontSize: 16, color: Colors.white),
+                          style: GoogleFonts.roboto(
+                              fontSize: 16, color: Colors.white),
                         ),
                       ),
                     ),
                   ),
-                  
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 0.6)
-                    ),
-                    height: 35,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          currentTabIndex = 4;
-                          selectedStore = null;
-                        });
-                      },
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        currentTabIndex = 4;
+                        selectedStore = null;
+                      });
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 0.6),
+                          gradient: currentTabIndex != 4
+                              ? null
+                              : LinearGradient(
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Color(0xff092F53),
+                                    Color(0xff284F70),
+                                  ],
+                                  begin: Alignment.topCenter)),
+                      height: 35,
                       child: Text(
                         staticTextTranslate('Store'),
-                        style:
-                            GoogleFonts.roboto(fontSize: 16, color: Colors.white),
+                        style: GoogleFonts.roboto(
+                            fontSize: 16, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        currentTabIndex = 5;
+                        selectedStore = null;
+                      });
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 0.6),
+                          gradient: currentTabIndex != 5
+                              ? null
+                              : LinearGradient(
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Color(0xff092F53),
+                                    Color(0xff284F70),
+                                  ],
+                                  begin: Alignment.topCenter)),
+                      height: 35,
+                      child: Text(
+                        staticTextTranslate('Receipt'),
+                        style: GoogleFonts.roboto(
+                            fontSize: 16, color: Colors.white),
                       ),
                     ),
                   ),
@@ -315,66 +382,6 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             const SizedBox(
               height: 10,
-            ),
-            Row(
-              children: [
-                if (currentTabIndex != 0)
-                  Container(
-                    height: 1,
-                    width: currentTabIndex == 1
-                        ? engSelectedLanguage
-                            ? 142
-                            : 100
-                        : currentTabIndex == 2
-                            ? engSelectedLanguage
-                                ? 226
-                                : 165
-                            : currentTabIndex == 3
-                                ? engSelectedLanguage
-                                    ? 316
-                                    : 165
-                                : engSelectedLanguage
-                                    ? 399
-                                    : 165,
-                    decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(8)),
-                  ),
-                Container(
-                  height: 5,
-                  width: currentTabIndex == 0
-                      ? engSelectedLanguage
-                          ? 120
-                          : 70
-                      : currentTabIndex == 1
-                          ? engSelectedLanguage
-                              ? 70
-                              : 40
-                          : currentTabIndex == 2
-                              ? engSelectedLanguage
-                                  ? 60
-                                  : 50
-                              : currentTabIndex == 3
-                                  ? engSelectedLanguage
-                                      ? 70
-                                      : 70
-                                  : engSelectedLanguage
-                                      ? 50
-                                      : 70,
-                  decoration: BoxDecoration(
-                      color: darkBlueColor,
-                      borderRadius: BorderRadius.circular(8)),
-                ),
-                Flexible(
-                  child: Container(
-                    height: 1,
-                    width: double.maxFinite,
-                    decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(8)),
-                  ),
-                ),
-              ],
             ),
           ],
         ),
@@ -389,13 +396,15 @@ class _SettingsPageState extends State<SettingsPage> {
                           ? texsSettings()
                           : currentTabIndex == 3
                               ? licenseSettings()
-                              : SettingStoreTab(
-                                  storeDataList: storeDataList,
-                                  selectStore: (selectedStoreData) {
-                                    selectedStore = selectedStoreData;
-                                    setState(() {});
-                                  },
-                                )),
+                              : currentTabIndex == 4
+                                  ? SettingStoreTab(
+                                      storeDataList: storeDataList,
+                                      selectStore: (selectedStoreData) {
+                                        selectedStore = selectedStoreData;
+                                        setState(() {});
+                                      },
+                                    )
+                                  : receiptSetting()),
         ),
         Align(
           alignment: Alignment.bottomCenter,
@@ -522,7 +531,15 @@ class _SettingsPageState extends State<SettingsPage> {
                                           'Settings saved, successfully'),
                                       context);
                                 }
+                              } else if (currentTabIndex == 5) {
+                                await box.put(
+                                    'payment_type_list', paymentTypeList);
+                                showToast(
+                                    staticTextTranslate(
+                                        'Settings saved, successfully'),
+                                    context);
                               }
+                              print(currentTabIndex);
                               // userData =
                               //     await UserDbService().fetchUserData(userData.docId);
 
@@ -564,15 +581,15 @@ class _SettingsPageState extends State<SettingsPage> {
           width: 10,
         ),
         Container(
-          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            gradient: const LinearGradient(
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Color(0xff092F53),
-                                  Color(0xff284F70),
-                                ],
-                                begin: Alignment.topCenter)),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                gradient: const LinearGradient(
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0xff092F53),
+                      Color(0xff284F70),
+                    ],
+                    begin: Alignment.topCenter)),
             width: 40,
             height: 40,
             child: ElevatedButton(
@@ -593,14 +610,14 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         Container(
           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            gradient: const LinearGradient(
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Color(0xff092F53),
-                                  Color(0xff284F70),
-                                ],
-                                begin: Alignment.topCenter)),
+              borderRadius: BorderRadius.circular(4),
+              gradient: const LinearGradient(
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xff092F53),
+                    Color(0xff284F70),
+                  ],
+                  begin: Alignment.topCenter)),
           height: 42,
           width: 173,
           child: ElevatedButton(
@@ -643,21 +660,20 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         Container(
           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            gradient: const LinearGradient(
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Color(0xff092F53),
-                                  Color(0xff284F70),
-                                ],
-                                begin: Alignment.topCenter)),
-
+              borderRadius: BorderRadius.circular(4),
+              gradient: const LinearGradient(
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xff092F53),
+                    Color(0xff284F70),
+                  ],
+                  begin: Alignment.topCenter)),
           height: 42,
           width: 173,
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.transparent,
-                  disabledBackgroundColor:Colors.grey[300] ,
+                  backgroundColor: Colors.transparent,
+                  disabledBackgroundColor: Colors.grey[300],
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4))),
               onPressed: selectedStore == null
@@ -730,19 +746,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 obscureText: true,
                 controller: keyController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                 style: GoogleFonts.roboto(fontSize: 14, height: 2.3),
+                style: GoogleFonts.roboto(fontSize: 14, height: 2.3),
                 decoration: const InputDecoration(
-                   enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 0.3)),
-                  fillColor: Colors.white,
-                  filled: true,
+                    enabledBorder:
+                        OutlineInputBorder(borderSide: BorderSide(width: 0.3)),
+                    fillColor: Colors.white,
+                    filled: true,
                     isDense: true,
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                    border: OutlineInputBorder(
-                      
-                    )),
-                    
+                    border: OutlineInputBorder()),
                 onChanged: (val) => setState(() {
                   licenseKey = val;
                   if (showLicenseKeyError) showLicenseKeyError = false;
@@ -796,16 +809,15 @@ class _SettingsPageState extends State<SettingsPage> {
                 obscureText: true,
                 controller: authController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                
-                    style: GoogleFonts.roboto(fontSize: 14, height: 2.3),
+                style: GoogleFonts.roboto(fontSize: 14, height: 2.3),
                 decoration: const InputDecoration(
-                   enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 0.3)),
-                  fillColor: Colors.white,
-                  filled: true,
+                    enabledBorder:
+                        OutlineInputBorder(borderSide: BorderSide(width: 0.3)),
+                    fillColor: Colors.white,
+                    filled: true,
                     isDense: true,
                     contentPadding:
-                        EdgeInsets.symmetric(vertical: 5, horizontal: 5 ),
+                        EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                     border: OutlineInputBorder()),
                 onChanged: (val) => setState(() {
                   licenseAuth = val;
@@ -855,7 +867,7 @@ class _SettingsPageState extends State<SettingsPage> {
               },
               child: Text(
                 staticTextTranslate('Copy Device Id'),
-               style: GoogleFonts.roboto(fontSize: 14),
+                style: GoogleFonts.roboto(fontSize: 14),
               )),
         ),
       ],
@@ -869,7 +881,8 @@ class _SettingsPageState extends State<SettingsPage> {
       children: [
         Text(
           staticTextTranslate('Tax Percentage'),
-          style: GoogleFonts.roboto(fontSize: 14),),
+          style: GoogleFonts.roboto(fontSize: 14),
+        ),
         const SizedBox(
           height: 5,
         ),
@@ -885,11 +898,12 @@ class _SettingsPageState extends State<SettingsPage> {
               }
               return null;
             },
-           style: GoogleFonts.roboto(fontSize: 14),
+            style: GoogleFonts.roboto(fontSize: 14),
             decoration: const InputDecoration(
-              enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.3)),
-              fillColor: Colors.white,
-              filled: true,
+                enabledBorder:
+                    OutlineInputBorder(borderSide: BorderSide(width: 0.3)),
+                fillColor: Colors.white,
+                filled: true,
                 isDense: true,
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 15, horizontal: 5),
@@ -1107,7 +1121,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       fontSize: 14, fontWeight: FontWeight.w400),
                   maxLines: 3,
                   decoration: const InputDecoration(
-                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.3)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 0.3)),
                       fillColor: Colors.white,
                       filled: true,
                       isDense: true,
@@ -1121,9 +1136,11 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ],
           ),
-          SizedBox(width: 20,),
+          SizedBox(
+            width: 20,
+          ),
           Column(
-             crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 height: 20,
@@ -1144,14 +1161,14 @@ class _SettingsPageState extends State<SettingsPage> {
                       fontSize: 14, fontWeight: FontWeight.w400),
                   maxLines: 3,
                   decoration: const InputDecoration(
-                    fillColor: Colors.white,
-                    filled: true,
-                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.3)),
+                      fillColor: Colors.white,
+                      filled: true,
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 0.3)),
                       isDense: true,
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                       border: OutlineInputBorder()),
-                      
                   onChanged: (val) => setState(() {
                     receiptFotterArb = val;
                   }),
@@ -1165,15 +1182,15 @@ class _SettingsPageState extends State<SettingsPage> {
         height: 20,
       ),
       Container(
-        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          gradient: const LinearGradient(
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Color(0xff092F53),
-                                Color(0xff284F70),
-                              ],
-                              begin: Alignment.topCenter)),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              gradient: const LinearGradient(
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xff092F53),
+                    Color(0xff284F70),
+                  ],
+                  begin: Alignment.topCenter)),
           height: 42,
           width: 173,
           child: ElevatedButton.icon(
@@ -1188,10 +1205,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     MaterialPageRoute(
                         builder: (context) => InventoryTagSize()));
               },
-              label: Text(
-                staticTextTranslate('Barcode Settings'),
-                style: GoogleFonts.roboto(fontSize: 14)
-              ))),
+              label: Text(staticTextTranslate('Barcode Settings'),
+                  style: GoogleFonts.roboto(fontSize: 14)))),
       const SizedBox(
         height: 10,
       ),
@@ -1269,8 +1284,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               ? 'Selected store'
                               : 'Store & Workstation Details'),
                       style: GoogleFonts.roboto(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Padding(
@@ -1344,6 +1358,65 @@ class _SettingsPageState extends State<SettingsPage> {
         const SizedBox(
           height: 20,
         ),
+      ],
+    );
+  }
+
+  receiptSetting() {
+    return Row(
+      children: [
+        Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: paymentTypeList.keys
+                .map((e) => Container(
+                      height: 48,
+                      alignment: Alignment.center,
+                      child: Text(
+                        staticTextTranslate(e),
+                        style: GoogleFonts.roboto(
+                            fontSize: 20,
+                            textStyle: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ))
+                .toList()),
+        SizedBox(
+          width: 20,
+        ),
+        Column(
+            children: paymentTypeList.keys
+                .map(
+                  (e) => Row(
+                    children: [
+                      Container(
+                        width: 135,
+                        child: RadioListTile(
+                          value: 1,
+                          groupValue: paymentTypeList[e],
+                          onChanged: (value) {
+                            setState(() {
+                              paymentTypeList[e] = 1;
+                            });
+                          },
+                          title: Text('Enable'),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 140,
+                        child: RadioListTile(
+                          value: 0,
+                          groupValue: paymentTypeList[e],
+                          onChanged: (value) {
+                            setState(() {
+                              paymentTypeList[e] = 0;
+                            });
+                          },
+                          title: Text('Disable'),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+                .toList())
       ],
     );
   }

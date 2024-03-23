@@ -1,6 +1,7 @@
 import 'package:barcode_image/barcode_image.dart';
 import 'package:bitpro_hive/model/store_data.dart';
 import 'package:bitpro_hive/shared/check_contain_arabic_letters.dart';
+import 'package:bitpro_hive/shared/constant_data.dart';
 import 'package:intl/intl.dart';
 import 'package:bitpro_hive/model/receipt/db_receipt_data.dart';
 import 'package:bitpro_hive/shared/templates/receipt_templates/e_invoice_generator.dart';
@@ -215,7 +216,8 @@ des0004A4ReceiptTemplate(
                                             ? ''
                                             : userSettingsData['companyName'],
                                         sellerTRN: selectedStoreData.vatNumber,
-                                        totalWithVat: dbReceiptData.subTotal,
+                                        totalWithVat:
+                                            dbReceiptData.receiptTotal,
                                         vatPrice: taxValue,
                                       ))))
                         ],
@@ -280,10 +282,14 @@ des0004A4ReceiptTemplate(
                                         pw.SizedBox(height: 5),
                                         pw.Text(
                                           double.tryParse(dbReceiptData
-                                                          .tendor.credit) !=
+                                                              .allPaymentMethodAmountsInfo[
+                                                          PaymentMethodKey()
+                                                              .cash]) !=
                                                       null &&
                                                   double.parse(dbReceiptData
-                                                          .tendor.credit) !=
+                                                              .allPaymentMethodAmountsInfo[
+                                                          PaymentMethodKey()
+                                                              .cash]) !=
                                                       0
                                               ? 'Credit'
                                               : 'Paid',
@@ -574,16 +580,17 @@ getBottomTotalCalucations(txtBoldFont, arabicNormalFont,
                 pw.Text('Payment method:',
                     style: pw.TextStyle(fontSize: 8, font: txtBoldFont)),
                 pw.Text(
-                    dbReceiptData.tendor.credit != '0' &&
-                            dbReceiptData.tendor.credit != '0.0'
-                        ? 'Credit'
-                        : dbReceiptData.tendor.cash != '0' &&
-                                dbReceiptData.tendor.creditCard == '0'
-                            ? 'Cash'
-                            : dbReceiptData.tendor.cash == '0' &&
-                                    dbReceiptData.tendor.creditCard != '0'
-                                ? 'Credit Card'
-                                : 'Split',
+                    // dbReceiptData.tendor.credit != '0' &&
+                    //         dbReceiptData.tendor.credit != '0.0'
+                    //     ? 'Credit'
+                    //     : dbReceiptData.tendor.cash != '0' &&
+                    //             dbReceiptData.tendor.creditCard == '0'
+                    //         ? 'Cash'
+                    //         : dbReceiptData.tendor.cash == '0' &&
+                    //                 dbReceiptData.tendor.creditCard != '0'
+                    //             ? 'Credit Card'
+                    //             : 'Split',
+                    'payment method',
                     style: pw.TextStyle(fontSize: 8, font: txtBoldFont))
               ]),
           pw.SizedBox(height: 4),
@@ -593,10 +600,11 @@ getBottomTotalCalucations(txtBoldFont, arabicNormalFont,
                 pw.Text('Paid amount:',
                     style: pw.TextStyle(fontSize: 8, font: txtBoldFont)),
                 pw.Text(
-                    dbReceiptData.tendor.credit != '0' &&
-                            dbReceiptData.tendor.credit != '0.0'
-                        ? 'SR 0'
-                        : 'SR ' + tendorAmount,
+                    // dbReceiptData.tendor.credit != '0' &&
+                    //         dbReceiptData.tendor.credit != '0.0'
+                    //     ? 'SR 0'
+                    //     :
+                    'SR ' + tendorAmount,
                     style: pw.TextStyle(fontSize: 8, font: txtBoldFont))
               ]),
           pw.SizedBox(height: 4),
@@ -605,7 +613,7 @@ getBottomTotalCalucations(txtBoldFont, arabicNormalFont,
             children: [
               pw.Text('Change:',
                   style: pw.TextStyle(fontSize: 8, font: txtBoldFont)),
-              pw.Text(dbReceiptData.tendor.balance,
+              pw.Text(dbReceiptData.receiptBalance,
                   style: pw.TextStyle(fontSize: 8, font: txtBoldFont))
             ],
           ),
@@ -616,10 +624,12 @@ getBottomTotalCalucations(txtBoldFont, arabicNormalFont,
               pw.Text('Amount due:',
                   style: pw.TextStyle(fontSize: 8, font: txtBoldFont)),
               pw.Text(
-                  dbReceiptData.tendor.credit != '0' &&
-                          dbReceiptData.tendor.credit != '0.0'
-                      ? 'SR ${dbReceiptData.tendor.credit}'
-                      : 'SR 0',
+                  // dbReceiptData.tendor.credit != '0' &&
+                  //         dbReceiptData.tendor.credit != '0.0'
+                  //     ? 'SR ${dbReceiptData.tendor.credit}'
+                  //     :
+
+                  'SR 0',
                   style: pw.TextStyle(fontSize: 8, font: txtBoldFont))
             ],
           ),
