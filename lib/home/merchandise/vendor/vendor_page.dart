@@ -3,7 +3,7 @@ import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_merchandise/fb_vendor_db_service.dart';
 import 'package:bitpro_hive/services/hive/hive_merchandise_db_service/vendors_db_service.dart';
 import 'package:bitpro_hive/widget/filter_container.dart';
-import 'package:bitpro_hive/widget/fiter_textfield.dart';
+import 'package:bitpro_hive/widget/filter_text_fileds/fiter_textfield.dart';
 import 'package:bitpro_hive/widget/string_related/get_id_number.dart';
 import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -353,464 +353,202 @@ class _VendorPageState extends State<VendorPage> {
                         ),
                       ),
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                width: double.maxFinite,
-                                height: 120,
-                                child: Card(
-                                    shape: RoundedRectangleBorder(
-                                        side: const BorderSide(
-                                            width: 0.5, color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(4)),
-                                    elevation: 0,
-                                    color: Colors.white,
-                                    child: Column(
-                                      children: [
-                                        FilterContainer(fiterFields: [
-                                          FilterTextField(
-                                              icon: Icon(
-                                                      vendorIdController
-                                                              .text.isEmpty
-                                                          ? CupertinoIcons
-                                                              .search
-                                                          : Icons.clear,
-                                                      size: 18,
-                                                      color: vendorIdController
-                                                              .text.isEmpty
-                                                          ? Colors.grey[600]
-                                                          : Colors.black),
-                                                          controller: vendorIdController,
-                                              onPressed: () {
-                                                    vendorIdController.clear();
-
-                                                    vendorDataSource =
-                                                        VendorDataSource(
-                                                            vendorData:
-                                                                allVendorDataLst);
-                                                    setState(() {});
-                                                  },
-                                              onChanged: (val) {
-                                                      searchById(val);
-                                                    },
-                                              hintText: 'Vendor Id'),
-                                          
-                                          const SizedBox(
-                                            width: 0,
-                                          ),
-                                          Container(
-                                            width: 230,
-                                            height: 32,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.grey,
-                                                    width: 0.5),
-                                                color: const Color.fromARGB(
-                                                    255, 255, 255, 255),
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                            padding: const EdgeInsets.only(
-                                                right: 10, bottom: 3),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                IconButton(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 3),
-                                                  onPressed: () {
-                                                    vendorNameController
-                                                        .clear();
-
-                                                    vendorDataSource =
-                                                        VendorDataSource(
-                                                            vendorData:
-                                                                allVendorDataLst);
-                                                    setState(() {});
-                                                  },
-                                                  splashRadius: 1,
-                                                  icon: Icon(
-                                                      vendorNameController
-                                                              .text.isEmpty
-                                                          ? CupertinoIcons
-                                                              .search
-                                                          : Icons.clear,
-                                                      size: 18,
-                                                      color:
-                                                          vendorNameController
-                                                                  .text.isEmpty
-                                                              ? Colors.grey[600]
-                                                              : Colors.black),
-                                                ),
-                                                Flexible(
-                                                  child: TextField(
-                                                      controller:
-                                                          vendorNameController,
-                                                      onChanged: (val) {
-                                                        searchByName(val);
-                                                      },
-                                                      decoration:
-                                                          InputDecoration(
-                                                        hintText:
-                                                            staticTextTranslate(
-                                                                'Vendor Name'),
-                                                        hintStyle: TextStyle(
-                                                            color: Colors
-                                                                .grey[600]),
-                                                        contentPadding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                bottom: 14,
-                                                                right: 5),
-                                                        border:
-                                                            InputBorder.none,
-                                                      )),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 0,
-                                          ),
-                                          Container(
-                                            width: 230,
-                                            height: 32,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.grey,
-                                                    width: 0.5),
-                                                color: const Color.fromARGB(
-                                                    255, 255, 255, 255),
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                            padding: const EdgeInsets.only(
-                                                right: 10, bottom: 3),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                IconButton(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 3),
-                                                  onPressed: () {
-                                                    vendorPhoneController
-                                                        .clear();
-
-                                                    vendorDataSource =
-                                                        VendorDataSource(
-                                                            vendorData:
-                                                                allVendorDataLst);
-                                                    setState(() {});
-                                                  },
-                                                  splashRadius: 1,
-                                                  icon: Icon(
-                                                      vendorPhoneController
-                                                              .text.isEmpty
-                                                          ? CupertinoIcons
-                                                              .search
-                                                          : Icons.clear,
-                                                      size: 18,
-                                                      color:
-                                                          vendorPhoneController
-                                                                  .text.isEmpty
-                                                              ? Colors.grey[600]
-                                                              : Colors.black),
-                                                ),
-                                                Flexible(
-                                                  child: TextField(
-                                                      controller:
-                                                          vendorPhoneController,
-                                                      onChanged: (val) {
-                                                        searchByPhone1(val);
-                                                      },
-                                                      decoration:
-                                                          InputDecoration(
-                                                        hintText:
-                                                            staticTextTranslate(
-                                                                'Vendor Phone 01'),
-                                                        hintStyle: TextStyle(
-                                                            color: Colors
-                                                                .grey[600]),
-                                                        contentPadding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                bottom: 14,
-                                                                right: 5),
-                                                        border:
-                                                            InputBorder.none,
-                                                      )),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ]),
-                                        if (loading)
-                                          Expanded(child: showLoading()),
-                                        if (!loading)
-                                          Expanded(
-                                            child: SfDataGridTheme(
-                                              data: SfDataGridThemeData(
-                                                  headerColor:
-                                                        const Color(0xffF1F1F1),
-                                                    sortIcon: const Icon(Icons
-                                                        .arrow_drop_down_rounded),
-                                                    headerHoverColor:
-                                                        const Color(0xffdddfe8),
-                                                  selectionColor: loginBgColor),
-                                              child: Column(
-                                                children: [
-                                                  Expanded(
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              6.0),
-                                                      child: Container(
-                                                        decoration: BoxDecoration(
-                                                            border: Border.all(
-                                                                width: 0.3)),
-                                                        child: SfDataGrid(
-                                                          gridLinesVisibility:
-                                                              GridLinesVisibility
-                                                                  .both,
-                                                          isScrollbarAlwaysShown:
-                                                              true,
-                                                          onQueryRowHeight:
-                                                              (details) {
-                                                            // Set the row height as 70.0 to the column header row.
-                                                            return details
-                                                                        .rowIndex ==
-                                                                    0
-                                                                ? 25.0
-                                                                : 25.0;
-                                                          },
-                                                          rowHeight: 25,
-                                                          headerRowHeight: 25,
-                                                          headerGridLinesVisibility:
-                                                              GridLinesVisibility
-                                                                  .both,
-                                                          allowFiltering: true,
-                                                          allowSorting: true,
-                                                          allowTriStateSorting:
-                                                              true,
-                                                          controller:
-                                                              dataGridController,
-                                                          selectionMode:
-                                                              SelectionMode
-                                                                  .single,
-                                                          source:
-                                                              vendorDataSource!,
-                                                          columnWidthMode:
-                                                              ColumnWidthMode
-                                                                  .lastColumnFill,
-                                                          onSelectionChanged:
-                                                              (addedRows,
-                                                                  removedRows) {
-                                                            setState(() {});
-                                                          },
-                                                          columns: <GridColumn>[
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'serialNumberForStyleColor',
-                                                                visible: false,
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            0.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        color: Colors
-                                                                            .white,
-                                                                        child:
-                                                                            Text(
-                                                                          'serialNumberForStyleColor',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontSize:
-                                                                                getMediumFontSize,
-                                                                          ),
-                                                                        ))),
-                                                            GridColumn(
-                                                              width: 150,
-                                                                columnName:
-                                                                    'id',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            2.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        
-                                                                        child: Text(
-                                                                            staticTextTranslate(
-                                                                                'Vendor Id'),
-                                                                            style: GoogleFonts
-                                                                        .roboto(
-                                                                      fontSize:
-                                                                          getMediumFontSize +
-                                                                              1,
-                                                                    ),))),
-                                                            GridColumn(
-                                                              width: 200,
-                                                              maximumWidth: 360,
-                                                                columnName:
-                                                                    'name',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            2.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        
-                                                                        child: Text(
-                                                                            staticTextTranslate(
-                                                                                'Vendor Name'),
-                                                                            style: GoogleFonts
-                                                                        .roboto(
-                                                                      fontSize:
-                                                                          getMediumFontSize +
-                                                                              1,
-                                                                    ),))),
-                                                            GridColumn(
-                                                              width: 200,
-                                                                columnName:
-                                                                    'vat no',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            2.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              'VAT Number'),
-                                                                          style: GoogleFonts
-                                                                        .roboto(
-                                                                      fontSize:
-                                                                          getMediumFontSize +
-                                                                              1,
-                                                                    ),
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                        ))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'phone1',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            2.0),
-                                                                        
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child: Text(
-                                                                            staticTextTranslate(
-                                                                                'Phone 01'),
-                                                                            style: GoogleFonts
-                                                                        .roboto(
-                                                                      fontSize:
-                                                                          getMediumFontSize +
-                                                                              1,
-                                                                    ),))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'email',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            2.0),
-                                                                        
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child: Text(
-                                                                            staticTextTranslate(
-                                                                                'Email'),
-                                                                           
-                                                                                style: GoogleFonts
-                                                                        .roboto(
-                                                                      fontSize:
-                                                                          getMediumFontSize +
-                                                                              1,
-                                                                    ),))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'created date',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            2.0),
-                                                                        
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child: Text(
-                                                                            staticTextTranslate(
-                                                                                'Created Date'),
-                                                                        
-                                                                                style: GoogleFonts
-                                                                        .roboto(
-                                                                      fontSize:
-                                                                          getMediumFontSize +
-                                                                              1,
-                                                                    ),))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'created by',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            2.0),
-                                                                        
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child: Text(
-                                                                            staticTextTranslate(
-                                                                                'Created by'),
-                                                                            style: GoogleFonts
-                                                                        .roboto(
-                                                                      fontSize:
-                                                                          getMediumFontSize +
-                                                                              1,
-                                                                    ),))),
-                                                          ],
-                                                        ),
+                        child: Card(
+                            shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                    width: 0.5, color: Colors.grey),
+                                borderRadius: BorderRadius.circular(4)),
+                            elevation: 0,
+                            color: Colors.white,
+                            child: Column(
+                              children: [
+                                // filter
+                                filterWidget(),
+                                if (loading) Expanded(child: showLoading()),
+                                if (!loading)
+                                  Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(width: 0.3)),
+                                      child: SfDataGridTheme(
+                                        data: SfDataGridThemeData(
+                                            headerColor:
+                                                const Color(0xffF1F1F1),
+                                            sortIcon: const Icon(
+                                                Icons.arrow_drop_down_rounded),
+                                            headerHoverColor:
+                                                const Color(0xffdddfe8),
+                                            selectionColor: loginBgColor),
+                                        child: SfDataGrid(
+                                          gridLinesVisibility:
+                                              GridLinesVisibility.both,
+                                          isScrollbarAlwaysShown: true,
+                                          onQueryRowHeight: (details) {
+                                            // Set the row height as 70.0 to the column header row.
+                                            return details.rowIndex == 0
+                                                ? 25.0
+                                                : 25.0;
+                                          },
+                                          rowHeight: 25,
+                                          headerRowHeight: 25,
+                                          headerGridLinesVisibility:
+                                              GridLinesVisibility.both,
+                                          allowFiltering: true,
+                                          allowSorting: true,
+                                          allowTriStateSorting: true,
+                                          controller: dataGridController,
+                                          selectionMode: SelectionMode.single,
+                                          source: vendorDataSource!,
+                                          columnWidthMode:
+                                              ColumnWidthMode.lastColumnFill,
+                                          onSelectionChanged:
+                                              (addedRows, removedRows) {
+                                            setState(() {});
+                                          },
+                                          columns: <GridColumn>[
+                                            GridColumn(
+                                                columnName:
+                                                    'serialNumberForStyleColor',
+                                                visible: false,
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            0.0),
+                                                    alignment: Alignment.center,
+                                                    color: Colors.white,
+                                                    child: Text(
+                                                      'serialNumberForStyleColor',
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            getMediumFontSize,
                                                       ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                      ],
-                                    )),
-                              ),
-                            )
-                          ],
-                        ),
+                                                    ))),
+                                            GridColumn(
+                                                width: 150,
+                                                columnName: 'id',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Vendor Id'),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),
+                                                    ))),
+                                            GridColumn(
+                                                width: 200,
+                                                maximumWidth: 360,
+                                                columnName: 'name',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Vendor Name'),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),
+                                                    ))),
+                                            GridColumn(
+                                                width: 200,
+                                                columnName: 'vat no',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'VAT Number'),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ))),
+                                            GridColumn(
+                                                columnName: 'phone1',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Phone 01'),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),
+                                                    ))),
+                                            GridColumn(
+                                                columnName: 'email',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Email'),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),
+                                                    ))),
+                                            GridColumn(
+                                                columnName: 'created date',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Created Date'),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),
+                                                    ))),
+                                            GridColumn(
+                                                columnName: 'created by',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Created by'),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),
+                                                    ))),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                              ],
+                            )),
                       )
                     ],
                   ),
@@ -821,6 +559,77 @@ class _VendorPageState extends State<VendorPage> {
         ),
       ),
     );
+  }
+
+  filterWidget() {
+    return FilterContainer(fiterFields: [
+      FilterTextField(
+          icon: Icon(
+              vendorIdController.text.isEmpty
+                  ? CupertinoIcons.search
+                  : Icons.clear,
+              size: 18,
+              color: vendorIdController.text.isEmpty
+                  ? Colors.grey[600]
+                  : Colors.black),
+          controller: vendorIdController,
+          onPressed: () {
+            vendorIdController.clear();
+
+            vendorDataSource = VendorDataSource(vendorData: allVendorDataLst);
+            setState(() {});
+          },
+          onChanged: (val) {
+            searchById(val);
+          },
+          hintText: 'Vendor Id'),
+      const SizedBox(
+        width: 0,
+      ),
+      FilterTextField(
+          icon: Icon(
+              vendorNameController.text.isEmpty
+                  ? CupertinoIcons.search
+                  : Icons.clear,
+              size: 18,
+              color: vendorNameController.text.isEmpty
+                  ? Colors.grey[600]
+                  : Colors.black),
+          controller: vendorNameController,
+          onPressed: () {
+            vendorNameController.clear();
+
+            vendorDataSource = VendorDataSource(vendorData: allVendorDataLst);
+            setState(() {});
+          },
+          onChanged: (val) {
+            searchByName(val);
+          },
+          hintText: 'Vendor Name'),
+      const SizedBox(
+        width: 0,
+      ),
+      FilterTextField(
+          icon: Icon(
+              vendorPhoneController.text.isEmpty
+                  ? CupertinoIcons.search
+                  : Icons.clear,
+              size: 18,
+              color: vendorPhoneController.text.isEmpty
+                  ? Colors.grey[600]
+                  : Colors.black),
+          controller: vendorNameController,
+          onPressed: () {
+            vendorPhoneController.clear();
+
+            vendorDataSource = VendorDataSource(vendorData: allVendorDataLst);
+            setState(() {});
+          },
+          onChanged: (val) {
+            searchByPhone1(val);
+          },
+          hintText: 'Vendor Phone 01'),
+    ]);
   }
 }
 
@@ -854,7 +663,7 @@ class VendorDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         color: row.getCells()[0].value.isEven
-             ? const Color(0xffF1F1F1)
+            ? const Color(0xffF1F1F1)
             : Colors.white,
         cells: row.getCells().map<Widget>((e) {
           return Container(

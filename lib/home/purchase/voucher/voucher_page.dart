@@ -1,5 +1,8 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:barcode/barcode.dart';
+import 'package:bitpro_hive/widget/filter_container.dart';
+import 'package:bitpro_hive/widget/filter_text_fileds/fiter_textfield.dart';
+
 import 'package:bitpro_hive/widget/string_related/get_id_number.dart';
 import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -562,893 +565,233 @@ class _VoucherPageState extends State<VoucherPage> {
                         width: 0,
                       ),
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(
-                              height: 0,
-                            ),
-                            Expanded(
-                              child: SizedBox(
-                                width: double.maxFinite,
-                                height: 120,
-                                child: Card(
-                                    shape: RoundedRectangleBorder(
-                                        side: const BorderSide(
-                                            width: 0.5, color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(5)),
-                                    elevation: 0,
-                                    color: Colors.white,
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(4),
-                                                  topRight: Radius.circular(4)),
-                                              gradient: LinearGradient(
-                                                  end: Alignment.bottomCenter,
-                                                  colors: [
-                                                    Color.fromARGB(
-                                                        255, 180, 180, 180),
-                                                    Color.fromARGB(
-                                                        255, 105, 105, 105),
-                                                  ],
-                                                  begin: Alignment.topCenter)),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(0.0),
-                                            child: ButtonBarSuper(
-                                              buttonTextTheme:
-                                                  ButtonTextTheme.primary,
-                                              wrapType: WrapType.fit,
-                                              wrapFit: WrapFit.min,
-                                              alignment: engSelectedLanguage
-                                                  ? WrapSuperAlignment.left
-                                                  : WrapSuperAlignment.right,
-                                              lineSpacing: 20,
-                                              children: [
-                                                Container(
-                                                  width: 230,
-                                                  height: 30,
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        width: 0.5,
-                                                        color: Colors.grey),
-                                                    color: const Color.fromARGB(
-                                                        255, 255, 255, 255),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 10,
-                                                          // top: 3,
-                                                          bottom: 3),
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      IconButton(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 3),
-                                                        onPressed: () {
-                                                          barcodeFilterController
-                                                              .clear();
-
-                                                          voucherDataSource = VoucherDataSource(
-                                                              voucherData: selectedStoreDocId ==
-                                                                      'All'
-                                                                  ? dbVoucherDataLst
-                                                                  : dbVoucherDataLst
-                                                                      .where((e) =>
-                                                                          e.selectedStoreDocId ==
-                                                                          selectedStoreDocId)
-                                                                      .toList(),
-                                                              allStoreDataLst:
-                                                                  allStoreDataLst,
-                                                              vendorDataLst:
-                                                                  vendorDataLst);
-                                                          setState(() {});
-                                                        },
-                                                        splashRadius: 1,
-                                                        icon: Icon(
-                                                            barcodeFilterController
-                                                                    .text
-                                                                    .isEmpty
-                                                                ? CupertinoIcons
-                                                                    .search
-                                                                : Icons.clear,
-                                                            size: 18,
-                                                            color:
-                                                                barcodeFilterController
-                                                                        .text
-                                                                        .isEmpty
-                                                                    ? Colors.grey[
-                                                                        600]
-                                                                    : Colors
-                                                                        .black),
-                                                      ),
-                                                      Flexible(
-                                                        child: TextField(
-                                                          controller:
-                                                              barcodeFilterController,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            hintText:
-                                                                staticTextTranslate(
-                                                                    'Voucher #'),
-                                                            hintStyle: TextStyle(
-                                                                color: Colors
-                                                                    .grey[600]),
-                                                            contentPadding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    // left:
-                                                                    //     10,
-                                                                    bottom: 14,
-                                                                    right: 5),
-                                                            border: InputBorder
-                                                                .none,
-                                                          ),
-                                                          onChanged: (val) {
-                                                            searchByVoucher(
-                                                                val);
-                                                          },
+                        child: Card(
+                            shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                    width: 0.5, color: Colors.grey),
+                                borderRadius: BorderRadius.circular(5)),
+                            elevation: 0,
+                            color: Colors.white,
+                            child: Column(
+                              children: [
+                                //filter
+                                filterWidget(),
+                                if (voucherDataSource == null || loading)
+                                  Expanded(child: showLoading()),
+                                if (voucherDataSource != null && !loading)
+                                  Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(width: 0.3)),
+                                      child: SfDataGridTheme(
+                                        data: SfDataGridThemeData(
+                                            headerColor:
+                                                const Color(0xffF1F1F1),
+                                            sortIcon: const Icon(
+                                                Icons.arrow_drop_down_rounded),
+                                            headerHoverColor:
+                                                const Color(0xffdddfe8),
+                                            selectionColor: loginBgColor),
+                                        child: Expanded(
+                                          child: SfDataGrid(
+                                            isScrollbarAlwaysShown: true,
+                                            onQueryRowHeight: (details) {
+                                              // Set the row height as 70.0 to the column header row.
+                                              return details.rowIndex == 0
+                                                  ? 25.0
+                                                  : 24.0;
+                                            },
+                                            rowHeight: 25,
+                                            headerRowHeight: 25,
+                                            headerGridLinesVisibility:
+                                                GridLinesVisibility.both,
+                                            allowSorting: true,
+                                            allowTriStateSorting: true,
+                                            controller: dataGridController,
+                                            selectionMode: SelectionMode.single,
+                                            source: voucherDataSource!,
+                                            columnWidthMode:
+                                                ColumnWidthMode.lastColumnFill,
+                                            onSelectionChanged:
+                                                (addedRows, removedRows) {
+                                              setState(() {});
+                                            },
+                                            columns: <GridColumn>[
+                                              GridColumn(
+                                                  columnName:
+                                                      'serialNumberForStyleColor',
+                                                  visible: false,
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              0.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        'serialNumberForStyleColor',
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 0,
-                                                ),
-                                                Container(
-                                                  width: 230,
-                                                  height: 30,
-                                                  decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          width: 0.5,
-                                                          color: Colors.grey),
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              255,
-                                                              255,
-                                                              255),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              4)),
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 10, bottom: 3),
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      IconButton(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 3),
-                                                        onPressed: () {
-                                                          _vendorTypeAheadController
-                                                              .clear();
-
-                                                          voucherDataSource = VoucherDataSource(
-                                                              voucherData: selectedStoreDocId ==
-                                                                      'All'
-                                                                  ? dbVoucherDataLst
-                                                                  : dbVoucherDataLst
-                                                                      .where((e) =>
-                                                                          e.selectedStoreDocId ==
-                                                                          selectedStoreDocId)
-                                                                      .toList(),
-                                                              allStoreDataLst:
-                                                                  allStoreDataLst,
-                                                              vendorDataLst:
-                                                                  vendorDataLst);
-                                                          setState(() {});
-                                                        },
-                                                        splashRadius: 1,
-                                                        icon: Icon(
-                                                            _vendorTypeAheadController
-                                                                    .text
-                                                                    .isEmpty
-                                                                ? CupertinoIcons
-                                                                    .search
-                                                                : Icons.clear,
-                                                            size: 18,
-                                                            color:
-                                                                _vendorTypeAheadController
-                                                                        .text
-                                                                        .isEmpty
-                                                                    ? Colors.grey[
-                                                                        600]
-                                                                    : Colors
-                                                                        .black),
-                                                      ),
-                                                      Flexible(
-                                                        child:
-                                                            TypeAheadFormField(
-                                                          getImmediateSuggestions:
-                                                              false,
-                                                          textFieldConfiguration:
-                                                              TextFieldConfiguration(
-                                                            controller:
-                                                                _vendorTypeAheadController,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              hintText:
-                                                                  staticTextTranslate(
-                                                                      'Vendor'),
-                                                              hintStyle: TextStyle(
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      600]),
-                                                              contentPadding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      bottom:
-                                                                          14,
-                                                                      right: 5),
-                                                              border:
-                                                                  InputBorder
-                                                                      .none,
-                                                            ),
-                                                          ),
-                                                          suggestionsCallback:
-                                                              (pattern) {
-                                                            return vendorDataLst
-                                                                .where((e) => e
-                                                                    .vendorName
-                                                                    .toLowerCase()
-                                                                    .contains(
-                                                                        pattern
-                                                                            .toLowerCase()))
-                                                                .toList();
-                                                          },
-                                                          noItemsFoundBuilder:
-                                                              (context) {
-                                                            return Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(
-                                                                      10.0),
-                                                              child: Text(
-                                                                  staticTextTranslate(
-                                                                      'No Items Found!'),
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        getMediumFontSize,
-                                                                  )),
-                                                            );
-                                                          },
-                                                          itemBuilder: (context,
-                                                              VendorData
-                                                                  suggestion) {
-                                                            return ListTile(
-                                                              title: Text(
-                                                                  suggestion
-                                                                      .vendorName,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        getMediumFontSize,
-                                                                  )),
-                                                            );
-                                                          },
-                                                          transitionBuilder:
-                                                              (context,
-                                                                  suggestionsBox,
-                                                                  controller) {
-                                                            return suggestionsBox;
-                                                          },
-                                                          onSuggestionSelected:
-                                                              (VendorData
-                                                                  suggestion) {
-                                                            _vendorTypeAheadController
-                                                                    .text =
-                                                                suggestion
-                                                                    .vendorName;
-                                                            setState(() {
-                                                              searchByVendor(
-                                                                  suggestion
-                                                                      .vendorId);
-                                                            });
-                                                          },
+                                                      ))),
+                                              GridColumn(
+                                                  width: 130,
+                                                  columnName: 'voucher_no',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          staticTextTranslate(
+                                                              'Voucher #'),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                getMediumFontSize,
+                                                          )))),
+                                              GridColumn(
+                                                  width: 100,
+                                                  columnName: 'type',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          staticTextTranslate(
+                                                              'Type'),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                getMediumFontSize,
+                                                          )))),
+                                              GridColumn(
+                                                  width: 300,
+                                                  columnName: 'vendor',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        staticTextTranslate(
+                                                            'Vendor'),
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 0,
-                                                ),
-                                                Container(
-                                                  width: 230,
-                                                  height: 30,
-                                                  decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          width: 0.5,
-                                                          color: Colors.grey),
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              255,
-                                                              255,
-                                                              255),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              4)),
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 10, bottom: 3),
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      IconButton(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 3),
-                                                        onPressed: () {
-                                                          vendorInvoiceFilterController
-                                                              .clear();
-
-                                                          voucherDataSource = VoucherDataSource(
-                                                              voucherData: selectedStoreDocId ==
-                                                                      'All'
-                                                                  ? dbVoucherDataLst
-                                                                  : dbVoucherDataLst
-                                                                      .where((e) =>
-                                                                          e.selectedStoreDocId ==
-                                                                          selectedStoreDocId)
-                                                                      .toList(),
-                                                              vendorDataLst:
-                                                                  vendorDataLst,
-                                                              allStoreDataLst:
-                                                                  allStoreDataLst);
-                                                          setState(() {});
-                                                        },
-                                                        splashRadius: 1,
-                                                        icon: Icon(
-                                                            vendorInvoiceFilterController
-                                                                    .text
-                                                                    .isEmpty
-                                                                ? CupertinoIcons
-                                                                    .search
-                                                                : Icons.clear,
-                                                            size: 18,
-                                                            color:
-                                                                vendorInvoiceFilterController
-                                                                        .text
-                                                                        .isEmpty
-                                                                    ? Colors.grey[
-                                                                        600]
-                                                                    : Colors
-                                                                        .black),
-                                                      ),
-                                                      Flexible(
-                                                        child: TextField(
-                                                            controller:
-                                                                vendorInvoiceFilterController,
-                                                            onChanged: (val) {
-                                                              searchByVendorInvoice(
-                                                                  val);
-                                                            },
-                                                            decoration:
-                                                                InputDecoration(
-                                                              hintText:
-                                                                  staticTextTranslate(
-                                                                      'Vendor Invoice #'),
-                                                              hintStyle: TextStyle(
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      600]),
-                                                              contentPadding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      bottom:
-                                                                          14,
-                                                                      right: 5),
-                                                              border:
-                                                                  InputBorder
-                                                                      .none,
-                                                            )),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Container(
-                                                  width: 230,
-                                                  height: 30,
-                                                  decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          width: 0.5,
-                                                          color: Colors.grey),
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              255,
-                                                              255,
-                                                              255),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              4)),
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 10, bottom: 3),
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      IconButton(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 3),
-                                                        onPressed: () {
-                                                          voucherDataSource = VoucherDataSource(
-                                                              voucherData: selectedStoreDocId ==
-                                                                      'All'
-                                                                  ? dbVoucherDataLst
-                                                                  : dbVoucherDataLst
-                                                                      .where((e) =>
-                                                                          e.selectedStoreDocId ==
-                                                                          selectedStoreDocId)
-                                                                      .toList(),
-                                                              vendorDataLst:
-                                                                  vendorDataLst,
-                                                              allStoreDataLst:
-                                                                  allStoreDataLst);
-                                                          setState(() {});
-                                                        },
-                                                        splashRadius: 1,
-                                                        icon: Icon(
-                                                            vendorInvoiceFilterController
-                                                                    .text
-                                                                    .isEmpty
-                                                                ? CupertinoIcons
-                                                                    .search
-                                                                : Icons.clear,
-                                                            size: 18,
-                                                            color:
-                                                                vendorInvoiceFilterController
-                                                                        .text
-                                                                        .isEmpty
-                                                                    ? Colors.grey[
-                                                                        600]
-                                                                    : Colors
-                                                                        .black),
-                                                      ),
-                                                      Flexible(
-                                                          child: Container(
-                                                              width: 200,
-                                                              height: 30,
-                                                              decoration: BoxDecoration(
-                                                                  color: const Color
-                                                                      .fromARGB(
-                                                                      255,
-                                                                      255,
-                                                                      255,
-                                                                      255),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8)),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      right: 10,
-                                                                      left: 10),
-                                                              child:
-                                                                  DropdownButton<
-                                                                      String>(
-                                                                isExpanded:
-                                                                    true,
-                                                                value:
-                                                                    selectedStoreDocId,
-                                                                underline:
-                                                                    const SizedBox(),
-                                                                hint: Text(
-                                                                  staticTextTranslate(
-                                                                      'Stores'),
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        getMediumFontSize +
-                                                                            2,
-                                                                  ),
-                                                                ),
-                                                                items: <String>[
-                                                                      'All'
-                                                                    ].map((String
-                                                                        value) {
-                                                                      return DropdownMenuItem<
-                                                                          String>(
-                                                                        value:
-                                                                            value,
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              value),
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontSize:
-                                                                                getMediumFontSize + 2,
-                                                                          ),
-                                                                        ),
-                                                                      );
-                                                                    }).toList() +
-                                                                    allStoreDataLst.map(
-                                                                        (StoreData
-                                                                            value) {
-                                                                      return DropdownMenuItem<
-                                                                          String>(
-                                                                        value: value
-                                                                            .docId,
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              value.storeName),
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontSize:
-                                                                                getMediumFontSize + 2,
-                                                                          ),
-                                                                        ),
-                                                                      );
-                                                                    }).toList(),
-                                                                onChanged:
-                                                                    (val) {
-                                                                  if (val !=
-                                                                      null) {
-                                                                    selectedStoreDocId =
-                                                                        val;
-                                                                    voucherDataSource = VoucherDataSource(
-                                                                        voucherData: val ==
-                                                                                'All'
-                                                                            ? dbVoucherDataLst
-                                                                            : dbVoucherDataLst
-                                                                                .where((e) =>
-                                                                                    e.selectedStoreDocId ==
-                                                                                    val)
-                                                                                .toList(),
-                                                                        vendorDataLst:
-                                                                            vendorDataLst,
-                                                                        allStoreDataLst:
-                                                                            allStoreDataLst);
-
-                                                                    setState(
-                                                                        () {});
-                                                                  }
-                                                                },
-                                                              ))),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                              ],
-                                            ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ))),
+                                              GridColumn(
+                                                  width: 150,
+                                                  columnName: 'qty_received',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          staticTextTranslate(
+                                                              'Qty Received'),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                getMediumFontSize,
+                                                          )))),
+                                              GridColumn(
+                                                  width: 150,
+                                                  columnName: 'voucher_total',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          staticTextTranslate(
+                                                              'Voucher Total'),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                getMediumFontSize,
+                                                          )))),
+                                              GridColumn(
+                                                  width: 150,
+                                                  columnName: 'vendor_inv',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          staticTextTranslate(
+                                                              'Vendor Inv#'),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                getMediumFontSize,
+                                                          )))),
+                                              GridColumn(
+                                                  width: 150,
+                                                  columnName: 'store',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          staticTextTranslate(
+                                                              'Store'),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                getMediumFontSize,
+                                                          )))),
+                                              GridColumn(
+                                                  width: 190,
+                                                  columnName: 'created_date',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          staticTextTranslate(
+                                                              'Created Date'),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                getMediumFontSize,
+                                                          )))),
+                                              GridColumn(
+                                                  width: 150,
+                                                  columnName: 'created_by',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          staticTextTranslate(
+                                                              'Created By'),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                getMediumFontSize,
+                                                          )))),
+                                            ],
+                                            gridLinesVisibility:
+                                                GridLinesVisibility.both,
                                           ),
                                         ),
-                                        if (voucherDataSource == null ||
-                                            loading)
-                                          Expanded(child: showLoading()),
-                                        if (voucherDataSource != null &&
-                                            !loading)
-                                          Expanded(
-                                            child: SfDataGridTheme(
-                                              data: SfDataGridThemeData(
-                                                  headerColor:
-                                                      const Color(0xffdddfe8),
-                                                  headerHoverColor:
-                                                      const Color(0xffdddfe8),
-                                                  selectionColor: loginBgColor),
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    height: 2,
-                                                    width: double.infinity,
-                                                    color: Colors.blue,
-                                                  ),
-                                                  Expanded(
-                                                    child: SfDataGrid(
-                                                      isScrollbarAlwaysShown:
-                                                          true,
-                                                      onQueryRowHeight:
-                                                          (details) {
-                                                        // Set the row height as 70.0 to the column header row.
-                                                        return details
-                                                                    .rowIndex ==
-                                                                0
-                                                            ? 25.0
-                                                            : 24.0;
-                                                      },
-                                                      rowHeight: 25,
-                                                      headerGridLinesVisibility:
-                                                          GridLinesVisibility
-                                                              .both,
-                                                      allowFiltering: true,
-                                                      allowSorting: true,
-                                                      allowTriStateSorting:
-                                                          true,
-                                                      key: _key,
-                                                      controller:
-                                                          dataGridController,
-                                                      selectionMode:
-                                                          SelectionMode.single,
-                                                      source:
-                                                          voucherDataSource!,
-                                                      columnWidthMode:
-                                                          ColumnWidthMode
-                                                              .lastColumnFill,
-                                                      onSelectionChanged:
-                                                          (addedRows,
-                                                              removedRows) {
-                                                        setState(() {});
-                                                      },
-                                                      columns: <GridColumn>[
-                                                        GridColumn(
-                                                            columnName:
-                                                                'serialNumberForStyleColor',
-                                                            visible: false,
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        0.0),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                color: Colors
-                                                                    .white,
-                                                                child: Text(
-                                                                  'serialNumberForStyleColor',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        getMediumFontSize,
-                                                                  ),
-                                                                ))),
-                                                        GridColumn(
-                                                            width: 130,
-                                                            columnName:
-                                                                'voucher_no',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        2.0),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                color: const Color(
-                                                                    0xffdddfe8),
-                                                                child: Text(
-                                                                    staticTextTranslate(
-                                                                        'Voucher #'),
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          getMediumFontSize,
-                                                                    )))),
-                                                        GridColumn(
-                                                            width: 100,
-                                                            columnName: 'type',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        2.0),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                color: const Color(
-                                                                    0xffdddfe8),
-                                                                child: Text(
-                                                                    staticTextTranslate(
-                                                                        'Type'),
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          getMediumFontSize,
-                                                                    )))),
-                                                        GridColumn(
-                                                            width: 300,
-                                                            columnName:
-                                                                'vendor',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        2.0),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                color: const Color(
-                                                                    0xffdddfe8),
-                                                                child: Text(
-                                                                  staticTextTranslate(
-                                                                      'Vendor'),
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        getMediumFontSize,
-                                                                  ),
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                ))),
-                                                        GridColumn(
-                                                            width: 150,
-                                                            columnName:
-                                                                'qty_received',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        2.0),
-                                                                color: const Color(
-                                                                    0xffdddfe8),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                    staticTextTranslate(
-                                                                        'Qty Received'),
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          getMediumFontSize,
-                                                                    )))),
-                                                        GridColumn(
-                                                            width: 150,
-                                                            columnName:
-                                                                'voucher_total',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        2.0),
-                                                                color: const Color(
-                                                                    0xffdddfe8),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                    staticTextTranslate(
-                                                                        'Voucher Total'),
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          getMediumFontSize,
-                                                                    )))),
-                                                        GridColumn(
-                                                            width: 150,
-                                                            columnName:
-                                                                'vendor_inv',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        2.0),
-                                                                color: const Color(
-                                                                    0xffdddfe8),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                    staticTextTranslate(
-                                                                        'Vendor Inv#'),
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          getMediumFontSize,
-                                                                    )))),
-                                                        GridColumn(
-                                                            width: 150,
-                                                            columnName: 'store',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        2.0),
-                                                                color: const Color(
-                                                                    0xffdddfe8),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                    staticTextTranslate(
-                                                                        'Store'),
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          getMediumFontSize,
-                                                                    )))),
-                                                        GridColumn(
-                                                            width: 190,
-                                                            columnName:
-                                                                'created_date',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        2.0),
-                                                                color: const Color(
-                                                                    0xffdddfe8),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                    staticTextTranslate(
-                                                                        'Created Date'),
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          getMediumFontSize,
-                                                                    )))),
-                                                        GridColumn(
-                                                            width: 150,
-                                                            columnName:
-                                                                'created_by',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        2.0),
-                                                                color: const Color(
-                                                                    0xffdddfe8),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                    staticTextTranslate(
-                                                                        'Created By'),
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          getMediumFontSize,
-                                                                    )))),
-                                                      ],
-                                                      gridLinesVisibility:
-                                                          GridLinesVisibility
-                                                              .both,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                      ],
-                                    )),
-                              ),
-                            )
-                          ],
-                        ),
+                                      ),
+                                    ),
+                                  )
+                              ],
+                            )),
                       )
                     ],
                   ),
@@ -1459,6 +802,256 @@ class _VoucherPageState extends State<VoucherPage> {
         ),
       ),
     );
+  }
+
+  filterWidget() {
+    return FilterContainer(fiterFields: [
+      FilterTextField(
+        onPressed: () {
+          barcodeFilterController.clear();
+
+          voucherDataSource = VoucherDataSource(
+              voucherData: selectedStoreDocId == 'All'
+                  ? dbVoucherDataLst
+                  : dbVoucherDataLst
+                      .where((e) => e.selectedStoreDocId == selectedStoreDocId)
+                      .toList(),
+              allStoreDataLst: allStoreDataLst,
+              vendorDataLst: vendorDataLst);
+          setState(() {});
+        },
+        icon: Icon(
+            barcodeFilterController.text.isEmpty
+                ? CupertinoIcons.search
+                : Icons.clear,
+            size: 18,
+            color: barcodeFilterController.text.isEmpty
+                ? Colors.grey[600]
+                : Colors.black),
+        controller: barcodeFilterController,
+        hintText: 'Voucher #',
+        onChanged: (val) {
+          searchByVoucher(val);
+        },
+      ),
+      Container(
+        width: 230,
+        height: 32,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey, width: 0.5),
+            color: const Color.fromARGB(255, 255, 255, 255),
+            borderRadius: BorderRadius.circular(5)),
+        padding: const EdgeInsets.only(right: 10, bottom: 3),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              padding: const EdgeInsets.only(top: 3),
+              onPressed: () {
+                _vendorTypeAheadController.clear();
+
+                voucherDataSource = VoucherDataSource(
+                    voucherData: selectedStoreDocId == 'All'
+                        ? dbVoucherDataLst
+                        : dbVoucherDataLst
+                            .where((e) =>
+                                e.selectedStoreDocId == selectedStoreDocId)
+                            .toList(),
+                    allStoreDataLst: allStoreDataLst,
+                    vendorDataLst: vendorDataLst);
+                setState(() {});
+              },
+              splashRadius: 1,
+              icon: Icon(
+                  _vendorTypeAheadController.text.isEmpty
+                      ? CupertinoIcons.search
+                      : Icons.clear,
+                  size: 18,
+                  color: _vendorTypeAheadController.text.isEmpty
+                      ? Colors.grey[600]
+                      : Colors.black),
+            ),
+            Flexible(
+              child: TypeAheadFormField(
+                getImmediateSuggestions: false,
+                textFieldConfiguration: TextFieldConfiguration(
+                  controller: _vendorTypeAheadController,
+                  decoration: InputDecoration(
+                    hintText: staticTextTranslate('Vendor'),
+                    hintStyle: TextStyle(color: Colors.grey[600]),
+                    contentPadding: const EdgeInsets.only(bottom: 14, right: 5),
+                    border: InputBorder.none,
+                  ),
+                ),
+                suggestionsCallback: (pattern) {
+                  return vendorDataLst
+                      .where((e) => e.vendorName
+                          .toLowerCase()
+                          .contains(pattern.toLowerCase()))
+                      .toList();
+                },
+                noItemsFoundBuilder: (context) {
+                  return Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(staticTextTranslate('No Items Found!'),
+                        style: TextStyle(
+                          fontSize: getMediumFontSize,
+                        )),
+                  );
+                },
+                itemBuilder: (context, VendorData suggestion) {
+                  return ListTile(
+                    title: Text(suggestion.vendorName,
+                        style: TextStyle(
+                          fontSize: getMediumFontSize,
+                        )),
+                  );
+                },
+                transitionBuilder: (context, suggestionsBox, controller) {
+                  return suggestionsBox;
+                },
+                onSuggestionSelected: (VendorData suggestion) {
+                  _vendorTypeAheadController.text = suggestion.vendorName;
+                  setState(() {
+                    searchByVendor(suggestion.vendorId);
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      FilterTextField(
+        onPressed: () {
+          vendorInvoiceFilterController.clear();
+
+          voucherDataSource = VoucherDataSource(
+              voucherData: selectedStoreDocId == 'All'
+                  ? dbVoucherDataLst
+                  : dbVoucherDataLst
+                      .where((e) => e.selectedStoreDocId == selectedStoreDocId)
+                      .toList(),
+              vendorDataLst: vendorDataLst,
+              allStoreDataLst: allStoreDataLst);
+          setState(() {});
+        },
+        icon: Icon(
+            vendorInvoiceFilterController.text.isEmpty
+                ? CupertinoIcons.search
+                : Icons.clear,
+            size: 18,
+            color: vendorInvoiceFilterController.text.isEmpty
+                ? Colors.grey[600]
+                : Colors.black),
+        controller: vendorInvoiceFilterController,
+        hintText: 'Vendor Invoice #',
+        onChanged: (val) {
+          searchByVendorInvoice(val);
+        },
+      ),
+      const SizedBox(
+        width: 5,
+      ),
+      Container(
+        width: 230,
+        height: 30,
+        decoration: BoxDecoration(
+            border: Border.all(width: 0.5, color: Colors.grey),
+            color: const Color.fromARGB(255, 255, 255, 255),
+            borderRadius: BorderRadius.circular(4)),
+        padding: const EdgeInsets.only(right: 10, bottom: 3),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              padding: const EdgeInsets.only(top: 3),
+              onPressed: () {
+                voucherDataSource = VoucherDataSource(
+                    voucherData: selectedStoreDocId == 'All'
+                        ? dbVoucherDataLst
+                        : dbVoucherDataLst
+                            .where((e) =>
+                                e.selectedStoreDocId == selectedStoreDocId)
+                            .toList(),
+                    vendorDataLst: vendorDataLst,
+                    allStoreDataLst: allStoreDataLst);
+                setState(() {});
+              },
+              splashRadius: 1,
+              icon: Icon(
+                  vendorInvoiceFilterController.text.isEmpty
+                      ? CupertinoIcons.search
+                      : Icons.clear,
+                  size: 18,
+                  color: vendorInvoiceFilterController.text.isEmpty
+                      ? Colors.grey[600]
+                      : Colors.black),
+            ),
+            Flexible(
+                child: Container(
+                    width: 200,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        borderRadius: BorderRadius.circular(8)),
+                    padding: const EdgeInsets.only(right: 10, left: 10),
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      value: selectedStoreDocId,
+                      underline: const SizedBox(),
+                      hint: Text(
+                        staticTextTranslate('Stores'),
+                        style: TextStyle(
+                          fontSize: getMediumFontSize + 2,
+                        ),
+                      ),
+                      items: <String>['All'].map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                staticTextTranslate(value),
+                                style: TextStyle(
+                                  fontSize: getMediumFontSize + 2,
+                                ),
+                              ),
+                            );
+                          }).toList() +
+                          allStoreDataLst.map((StoreData value) {
+                            return DropdownMenuItem<String>(
+                              value: value.docId,
+                              child: Text(
+                                staticTextTranslate(value.storeName),
+                                style: TextStyle(
+                                  fontSize: getMediumFontSize + 2,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                      onChanged: (val) {
+                        if (val != null) {
+                          selectedStoreDocId = val;
+                          voucherDataSource = VoucherDataSource(
+                              voucherData: val == 'All'
+                                  ? dbVoucherDataLst
+                                  : dbVoucherDataLst
+                                      .where((e) => e.selectedStoreDocId == val)
+                                      .toList(),
+                              vendorDataLst: vendorDataLst,
+                              allStoreDataLst: allStoreDataLst);
+
+                          setState(() {});
+                        }
+                      },
+                    ))),
+          ],
+        ),
+      ),
+      const SizedBox(
+        width: 5,
+      ),
+    ]);
   }
 }
 

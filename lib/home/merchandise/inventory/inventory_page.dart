@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/model/department_data.dart';
 import 'package:bitpro_hive/model/store_data.dart';
 import 'package:bitpro_hive/model/vendor_data.dart';
@@ -11,11 +12,15 @@ import 'package:bitpro_hive/services/hive/hive_merchandise_db_service/department
 import 'package:bitpro_hive/services/hive/hive_merchandise_db_service/inventory_db_service.dart';
 import 'package:bitpro_hive/services/hive/hive_merchandise_db_service/vendors_db_service.dart';
 import 'package:bitpro_hive/services/hive/hive_settings/hive_store_db_service.dart';
+import 'package:bitpro_hive/widget/filter_container.dart';
+import 'package:bitpro_hive/widget/filter_text_fileds/fiter_textfield.dart';
 import 'package:bitpro_hive/widget/string_related/get_id_number.dart';
 import 'package:bitpro_hive/widget/string_related/get_random_string.dart';
+import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:hive/hive.dart';
 import 'package:iconsax/iconsax.dart';
@@ -229,1396 +234,795 @@ class _InventoryPageState extends State<InventoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(selectedStoreDocId);
     return customTopNavBar(
       Scaffold(
         backgroundColor: homeBgColor,
         body: SafeArea(
-          child: Container(
-            color: homeBgColor,
-            padding: const EdgeInsets.fromLTRB(5, 0, 5, 2),
-            child: Row(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 0,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Colors.blue,
-                            darkBlueColor,
-                          ],
-                        ),
-                      ),
-                      margin: const EdgeInsets.only(left: 0),
-                      padding: const EdgeInsets.all(0),
-                      width: 170,
-                      height: 45,
-                      child: const Center(
-                        child: Text(
-                          'BitPro',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 28,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.back_square,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Back'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.add_square4,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Create'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () async {
-                          String newInventoryId =
-                              await getIdNumber(inventoryDataLst.length + 1);
-                          bool? res = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CreateEditInventoryPage(
-                                        newInventoryId: newInventoryId,
-                                        inventoryDataLst: inventoryDataLst,
-                                        userData: widget.userData,
-                                      )));
-
-                          if (res != null && res) {
-                            setState(() {
-                              loading = true;
-                            });
-
-                            fbFetchData();
-                          }
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(
-                              size: 19,
-                              Iconsax.edit4,
-                              color: dataGridController.selectedRow != null
-                                  ? const Color.fromARGB(255, 0, 0, 0)
-                                  : Colors.grey[500],
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Edit'),
-                                style: TextStyle(
-                                  fontSize: getMediumFontSize,
-                                  color: dataGridController.selectedRow != null
-                                      ? const Color.fromARGB(255, 0, 0, 0)
-                                      : Colors.grey[500],
-                                )),
-                          ],
-                        ),
-                        onPressed: () async {
-                          if (dataGridController.selectedRow != null) {
-                            var itemcode = '';
-
-                            for (var c
-                                in dataGridController.selectedRow!.getCells()) {
-                              if (c.columnName == 'itemCode') {
-                                itemcode = c.value;
-                              }
-                            }
-
-                            bool? res = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        CreateEditInventoryPage(
-                                          newInventoryId: itemcode,
-                                          inventoryDataLst: inventoryDataLst,
-                                          userData: widget.userData,
-                                          edit: true,
-                                          selectedRowData: inventoryDataLst
-                                              .where(
-                                                  (e) => e.itemCode == itemcode)
-                                              .first,
-                                        )));
-                            if (res != null && res) {
-                              setState(() {
-                                loading = true;
-                              });
-
-                              fbFetchData();
-                            }
-                          }
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.refresh5,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Refresh'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () async {
-                          setState(() {
-                            loading = true;
-                          });
-
-                          await fbFetchData();
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.calendar_1,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Date Range'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Dialog(
-                                  child: SizedBox(
-                                    width: 400,
-                                    height: 380,
-                                    child: SfDateRangePicker(
-                                        headerStyle: DateRangePickerHeaderStyle(
-                                            backgroundColor: darkBlueColor,
-                                            textStyle: const TextStyle(
-                                              color: Colors.white,
-                                            )),
-                                        onSelectionChanged:
-                                            (DateRangePickerSelectionChangedArgs
-                                                args) {
-                                          if (args.value is PickerDateRange) {
-                                            rangeStartDate =
-                                                args.value.startDate;
-
-                                            rangeEndDate = args.value.endDate;
-                                            setState(() {});
-                                          }
-                                        },
-                                        onCancel: () {
-                                          Navigator.pop(context);
-                                        },
-                                        onSubmit: (var p0) {
-                                          filterAccordingSelectedDate();
-                                          Navigator.pop(context);
-                                        },
-                                        cancelText: 'CANCEL',
-                                        confirmText: 'OK',
-                                        showTodayButton: false,
-                                        showActionButtons: true,
-                                        view: DateRangePickerView.month,
-                                        selectionMode:
-                                            DateRangePickerSelectionMode.range),
-                                  ),
-                                );
-                              });
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(
-                              size: 19,
-                              Iconsax.tag,
-                              color: dataGridController.selectedRow != null
-                                  ? const Color.fromARGB(255, 0, 0, 0)
-                                  : Colors.grey[500],
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Print Tag'),
-                                style: TextStyle(
-                                  fontSize: getMediumFontSize,
-                                  color: dataGridController.selectedRow != null
-                                      ? const Color.fromARGB(255, 0, 0, 0)
-                                      : Colors.grey[500],
-                                )),
-                          ],
-                        ),
-                        onPressed: () async {
-                          if (dataGridController.selectedRow != null) {
-                            String productName = '';
-                            String itemCode = '';
-                            String barcodeValue = '';
-                            String priceWt = '';
-                            int ohQty = -1;
-
-                            for (var c
-                                in dataGridController.selectedRow!.getCells()) {
-                              if (c.columnName == 'productName') {
-                                productName = c.value;
-                              } else if (c.columnName == 'itemCode') {
-                                itemCode = c.value;
-                              } else if (c.columnName == 'barcode') {
-                                barcodeValue = c.value;
-                              } else if (c.columnName == 'priceWT') {
-                                priceWt = c.value;
-                              } else if (c.columnName == 'ohQty') {
-                                ohQty = int.tryParse(c.value) ?? 0;
-                              }
-                            }
-
-                            PrintTagData selectedPrintTagData = PrintTagData(
-                                barcodeValue: barcodeValue,
-                                docQty: -1,
-                                itemCode: itemCode,
-                                productName: productName,
-                                onHandQty: ohQty,
-                                priceWt: priceWt);
-
-                            List<PrintTagData> allPrintTagDataLst =
-                                filteredInventoryDataLst.map((e) {
-                              int ohHandQty = e.ohQtyForDifferentStores[
-                                      selectedStoreDocId] ??
-                                  0;
-                              return PrintTagData(
-                                  barcodeValue: e.barcode,
-                                  docQty: -1,
-                                  itemCode: e.itemCode,
-                                  productName: e.productName,
-                                  onHandQty: ohHandQty,
-                                  priceWt: e.priceWT);
-                            }).toList();
-
-                            buildTagPrint(
-                              allPrintTagDataLst: allPrintTagDataLst,
-                              selectedPrintTagData: selectedPrintTagData,
-                              context: context,
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.export,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Export'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () async {
-                          setState(() {
-                            loading = true;
-                          });
-                          final Workbook workbook =
-                              _key.currentState!.exportToExcelWorkbook();
-                          final List<int> bytes = workbook.saveAsStream();
-                          workbook.dispose();
-                          await saveAndLaunchFile(
-                              bytes, fileExtension: 'xlsx', context);
-                          setState(() {
-                            loading = false;
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.import,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Import items'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () async {
-                          showImportDialog();
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.computing,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Update Quantity'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () async {
-                          showImportQuantityDialog();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 0,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
+            children: [
+              TopBar(pageName: 'Inventory'),
+              Expanded(
+                child: Container(
+                  color: homeBgColor,
+                  child: Row(
                     children: [
-                      const SizedBox(
-                        height: 0,
-                      ),
-                      SizedBox(
-                        height: 30,
-                        width: 370,
-                        child: Row(children: [
-                          const SizedBox(width: 5),
-                          const Icon(
-                            size: 17,
-                            Iconsax.d_square,
-                            color: Color.fromARGB(255, 0, 0, 0),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            staticTextTranslate('Inventory'),
-                            style: TextStyle(
-                              fontSize: getMediumFontSize,
-                              color: const Color.fromARGB(255, 0, 0, 0),
+                      Container(
+                        color: const Color.fromARGB(255, 43, 43, 43),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 0,
                             ),
-                          )
-                        ]),
+                            SideMenuButton(
+                              label: 'Back',
+                              iconPath: 'assets/icons/back.png',
+                              buttonFunction: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            SideMenuButton(
+                              label: 'Create',
+                              iconPath: 'assets/icons/plus.png',
+                              buttonFunction: () async {
+                                String newInventoryId = await getIdNumber(
+                                    inventoryDataLst.length + 1);
+                                bool? res = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CreateEditInventoryPage(
+                                              newInventoryId: newInventoryId,
+                                              inventoryDataLst:
+                                                  inventoryDataLst,
+                                              userData: widget.userData,
+                                            )));
+
+                                if (res != null && res) {
+                                  setState(() {
+                                    loading = true;
+                                  });
+
+                                  fbFetchData();
+                                }
+                              },
+                            ),
+                            SideMenuButton(
+                              label: 'Edit',
+                              iconPath: 'assets/icons/edit.png',
+                              buttonFunction: () async {
+                                if (dataGridController.selectedRow != null) {
+                                  var itemcode = '';
+
+                                  for (var c in dataGridController.selectedRow!
+                                      .getCells()) {
+                                    if (c.columnName == 'itemCode') {
+                                      itemcode = c.value;
+                                    }
+                                  }
+
+                                  bool? res = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              CreateEditInventoryPage(
+                                                newInventoryId: itemcode,
+                                                inventoryDataLst:
+                                                    inventoryDataLst,
+                                                userData: widget.userData,
+                                                edit: true,
+                                                selectedRowData:
+                                                    inventoryDataLst
+                                                        .where((e) =>
+                                                            e.itemCode ==
+                                                            itemcode)
+                                                        .first,
+                                              )));
+                                  if (res != null && res) {
+                                    setState(() {
+                                      loading = true;
+                                    });
+
+                                    fbFetchData();
+                                  }
+                                }
+                              },
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            SideMenuButton(
+                              label: 'Refresh',
+                              iconPath: 'assets/icons/refresh.png',
+                              buttonFunction: () async {
+                                setState(() {
+                                  loading = true;
+                                });
+
+                                await fbFetchData();
+                              },
+                            ),
+                            SideMenuButton(
+                              label: 'Date Range',
+                              iconPath: 'assets/icons/date.png',
+                              buttonFunction: () async {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return Dialog(
+                                        child: SizedBox(
+                                          width: 400,
+                                          height: 380,
+                                          child: SfDateRangePicker(
+                                              headerStyle:
+                                                  DateRangePickerHeaderStyle(
+                                                      backgroundColor:
+                                                          darkBlueColor,
+                                                      textStyle:
+                                                          const TextStyle(
+                                                        color: Colors.white,
+                                                      )),
+                                              onSelectionChanged:
+                                                  (DateRangePickerSelectionChangedArgs
+                                                      args) {
+                                                if (args.value
+                                                    is PickerDateRange) {
+                                                  rangeStartDate =
+                                                      args.value.startDate;
+
+                                                  rangeEndDate =
+                                                      args.value.endDate;
+                                                  setState(() {});
+                                                }
+                                              },
+                                              onCancel: () {
+                                                Navigator.pop(context);
+                                              },
+                                              onSubmit: (var p0) {
+                                                filterAccordingSelectedDate();
+                                                Navigator.pop(context);
+                                              },
+                                              cancelText: 'CANCEL',
+                                              confirmText: 'OK',
+                                              showTodayButton: false,
+                                              showActionButtons: true,
+                                              view: DateRangePickerView.month,
+                                              selectionMode:
+                                                  DateRangePickerSelectionMode
+                                                      .range),
+                                        ),
+                                      );
+                                    });
+                              },
+                            ),
+                            SideMenuButton(
+                                label: 'Print Tag',
+                                iconPath: 'assets/icons/date.png',
+                                buttonFunction: () async {
+                                  if (dataGridController.selectedRow != null) {
+                                    String productName = '';
+                                    String itemCode = '';
+                                    String barcodeValue = '';
+                                    String priceWt = '';
+                                    int ohQty = -1;
+
+                                    for (var c in dataGridController
+                                        .selectedRow!
+                                        .getCells()) {
+                                      if (c.columnName == 'productName') {
+                                        productName = c.value;
+                                      } else if (c.columnName == 'itemCode') {
+                                        itemCode = c.value;
+                                      } else if (c.columnName == 'barcode') {
+                                        barcodeValue = c.value;
+                                      } else if (c.columnName == 'priceWT') {
+                                        priceWt = c.value;
+                                      } else if (c.columnName == 'ohQty') {
+                                        ohQty = int.tryParse(c.value) ?? 0;
+                                      }
+                                    }
+
+                                    PrintTagData selectedPrintTagData =
+                                        PrintTagData(
+                                            barcodeValue: barcodeValue,
+                                            docQty: -1,
+                                            itemCode: itemCode,
+                                            productName: productName,
+                                            onHandQty: ohQty,
+                                            priceWt: priceWt);
+
+                                    List<PrintTagData> allPrintTagDataLst =
+                                        filteredInventoryDataLst.map((e) {
+                                      int ohHandQty = e.ohQtyForDifferentStores[
+                                              selectedStoreDocId] ??
+                                          0;
+                                      return PrintTagData(
+                                          barcodeValue: e.barcode,
+                                          docQty: -1,
+                                          itemCode: e.itemCode,
+                                          productName: e.productName,
+                                          onHandQty: ohHandQty,
+                                          priceWt: e.priceWT);
+                                    }).toList();
+
+                                    buildTagPrint(
+                                      allPrintTagDataLst: allPrintTagDataLst,
+                                      selectedPrintTagData:
+                                          selectedPrintTagData,
+                                      context: context,
+                                    );
+                                  }
+                                }),
+                            SideMenuButton(
+                              label: 'Export',
+                              iconPath: 'assets/icons/date.png',
+                              buttonFunction: () async {
+                                setState(() {
+                                  loading = true;
+                                });
+                                final Workbook workbook =
+                                    _key.currentState!.exportToExcelWorkbook();
+                                final List<int> bytes = workbook.saveAsStream();
+                                workbook.dispose();
+                                await saveAndLaunchFile(
+                                    bytes, fileExtension: 'xlsx', context);
+                                setState(() {
+                                  loading = false;
+                                });
+                              },
+                            ),
+                            SideMenuButton(
+                              label: 'Import Items',
+                              iconPath: 'assets/icons/date.png',
+                              buttonFunction: () async {
+                                showImportDialog();
+                              },
+                            ),
+                            SideMenuButton(
+                              label: 'Update Quantity',
+                              iconPath: 'assets/icons/date.png',
+                              buttonFunction: () async {
+                                showImportQuantityDialog();
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(
-                        height: 0,
+                        width: 0,
                       ),
                       Expanded(
-                        child: SizedBox(
-                          width: double.maxFinite,
-                          height: 100,
-                          child: Card(
-                              shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                      width: 0.5, color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(5)),
-                              elevation: 0,
-                              color: Colors.white,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(0.0),
-                                    child: ButtonBarSuper(
-                                      buttonTextTheme: ButtonTextTheme.primary,
-                                      wrapType: WrapType.fit,
-                                      wrapFit: WrapFit.min,
-                                      lineSpacing: 10,
-                                      alignment: engSelectedLanguage
-                                          ? WrapSuperAlignment.left
-                                          : WrapSuperAlignment.right,
-                                      children: [
-                                        Container(
-                                          width: 230,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey,
-                                                  width: 0.5),
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          padding: const EdgeInsets.only(
-                                              right: 10,
-                                              // top: 3,
-                                              bottom: 3),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              IconButton(
-                                                padding: const EdgeInsets.only(
-                                                    top: 3),
-                                                onPressed: () {
-                                                  barcodeFilterController
-                                                      .clear();
-
-                                                  inventoryDataSource =
-                                                      EmployeeDataSource(
-                                                          inventoryData:
-                                                              inventoryDataLst,
-                                                          selectedStoreDocId:
-                                                              selectedStoreDocId);
-                                                  setState(() {});
-                                                },
-                                                splashRadius: 1,
-                                                icon: Icon(
-                                                    barcodeFilterController
-                                                            .text.isEmpty
-                                                        ? CupertinoIcons.search
-                                                        : Icons.clear,
-                                                    size: 18,
-                                                    color:
-                                                        barcodeFilterController
-                                                                .text.isEmpty
-                                                            ? Colors.grey[600]
-                                                            : Colors.black),
-                                              ),
-                                              Flexible(
-                                                child: TextField(
-                                                  controller:
-                                                      barcodeFilterController,
-                                                  decoration: InputDecoration(
-                                                    hintText: staticTextTranslate(
-                                                        'Barcode / Item Code'),
-                                                    hintStyle: TextStyle(
-                                                        color:
-                                                            Colors.grey[600]),
-                                                    contentPadding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 16,
-                                                            right: 5),
-                                                    border: InputBorder.none,
-                                                  ),
-                                                  onChanged: (val) {
-                                                    searchByBarcodeAndItemCode(
-                                                        val);
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 0,
-                                        ),
-                                        Container(
-                                          width: 230,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey,
-                                                  width: 0.5),
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          padding: const EdgeInsets.only(
-                                              right: 10, bottom: 3),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              IconButton(
-                                                padding: const EdgeInsets.only(
-                                                    top: 3),
-                                                onPressed: () {
-                                                  itemNameFilterController
-                                                      .clear();
-
-                                                  inventoryDataSource =
-                                                      EmployeeDataSource(
-                                                          inventoryData:
-                                                              inventoryDataLst,
-                                                          selectedStoreDocId:
-                                                              selectedStoreDocId);
-                                                  setState(() {});
-                                                },
-                                                splashRadius: 1,
-                                                icon: Icon(
-                                                    itemNameFilterController
-                                                            .text.isEmpty
-                                                        ? CupertinoIcons.search
-                                                        : Icons.clear,
-                                                    size: 18,
-                                                    color:
-                                                        itemNameFilterController
-                                                                .text.isEmpty
-                                                            ? Colors.grey[600]
-                                                            : Colors.black),
-                                              ),
-                                              Flexible(
-                                                child: TextField(
-                                                    controller:
-                                                        itemNameFilterController,
-                                                    onChanged: (val) {
-                                                      searchByItemName(val);
-                                                    },
-                                                    decoration: InputDecoration(
-                                                      hintText:
-                                                          staticTextTranslate(
-                                                              'Item Name'),
-                                                      hintStyle: TextStyle(
-                                                          color:
-                                                              Colors.grey[600]),
-                                                      contentPadding:
-                                                          const EdgeInsets.only(
-                                                              bottom: 16,
-                                                              right: 5),
-                                                      border: InputBorder.none,
-                                                    )),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 0,
-                                        ),
-                                        Container(
-                                          width: 230,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey,
-                                                  width: 0.5),
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          padding: const EdgeInsets.only(
-                                              right: 10, bottom: 3),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              IconButton(
-                                                padding: const EdgeInsets.only(
-                                                    top: 3),
-                                                onPressed: () {
-                                                  _vendorTypeAheadController
-                                                      .clear();
-
-                                                  inventoryDataSource =
-                                                      EmployeeDataSource(
-                                                          inventoryData:
-                                                              inventoryDataLst,
-                                                          selectedStoreDocId:
-                                                              selectedStoreDocId);
-                                                  setState(() {});
-                                                },
-                                                splashRadius: 1,
-                                                icon: Icon(
-                                                    _vendorTypeAheadController
-                                                            .text.isEmpty
-                                                        ? CupertinoIcons.search
-                                                        : Icons.clear,
-                                                    size: 18,
-                                                    color:
-                                                        _vendorTypeAheadController
-                                                                .text.isEmpty
-                                                            ? Colors.grey[600]
-                                                            : Colors.black),
-                                              ),
-                                              Flexible(
-                                                child: TypeAheadFormField(
-                                                  getImmediateSuggestions:
-                                                      false,
-                                                  textFieldConfiguration:
-                                                      TextFieldConfiguration(
-                                                    controller:
-                                                        _vendorTypeAheadController,
-                                                    decoration: InputDecoration(
-                                                      hintText:
-                                                          staticTextTranslate(
-                                                              'Vendor'),
-                                                      hintStyle: TextStyle(
-                                                          color:
-                                                              Colors.grey[600]),
-                                                      contentPadding:
-                                                          const EdgeInsets.only(
-                                                              bottom: 16,
-                                                              right: 5),
-                                                      border: InputBorder.none,
-                                                    ),
-                                                  ),
-                                                  suggestionsCallback:
-                                                      (pattern) {
-                                                    return allVendorDataLst
-                                                        .where((e) => e
-                                                            .vendorName
-                                                            .toLowerCase()
-                                                            .contains(pattern
-                                                                .toLowerCase()))
-                                                        .toList();
-                                                  },
-                                                  noItemsFoundBuilder:
-                                                      (context) {
-                                                    return Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              10.0),
-                                                      child: Text(
-                                                          staticTextTranslate(
-                                                              'No Items Found!'),
-                                                          style: TextStyle(
-                                                            fontSize:
-                                                                getMediumFontSize,
-                                                          )),
-                                                    );
-                                                  },
-                                                  itemBuilder: (context,
-                                                      VendorData suggestion) {
-                                                    return ListTile(
-                                                      title: Text(
-                                                          suggestion.vendorName,
-                                                          style: TextStyle(
-                                                            fontSize:
-                                                                getMediumFontSize,
-                                                          )),
-                                                    );
-                                                  },
-                                                  transitionBuilder: (context,
-                                                      suggestionsBox,
-                                                      controller) {
-                                                    return suggestionsBox;
-                                                  },
-                                                  onSuggestionSelected:
-                                                      (VendorData suggestion) {
-                                                    _vendorTypeAheadController
-                                                            .text =
-                                                        suggestion.vendorName;
-                                                    setState(() {
-                                                      searchByVendor(
-                                                          suggestion.vendorId);
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 0,
-                                        ),
-                                        Container(
-                                          width: 230,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey,
-                                                  width: 0.5),
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          padding: const EdgeInsets.only(
-                                              right: 10, bottom: 3),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              IconButton(
-                                                padding: const EdgeInsets.only(
-                                                    top: 3),
-                                                onPressed: () {
-                                                  _departmenttypeAheadController
-                                                      .clear();
-
-                                                  inventoryDataSource =
-                                                      EmployeeDataSource(
-                                                          inventoryData:
-                                                              inventoryDataLst,
-                                                          selectedStoreDocId:
-                                                              selectedStoreDocId);
-                                                  setState(() {});
-                                                },
-                                                splashRadius: 1,
-                                                icon: Icon(
-                                                    _departmenttypeAheadController
-                                                            .text.isEmpty
-                                                        ? CupertinoIcons.search
-                                                        : Icons.clear,
-                                                    size: 18,
-                                                    color:
-                                                        _departmenttypeAheadController
-                                                                .text.isEmpty
-                                                            ? Colors.grey[600]
-                                                            : Colors.black),
-                                              ),
-                                              Flexible(
-                                                child: TypeAheadFormField(
-                                                  getImmediateSuggestions:
-                                                      false,
-                                                  textFieldConfiguration:
-                                                      TextFieldConfiguration(
-                                                    controller:
-                                                        _departmenttypeAheadController,
-                                                    decoration: InputDecoration(
-                                                      hintText:
-                                                          staticTextTranslate(
-                                                              'Department'),
-                                                      hintStyle: TextStyle(
-                                                          color:
-                                                              Colors.grey[600]),
-                                                      contentPadding:
-                                                          const EdgeInsets.only(
-                                                              bottom: 16,
-                                                              right: 5),
-                                                      border: InputBorder.none,
-                                                    ),
-                                                  ),
-                                                  suggestionsCallback:
-                                                      (pattern) {
-                                                    return allDepartmentDataLst
-                                                        .where((e) => e
-                                                            .departmentName
-                                                            .toLowerCase()
-                                                            .contains(pattern
-                                                                .toLowerCase()))
-                                                        .toList();
-                                                  },
-                                                  noItemsFoundBuilder:
-                                                      (context) {
-                                                    return Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              10.0),
-                                                      child: Text(
-                                                          staticTextTranslate(
-                                                              'No Items Found!'),
-                                                          style: TextStyle(
-                                                            fontSize:
-                                                                getMediumFontSize,
-                                                          )),
-                                                    );
-                                                  },
-                                                  itemBuilder: (context,
-                                                      DepartmentData
-                                                          suggestion) {
-                                                    return ListTile(
-                                                      title: Text(
-                                                          suggestion
-                                                              .departmentName,
-                                                          style: TextStyle(
-                                                            fontSize:
-                                                                getMediumFontSize,
-                                                          )),
-                                                    );
-                                                  },
-                                                  transitionBuilder: (context,
-                                                      suggestionsBox,
-                                                      controller) {
-                                                    return suggestionsBox;
-                                                  },
-                                                  onSuggestionSelected:
-                                                      (DepartmentData
-                                                          suggestion) {
-                                                    _departmenttypeAheadController
-                                                            .text =
-                                                        suggestion
-                                                            .departmentName;
-                                                    setState(() {
-                                                      searchByDepartment(
-                                                          suggestion
-                                                              .departmentId);
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        // Container(
-                                        //     width: 120,
-                                        //     height: 30,
-                                        //     decoration: BoxDecoration(
-                                        //         border: Border.all(
-                                        //             color: Colors.grey,
-                                        //             width: 0.5),
-                                        //         color: const Color.fromARGB(
-                                        //             255, 255, 255, 255),
-                                        //         borderRadius:
-                                        //             BorderRadius.circular(4)),
-                                        //     padding: const EdgeInsets.only(
-                                        //         right: 10, left: 10),
-                                        //     child: DropdownButton<String>(
-                                        //       isExpanded: true,
-                                        //       value: selectedStoreCodeDocId,
-                                        //       underline: const SizedBox(),
-                                        //       items: allStoreDataLst
-                                        //           .map((StoreData value) {
-                                        //         return DropdownMenuItem<String>(
-                                        //           value: value.docId,
-                                        //           child: Text(
-                                        //               staticTextTranslate(
-                                        //                   value.storeName),
-                                        //               style: TextStyle(
-                                        //                   fontSize:
-                                        //                       getMediumFontSize +
-                                        //                           2)),
-                                        //         );
-                                        //       }).toList(),
-                                        //       onChanged: (val) {
-                                        //         setState(() {
-                                        //           int index = allStoreDataLst
-                                        //               .indexWhere((element) =>
-                                        //                   element.docId == val);
-                                        //           if (index != -1) {
-                                        //             selectedStoreCodeDocId =
-                                        //                 allStoreDataLst
-                                        //                     .elementAt(index)
-                                        //                     .docId;
-                                        //             inventoryDataSource =
-                                        //                 EmployeeDataSource(
-                                        //                     inventoryData:
-                                        //                         inventoryDataLst,
-                                        //                     selectedStoreDocId:
-                                        //                         selectedStoreCodeDocId);
-                                        //             setState(() {});
-                                        //           }
-                                        //         });
-                                        //       },
-                                        //     ))
-                                        Container(
-                                            width: 230,
-                                            height: 30,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    width: 0.5,
-                                                    color: Colors.grey),
-                                                color: const Color.fromARGB(
-                                                    255, 255, 255, 255),
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                            padding: const EdgeInsets.only(
-                                                right: 10, bottom: 3),
-                                            child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  IconButton(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 2),
-                                                    onPressed: () {},
-                                                    splashRadius: 1,
-                                                    icon: Icon(
-                                                        Icons
-                                                            .filter_alt_outlined,
-                                                        size: 18,
-                                                        color:
-                                                            Colors.grey[600]),
-                                                  ),
-                                                  Flexible(
-                                                      child: Container(
-                                                          width: 200,
-                                                          height: 30,
-                                                          decoration: BoxDecoration(
-                                                              color: const Color
-                                                                  .fromARGB(
-                                                                  255,
-                                                                  255,
-                                                                  255,
-                                                                  255),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          8)),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  right: 10,
-                                                                  left: 10),
-                                                          child: DropdownButton<
-                                                              String>(
-                                                            isExpanded: true,
-                                                            value:
-                                                                selectedStoreDocId,
-                                                            underline:
-                                                                const SizedBox(),
-                                                            hint: Text(
-                                                              staticTextTranslate(
-                                                                  'Stores'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize +
-                                                                        2,
-                                                              ),
-                                                            ),
-                                                            items: <String>[
-                                                                  'All'
-                                                                ].map((String
-                                                                    value) {
-                                                                  return DropdownMenuItem<
-                                                                      String>(
-                                                                    value:
-                                                                        value,
-                                                                    child: Text(
-                                                                      staticTextTranslate(
-                                                                          value),
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontSize:
-                                                                            getMediumFontSize +
-                                                                                2,
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                }).toList() +
-                                                                allStoreDataLst
-                                                                    .map((StoreData
-                                                                        value) {
-                                                                  return DropdownMenuItem<
-                                                                      String>(
-                                                                    value: value
-                                                                        .docId,
-                                                                    child: Text(
-                                                                      staticTextTranslate(
-                                                                          value
-                                                                              .storeName),
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontSize:
-                                                                            getMediumFontSize +
-                                                                                2,
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                }).toList(),
-                                                            onChanged: (val) {
-                                                              if (val != null) {
-                                                                selectedStoreDocId =
-                                                                    val;
-                                                                inventoryDataSource = EmployeeDataSource(
-                                                                    inventoryData:
-                                                                        inventoryDataLst,
-                                                                    selectedStoreDocId:
-                                                                        val);
-                                                                setState(() {});
-                                                              }
-                                                            },
-                                                          ))),
-                                                ]))
-                                      ],
-                                    ),
+                        child: Card(
+                            shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                    width: 0.5, color: Colors.grey),
+                                borderRadius: BorderRadius.circular(5)),
+                            elevation: 0,
+                            color: Colors.white,
+                            child: Column(
+                              children: [
+                                // filter
+                                filterWidget(),
+                                if (inventoryDataSource == null || loading)
+                                  Expanded(
+                                    child: showLoading(),
                                   ),
-                                  if (inventoryDataSource == null || loading)
-                                    Expanded(
-                                      child: showLoading(),
-                                    ),
-                                  if (inventoryDataSource != null && !loading)
-                                    Expanded(
+                                if (inventoryDataSource != null && !loading)
+                                  Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(width: 0.3)),
                                       child: SfDataGridTheme(
                                         data: SfDataGridThemeData(
                                             headerColor:
-                                                const Color(0xffdddfe8),
+                                                const Color(0xffF1F1F1),
+                                            sortIcon: const Icon(
+                                                Icons.arrow_drop_down_rounded),
                                             headerHoverColor:
                                                 const Color(0xffdddfe8),
                                             selectionColor: loginBgColor),
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              height: 2,
-                                              width: double.infinity,
-                                              color: Colors.blue,
-                                            ),
-                                            Expanded(
-                                              child: SfDataGrid(
-                                                gridLinesVisibility:
-                                                    GridLinesVisibility.both,
-                                                isScrollbarAlwaysShown: true,
-                                                onQueryRowHeight: (details) {
-                                                  // Set the row height as 70.0 to the column header row.
-                                                  return details.rowIndex == 0
-                                                      ? 25.0
-                                                      : 23.0;
-                                                },
-                                                allowSorting: true,
-                                                headerGridLinesVisibility:
-                                                    GridLinesVisibility.both,
-                                                headerRowHeight: 25,
-                                                allowTriStateSorting: true,
-                                                allowFiltering: true,
-                                                key: _key,
-                                                controller: dataGridController,
-                                                selectionMode:
-                                                    SelectionMode.single,
-                                                source: inventoryDataSource!,
-                                                columnWidthMode: ColumnWidthMode
-                                                    .lastColumnFill,
-                                                onSelectionChanged:
-                                                    (addedRows, removedRows) {
-                                                  setState(() {});
-                                                },
-                                                columns: <GridColumn>[
-                                                  GridColumn(
-                                                      columnName:
-                                                          'serialNumberForStyleColor',
-                                                      visible: false,
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(0.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: Colors.white,
-                                                          child: Text(
-                                                            'serialNumberForStyleColor',
-                                                            style: TextStyle(
-                                                              fontSize:
-                                                                  getMediumFontSize,
-                                                            ),
-                                                          ))),
-                                                  GridColumn(
-                                                      width: 120,
-                                                      columnName: 'barcode',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Barcode'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      width: 170,
-                                                      columnName: 'itemCode',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Item Code'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      width: 250,
-                                                      columnName: 'productName',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          child: Text(
-                                                            staticTextTranslate(
-                                                                'Product Name'),
-                                                            style: TextStyle(
-                                                              fontSize:
-                                                                  getMediumFontSize,
-                                                            ),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ))),
-                                                  GridColumn(
-                                                      width: 150,
-                                                      columnName: 'storeOhQty',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Store OH'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      width: 150,
-                                                      columnName:
-                                                          'companyOhQty',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Company OH'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      width: 120,
-                                                      columnName: 'cost',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Cost'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      width: 120,
-                                                      columnName: 'price',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Price'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      width: 140,
-                                                      columnName: 'priceWT',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Price W/T'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      width: 160,
-                                                      columnName: 'extCost',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Ext Cost'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      width: 160,
-                                                      columnName: 'extPriceWt',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Ext Price W/T'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                ],
-                                              ),
-                                            ),
+                                        child: SfDataGrid(
+                                          isScrollbarAlwaysShown: true,
+                                          onQueryRowHeight: (details) {
+                                            // Set the row height as 70.0 to the column header row.
+                                            return details.rowIndex == 0
+                                                ? 25.0
+                                                : 25.0;
+                                          },
+                                          rowHeight: 25,
+                                          headerRowHeight: 25,
+                                          headerGridLinesVisibility:
+                                              GridLinesVisibility.both,
+                                          allowSorting: true,
+                                          allowTriStateSorting: true,
+                                          controller: dataGridController,
+                                          selectionMode: SelectionMode.single,
+                                          source: inventoryDataSource!,
+                                          columnWidthMode:
+                                              ColumnWidthMode.lastColumnFill,
+                                          onSelectionChanged:
+                                              (addedRows, removedRows) {
+                                            setState(() {});
+                                          },
+                                          columns: <GridColumn>[
+                                            GridColumn(
+                                                columnName:
+                                                    'serialNumberForStyleColor',
+                                                visible: false,
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            0.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      'serialNumberForStyleColor',
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            getMediumFontSize,
+                                                      ),
+                                                    ))),
+                                            GridColumn(
+                                                width: 120,
+                                                columnName: 'barcode',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            1.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                        staticTextTranslate(
+                                                            'Barcode'),
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                        )))),
+                                            GridColumn(
+                                                width: 170,
+                                                columnName: 'itemCode',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            1.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                        staticTextTranslate(
+                                                            'Item Code'),
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                        )))),
+                                            GridColumn(
+                                                width: 250,
+                                                columnName: 'productName',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            1.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Product Name'),
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            getMediumFontSize,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ))),
+                                            GridColumn(
+                                                width: 150,
+                                                columnName: 'storeOhQty',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            1.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                        staticTextTranslate(
+                                                            'Store OH'),
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                        )))),
+                                            GridColumn(
+                                                width: 150,
+                                                columnName: 'companyOhQty',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            1.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                        staticTextTranslate(
+                                                            'Company OH'),
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                        )))),
+                                            GridColumn(
+                                                width: 120,
+                                                columnName: 'cost',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            1.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                        staticTextTranslate(
+                                                            'Cost'),
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                        )))),
+                                            GridColumn(
+                                                width: 120,
+                                                columnName: 'price',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            1.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                        staticTextTranslate(
+                                                            'Price'),
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                        )))),
+                                            GridColumn(
+                                                width: 140,
+                                                columnName: 'priceWT',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            1.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                        staticTextTranslate(
+                                                            'Price W/T'),
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                        )))),
+                                            GridColumn(
+                                                width: 160,
+                                                columnName: 'extCost',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            1.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                        staticTextTranslate(
+                                                            'Ext Cost'),
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                        )))),
+                                            GridColumn(
+                                                width: 160,
+                                                columnName: 'extPriceWt',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            1.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                        staticTextTranslate(
+                                                            'Ext Price W/T'),
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                        )))),
                                           ],
                                         ),
                                       ),
-                                    )
-                                ],
-                              )),
-                        ),
+                                    ),
+                                  )
+                              ],
+                            )),
                       )
                     ],
                   ),
-                )
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
+  }
+
+  filterWidget() {
+    return FilterContainer(fiterFields: [
+      FilterTextField(
+        onPressed: () {
+          barcodeFilterController.clear();
+
+          inventoryDataSource = EmployeeDataSource(
+              inventoryData: inventoryDataLst,
+              selectedStoreDocId: selectedStoreDocId);
+          setState(() {});
+        },
+        icon: Icon(
+            barcodeFilterController.text.isEmpty
+                ? CupertinoIcons.search
+                : Icons.clear,
+            size: 18,
+            color: barcodeFilterController.text.isEmpty
+                ? Colors.grey[600]
+                : Colors.black),
+        controller: barcodeFilterController,
+        hintText: 'Barcode / Item Code',
+        onChanged: (val) {
+          searchByBarcodeAndItemCode(val);
+        },
+      ),
+      FilterTextField(
+        onPressed: () {
+          itemNameFilterController.clear();
+
+          inventoryDataSource = EmployeeDataSource(
+              inventoryData: inventoryDataLst,
+              selectedStoreDocId: selectedStoreDocId);
+          setState(() {});
+        },
+        icon: Icon(
+            itemNameFilterController.text.isEmpty
+                ? CupertinoIcons.search
+                : Icons.clear,
+            size: 18,
+            color: itemNameFilterController.text.isEmpty
+                ? Colors.grey[600]
+                : Colors.black),
+        controller: itemNameFilterController,
+        hintText: 'Item Name',
+        onChanged: (val) {
+          searchByItemName(val);
+        },
+      ),
+      Container(
+        width: 230,
+        height: 30,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey, width: 0.5),
+            color: const Color.fromARGB(255, 255, 255, 255),
+            borderRadius: BorderRadius.circular(5)),
+        padding: const EdgeInsets.only(right: 10, bottom: 3),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              padding: const EdgeInsets.only(top: 3),
+              onPressed: () {
+                _vendorTypeAheadController.clear();
+
+                inventoryDataSource = EmployeeDataSource(
+                    inventoryData: inventoryDataLst,
+                    selectedStoreDocId: selectedStoreDocId);
+                setState(() {});
+              },
+              splashRadius: 1,
+              icon: Icon(
+                  _vendorTypeAheadController.text.isEmpty
+                      ? CupertinoIcons.search
+                      : Icons.clear,
+                  size: 18,
+                  color: _vendorTypeAheadController.text.isEmpty
+                      ? Colors.grey[600]
+                      : Colors.black),
+            ),
+            Flexible(
+              child: TypeAheadFormField(
+                getImmediateSuggestions: false,
+                textFieldConfiguration: TextFieldConfiguration(
+                  controller: _vendorTypeAheadController,
+                  decoration: InputDecoration(
+                    hintText: staticTextTranslate('Vendor'),
+                    hintStyle: TextStyle(color: Colors.grey[600]),
+                    contentPadding: const EdgeInsets.only(bottom: 16, right: 5),
+                    border: InputBorder.none,
+                  ),
+                ),
+                suggestionsCallback: (pattern) {
+                  return allVendorDataLst
+                      .where((e) => e.vendorName
+                          .toLowerCase()
+                          .contains(pattern.toLowerCase()))
+                      .toList();
+                },
+                noItemsFoundBuilder: (context) {
+                  return Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(staticTextTranslate('No Items Found!'),
+                        style: TextStyle(
+                          fontSize: getMediumFontSize,
+                        )),
+                  );
+                },
+                itemBuilder: (context, VendorData suggestion) {
+                  return ListTile(
+                    title: Text(suggestion.vendorName,
+                        style: TextStyle(
+                          fontSize: getMediumFontSize,
+                        )),
+                  );
+                },
+                transitionBuilder: (context, suggestionsBox, controller) {
+                  return suggestionsBox;
+                },
+                onSuggestionSelected: (VendorData suggestion) {
+                  _vendorTypeAheadController.text = suggestion.vendorName;
+                  setState(() {
+                    searchByVendor(suggestion.vendorId);
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      Container(
+        width: 230,
+        height: 30,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey, width: 0.5),
+            color: const Color.fromARGB(255, 255, 255, 255),
+            borderRadius: BorderRadius.circular(5)),
+        padding: const EdgeInsets.only(right: 10, bottom: 3),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              padding: const EdgeInsets.only(top: 3),
+              onPressed: () {
+                _departmenttypeAheadController.clear();
+
+                inventoryDataSource = EmployeeDataSource(
+                    inventoryData: inventoryDataLst,
+                    selectedStoreDocId: selectedStoreDocId);
+                setState(() {});
+              },
+              splashRadius: 1,
+              icon: Icon(
+                  _departmenttypeAheadController.text.isEmpty
+                      ? CupertinoIcons.search
+                      : Icons.clear,
+                  size: 18,
+                  color: _departmenttypeAheadController.text.isEmpty
+                      ? Colors.grey[600]
+                      : Colors.black),
+            ),
+            Flexible(
+              child: TypeAheadFormField(
+                getImmediateSuggestions: false,
+                textFieldConfiguration: TextFieldConfiguration(
+                  controller: _departmenttypeAheadController,
+                  decoration: InputDecoration(
+                    hintText: staticTextTranslate('Department'),
+                    hintStyle: TextStyle(color: Colors.grey[600]),
+                    contentPadding: const EdgeInsets.only(bottom: 16, right: 5),
+                    border: InputBorder.none,
+                  ),
+                ),
+                suggestionsCallback: (pattern) {
+                  return allDepartmentDataLst
+                      .where((e) => e.departmentName
+                          .toLowerCase()
+                          .contains(pattern.toLowerCase()))
+                      .toList();
+                },
+                noItemsFoundBuilder: (context) {
+                  return Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(staticTextTranslate('No Items Found!'),
+                        style: TextStyle(
+                          fontSize: getMediumFontSize,
+                        )),
+                  );
+                },
+                itemBuilder: (context, DepartmentData suggestion) {
+                  return ListTile(
+                    title: Text(suggestion.departmentName,
+                        style: TextStyle(
+                          fontSize: getMediumFontSize,
+                        )),
+                  );
+                },
+                transitionBuilder: (context, suggestionsBox, controller) {
+                  return suggestionsBox;
+                },
+                onSuggestionSelected: (DepartmentData suggestion) {
+                  _departmenttypeAheadController.text =
+                      suggestion.departmentName;
+                  setState(() {
+                    searchByDepartment(suggestion.departmentId);
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      Container(
+          width: 230,
+          height: 30,
+          decoration: BoxDecoration(
+              border: Border.all(width: 0.5, color: Colors.grey),
+              color: const Color.fromARGB(255, 255, 255, 255),
+              borderRadius: BorderRadius.circular(4)),
+          padding: const EdgeInsets.only(right: 10, bottom: 3),
+          child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  padding: const EdgeInsets.only(top: 2),
+                  onPressed: () {},
+                  splashRadius: 1,
+                  icon: Icon(Icons.filter_alt_outlined,
+                      size: 18, color: Colors.grey[600]),
+                ),
+                Flexible(
+                    child: Container(
+                        width: 200,
+                        height: 30,
+                        decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                            borderRadius: BorderRadius.circular(8)),
+                        padding: const EdgeInsets.only(right: 10, left: 10),
+                        child: DropdownButton<String>(
+                          isExpanded: true,
+                          value: selectedStoreDocId,
+                          underline: const SizedBox(),
+                          hint: Text(
+                            staticTextTranslate('Stores'),
+                            style: TextStyle(
+                              fontSize: getMediumFontSize + 2,
+                            ),
+                          ),
+                          items: <String>['All'].map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    staticTextTranslate(value),
+                                    style: TextStyle(
+                                      fontSize: getMediumFontSize + 2,
+                                    ),
+                                  ),
+                                );
+                              }).toList() +
+                              allStoreDataLst.map((StoreData value) {
+                                return DropdownMenuItem<String>(
+                                  value: value.docId,
+                                  child: Text(
+                                    staticTextTranslate(value.storeName),
+                                    style: TextStyle(
+                                      fontSize: getMediumFontSize + 2,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                          onChanged: (val) {
+                            if (val != null) {
+                              selectedStoreDocId = val;
+                              inventoryDataSource = EmployeeDataSource(
+                                  inventoryData: inventoryDataLst,
+                                  selectedStoreDocId: val);
+                              setState(() {});
+                            }
+                          },
+                        ))),
+              ]))
+    ]);
+
+    //     ],
+    //   ),
+    // );
   }
 
   showImportQuantityDialog() {

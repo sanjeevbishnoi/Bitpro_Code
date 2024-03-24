@@ -3,7 +3,7 @@ import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_merchandise/fb_department_db_service.dart';
 import 'package:bitpro_hive/services/hive/hive_merchandise_db_service/department_db_service.dart';
 import 'package:bitpro_hive/widget/filter_container.dart';
-import 'package:bitpro_hive/widget/fiter_textfield.dart';
+import 'package:bitpro_hive/widget/filter_text_fileds/fiter_textfield.dart';
 import 'package:bitpro_hive/widget/string_related/get_id_number.dart';
 import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -140,6 +140,7 @@ class _DepartmentPageState extends State<DepartmentPage> {
   Widget build(BuildContext context) {
     return customTopNavBar(
       Scaffold(
+        backgroundColor: homeBgColor,
         body: SafeArea(
           child: Container(
             child: Column(
@@ -324,250 +325,150 @@ class _DepartmentPageState extends State<DepartmentPage> {
                         ),
                       ),
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                width: double.maxFinite,
-                                child: Card(
-                                    shape: RoundedRectangleBorder(
-                                        side: const BorderSide(
-                                            width: 0.5, color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(4)),
-                                    elevation: 0,
-                                    color: Colors.white,
-                                    child: Column(
-                                      children: [
-                                        FilterContainer(fiterFields: [
-                                          FilterTextField(
-                                              icon: Icon(
-                                                  departmentIdFilterController
-                                                          .text.isEmpty
-                                                      ? CupertinoIcons.search
-                                                      : Icons.clear,
-                                                  size: 18,
-                                                  color:
-                                                      departmentIdFilterController
-                                                              .text.isEmpty
-                                                          ? Colors.grey[600]
-                                                          : Colors.black),
-                                              onPressed: () {
-                                                departmentIdFilterController
-                                                    .clear();
-
-                                                departmentDataSource =
-                                                    DepartmentDataSource(
-                                                  departmentData:
-                                                      allDepartmentDataLst,
-                                                );
-                                                setState(() {});
-                                              },
-                                              onChanged: (val) {
-                                                searchById(val);
-                                              },
-                                              controller:
-                                                  departmentIdFilterController,
-                                              hintText: 'Department Id'),
-                                          FilterTextField(
-                                              icon: Icon(
-                                                      departmentNameFilterController
-                                                              .text.isEmpty
-                                                          ? CupertinoIcons
-                                                              .search
-                                                          : Icons.clear,
-                                                      size: 18,
-                                                      color:
-                                                          departmentNameFilterController
-                                                                  .text.isEmpty
-                                                              ? Colors.grey[600]
-                                                              : Colors.black),
-                                              onPressed: () {
-                                                    departmentNameFilterController
-                                                        .clear();
-
-                                                    departmentDataSource =
-                                                        DepartmentDataSource(
-                                                            departmentData:
-                                                                allDepartmentDataLst);
-                                                    setState(() {});
-                                                  },
-                                              onChanged: (val) {
-                                                        searchByName(val);
-                                                      },
-                                                      controller:
-                                                          departmentNameFilterController,
-                                              hintText: 'Department Name'),
-                                          
-                                        ]),
-                                        if (loading)
-                                          Expanded(
-                                            child: showLoading(),
-                                          ),
-                                        if (!loading)
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(6.0),
-                                              child: SfDataGridTheme(
-                                                data: SfDataGridThemeData(
-                                                     headerColor:
-                                                        const Color(0xffF1F1F1),
-                                                    sortIcon: const Icon(Icons
-                                                        .arrow_drop_down_rounded),
-                                                    headerHoverColor:
-                                                        const Color(0xffdddfe8),
-                                                    selectionColor: loginBgColor),
-                                                child: Column(
-                                                  children: [
-                                                   
-                                                    SfDataGrid(
-                                                      isScrollbarAlwaysShown:
-                                                          true,
-                                                      rowHeight: 25,
-                                                      headerGridLinesVisibility:
-                                                          GridLinesVisibility
-                                                              .both,
-                                                      allowFiltering: true,
-                                                      onQueryRowHeight:
-                                                          (details) {
-                                                        // Set the row height as 70.0 to the column header row.
-                                                        return details.rowIndex ==
-                                                                0
-                                                            ? 25.0
-                                                            : 25.0;
-                                                      },
-                                                        headerRowHeight: 25,
-                                                      allowSorting: true,
-                                                      allowTriStateSorting: true,
-                                                      controller:
-                                                          dataGridController,
-                                                      selectionMode:
-                                                          SelectionMode.single,
-                                                      source:
-                                                          departmentDataSource!,
-                                                      columnWidthMode:
-                                                          ColumnWidthMode.fill,
-                                                      onSelectionChanged:
-                                                          (addedRows,
-                                                              removedRows) {
-                                                        setState(() {});
-                                                      },
-                                                      columns: <GridColumn>[
-                                                        GridColumn(
-                                                            columnName:
-                                                                'serialNumberForStyleColor',
-                                                            visible: false,
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(0.0),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                color:
-                                                                    Colors.white,
-                                                                child: Text(
-                                                                  'serialNumberForStyleColor',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        getMediumFontSize,
-                                                                  ),
-                                                                ))),
-                                                        GridColumn(
-                                                            columnName: 'id',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(2.0),
-                                                                alignment: Alignment
-                                                                    .center,
-                                                                
-                                                                child: Text(
-                                                                  staticTextTranslate(
-                                                                      'Department Id', ),
-                                                                      style: GoogleFonts
-                                                                        .roboto(
-                                                                      fontSize:
-                                                                          getMediumFontSize +
-                                                                              1,
-                                                                    ),
-                                                                ))),
-                                                        GridColumn(
-                                                            columnName: 'name',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(2.0),
-                                                                alignment: Alignment
-                                                                    .center,
-                                                               
-                                                                child: Text(
-                                                                    staticTextTranslate(
-                                                                        'Department Name'),
-                                                                    style:
-                                                                        GoogleFonts
-                                                                        .roboto(
-                                                                      fontSize:
-                                                                          getMediumFontSize +
-                                                                              1,
-                                                                    ),))),
-                                                        GridColumn(
-                                                            columnName:
-                                                                'created date',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets.all(
-                                                                        2.0),
-                                                               
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                    staticTextTranslate(
-                                                                        'Created Date'),
-                                                                    style: GoogleFonts
-                                                                        .roboto(
-                                                                      fontSize:
-                                                                          getMediumFontSize +
-                                                                              1,
-                                                                    ),))),
-                                                        GridColumn(
-                                                            columnName:
-                                                                'created by',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets.all(
-                                                                        2.0),
-                                                                
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                    staticTextTranslate(
-                                                                        'Created by'),
-                                                                    style: GoogleFonts
-                                                                        .roboto(
-                                                                      fontSize:
-                                                                          getMediumFontSize +
-                                                                              1,
-                                                                    ),))),
-                                                      ],
-                                                      gridLinesVisibility:
-                                                          GridLinesVisibility
-                                                              .both,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                      ],
-                                    )),
-                              ),
-                            )
-                          ],
-                        ),
+                        child: Card(
+                            shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                    width: 0.5, color: Colors.grey),
+                                borderRadius: BorderRadius.circular(4)),
+                            elevation: 0,
+                            color: Colors.white,
+                            child: Column(
+                              children: [
+                                //filter
+                                filterWidget(),
+                                if (loading)
+                                  Expanded(
+                                    child: showLoading(),
+                                  ),
+                                if (!loading)
+                                  Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(width: 0.3)),
+                                      child: SfDataGridTheme(
+                                        data: SfDataGridThemeData(
+                                            headerColor:
+                                                const Color(0xffF1F1F1),
+                                            sortIcon: const Icon(
+                                                Icons.arrow_drop_down_rounded),
+                                            headerHoverColor:
+                                                const Color(0xffdddfe8),
+                                            selectionColor: loginBgColor),
+                                        child: SfDataGrid(
+                                          isScrollbarAlwaysShown: true,
+                                          onQueryRowHeight: (details) {
+                                            // Set the row height as 70.0 to the column header row.
+                                            return details.rowIndex == 0
+                                                ? 25.0
+                                                : 25.0;
+                                          },
+                                          rowHeight: 25,
+                                          headerRowHeight: 25,
+                                          headerGridLinesVisibility:
+                                              GridLinesVisibility.both,
+                                          allowSorting: true,
+                                          allowTriStateSorting: true,
+                                          controller: dataGridController,
+                                          selectionMode: SelectionMode.single,
+                                          source: departmentDataSource!,
+                                          columnWidthMode: ColumnWidthMode.fill,
+                                          onSelectionChanged:
+                                              (addedRows, removedRows) {
+                                            setState(() {});
+                                          },
+                                          columns: <GridColumn>[
+                                            GridColumn(
+                                                columnName:
+                                                    'serialNumberForStyleColor',
+                                                visible: false,
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            0.0),
+                                                    alignment: Alignment.center,
+                                                    color: Colors.white,
+                                                    child: Text(
+                                                      'serialNumberForStyleColor',
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            getMediumFontSize,
+                                                      ),
+                                                    ))),
+                                            GridColumn(
+                                                columnName: 'id',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                        'Department Id',
+                                                      ),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),
+                                                    ))),
+                                            GridColumn(
+                                                columnName: 'name',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Department Name'),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),
+                                                    ))),
+                                            GridColumn(
+                                                columnName: 'created date',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Created Date'),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),
+                                                    ))),
+                                            GridColumn(
+                                                columnName: 'created by',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Created by'),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),
+                                                    ))),
+                                          ],
+                                          gridLinesVisibility:
+                                              GridLinesVisibility.both,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                              ],
+                            )),
                       )
                     ],
                   ),
@@ -578,6 +479,54 @@ class _DepartmentPageState extends State<DepartmentPage> {
         ),
       ),
     );
+  }
+
+  filterWidget() {
+    return FilterContainer(fiterFields: [
+      FilterTextField(
+          icon: Icon(
+              departmentIdFilterController.text.isEmpty
+                  ? CupertinoIcons.search
+                  : Icons.clear,
+              size: 18,
+              color: departmentIdFilterController.text.isEmpty
+                  ? Colors.grey[600]
+                  : Colors.black),
+          onPressed: () {
+            departmentIdFilterController.clear();
+
+            departmentDataSource = DepartmentDataSource(
+              departmentData: allDepartmentDataLst,
+            );
+            setState(() {});
+          },
+          onChanged: (val) {
+            searchById(val);
+          },
+          controller: departmentIdFilterController,
+          hintText: 'Department Id'),
+      FilterTextField(
+          icon: Icon(
+              departmentNameFilterController.text.isEmpty
+                  ? CupertinoIcons.search
+                  : Icons.clear,
+              size: 18,
+              color: departmentNameFilterController.text.isEmpty
+                  ? Colors.grey[600]
+                  : Colors.black),
+          onPressed: () {
+            departmentNameFilterController.clear();
+
+            departmentDataSource =
+                DepartmentDataSource(departmentData: allDepartmentDataLst);
+            setState(() {});
+          },
+          onChanged: (val) {
+            searchByName(val);
+          },
+          controller: departmentNameFilterController,
+          hintText: 'Department Name'),
+    ]);
   }
 }
 

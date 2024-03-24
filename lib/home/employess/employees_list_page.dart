@@ -1,9 +1,14 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_user_db_service.dart';
 import 'package:bitpro_hive/services/hive/hive_user_db_service.dart';
+import 'package:bitpro_hive/widget/filter_container.dart';
+import 'package:bitpro_hive/widget/filter_text_fileds/fiter_textfield.dart';
 import 'package:bitpro_hive/widget/string_related/get_id_number.dart';
+import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:bitpro_hive/home/employess/create_edit_employess_page.dart';
@@ -43,6 +48,9 @@ class _EmployeesListPageState extends State<EmployeesListPage> {
   DateTime? rangeStartDate;
   DateTime? rangeEndDate;
   bool loading = true;
+
+  var employeeIdController = TextEditingController();
+  var employeeNameController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -160,334 +168,171 @@ class _EmployeesListPageState extends State<EmployeesListPage> {
         body: SafeArea(
           child: Container(
             color: homeBgColor,
-            padding: const EdgeInsets.fromLTRB(5, 0, 5, 2),
-            child: Row(
+            // padding: const EdgeInsets.fromLTRB(5, 0, 5, 2),
+            child: Column(
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 0,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Colors.blue,
-                            darkBlueColor,
-                          ],
-                        ),
-                      ),
-                      margin: const EdgeInsets.only(left: 0),
-                      padding: const EdgeInsets.all(0),
-                      width: 170,
-                      height: 45,
-                      child: const Center(
-                        child: Text(
-                          'BitPro',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 28,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.back_square,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Back'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.add_square4,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Create'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () async {
-                          if (!loading) {
-                            String newItemId =
-                                await getIdNumber(employeesDataLst.length + 1);
-                            bool? res = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        CreateEditEmployeesPage(
-                                          newItemId: newItemId,
-                                          empLstData: employeesDataLst,
-                                          userGroupsDataLst:
-                                              widget.userGroupsDataLst,
-                                          userData: widget.userData,
-                                        )));
-
-                            if (res != null && res) {
-                              setState(() {
-                                loading = true;
-                              });
-                              fbFetchData();
-                            }
-                          }
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(
-                              size: 19,
-                              Iconsax.edit4,
-                              color: dataGridController.selectedRow != null
-                                  ? const Color.fromARGB(255, 0, 0, 0)
-                                  : Colors.grey[500],
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Edit'),
-                                style: TextStyle(
-                                  fontSize: getMediumFontSize,
-                                  color: dataGridController.selectedRow != null
-                                      ? const Color.fromARGB(255, 0, 0, 0)
-                                      : Colors.grey[500],
-                                )),
-                          ],
-                        ),
-                        onPressed: () async {
-                          if (dataGridController.selectedRow != null) {
-                            if (!loading) {
-                              var id = '';
-
-                              for (var c in dataGridController.selectedRow!
-                                  .getCells()) {
-                                if (c.columnName == 'id') {
-                                  id = c.value;
-                                }
-                              }
-
-                              bool? res = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          CreateEditEmployeesPage(
-                                            newItemId: id,
-                                            empLstData: employeesDataLst,
-                                            selectedRowData: employeesDataLst
-                                                .where(
-                                                    (e) => e.employeeId == id)
-                                                .first,
-                                            userGroupsDataLst:
-                                                widget.userGroupsDataLst,
-                                            userData: widget.userData,
-                                            edit: true,
-                                          )));
-                              if (res != null && res) {
-                                setState(() {
-                                  loading = true;
-                                });
-                                fbFetchData();
-                              }
-                            }
-                          }
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.refresh5,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Refresh'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () async {
-                          if (!loading) {
-                            setState(() {
-                              loading = true;
-                            });
-
-                            await fbFetchData();
-                          }
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.calendar_1,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Date Range'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Dialog(
-                                  child: SizedBox(
-                                    width: 400,
-                                    height: 380,
-                                    child: SfDateRangePicker(
-                                        onSelectionChanged:
-                                            (DateRangePickerSelectionChangedArgs
-                                                args) {
-                                          if (args.value is PickerDateRange) {
-                                            rangeStartDate =
-                                                args.value.startDate;
-                                            rangeEndDate = args.value.endDate;
-                                            setState(() {});
-                                          }
-                                        },
-                                        onCancel: () {
-                                          Navigator.pop(context);
-                                        },
-                                        onSubmit: (var p0) {
-                                          filterAccordingSelectedDate();
-                                          Navigator.pop(context);
-                                        },
-                                        cancelText: 'CANCEL',
-                                        confirmText: 'OK',
-                                        showTodayButton: false,
-                                        showActionButtons: true,
-                                        view: DateRangePickerView.month,
-                                        selectionMode:
-                                            DateRangePickerSelectionMode.range),
-                                  ),
-                                );
-                              });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 0,
-                ),
+                TopBar(pageName: 'Employees'),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 0,
-                      ),
-                      SizedBox(
-                        height: 35,
-                        width: 370,
-                        child: Row(children: [
-                          const SizedBox(width: 10),
-                          const Icon(
-                            size: 17,
-                            Iconsax.user,
-                            color: Color.fromARGB(255, 0, 0, 0),
+                  child: Container(
+                    color: homeBgColor,
+                    child: Row(
+                      children: [
+                        Container(
+                          color: const Color.fromARGB(255, 43, 43, 43),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 0,
+                              ),
+                              SideMenuButton(
+                                label: 'Back',
+                                iconPath: 'assets/icons/back.png',
+                                buttonFunction: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              SideMenuButton(
+                                label: 'Create',
+                                iconPath: 'assets/icons/plus.png',
+                                buttonFunction: () async {
+                                  if (!loading) {
+                                    String newItemId = await getIdNumber(
+                                        employeesDataLst.length + 1);
+                                    bool? res = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                CreateEditEmployeesPage(
+                                                  newItemId: newItemId,
+                                                  empLstData: employeesDataLst,
+                                                  userGroupsDataLst:
+                                                      widget.userGroupsDataLst,
+                                                  userData: widget.userData,
+                                                )));
+
+                                    if (res != null && res) {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      fbFetchData();
+                                    }
+                                  }
+                                },
+                              ),
+                              SideMenuButton(
+                                label: 'Edit',
+                                iconPath: 'assets/icons/edit.png',
+                                buttonFunction: () async {
+                                  if (dataGridController.selectedRow != null) {
+                                    if (!loading) {
+                                      var id = '';
+
+                                      for (var c in dataGridController
+                                          .selectedRow!
+                                          .getCells()) {
+                                        if (c.columnName == 'id') {
+                                          id = c.value;
+                                        }
+                                      }
+
+                                      bool? res = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  CreateEditEmployeesPage(
+                                                    newItemId: id,
+                                                    empLstData:
+                                                        employeesDataLst,
+                                                    selectedRowData:
+                                                        employeesDataLst
+                                                            .where((e) =>
+                                                                e.employeeId ==
+                                                                id)
+                                                            .first,
+                                                    userGroupsDataLst: widget
+                                                        .userGroupsDataLst,
+                                                    userData: widget.userData,
+                                                    edit: true,
+                                                  )));
+                                      if (res != null && res) {
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        fbFetchData();
+                                      }
+                                    }
+                                  }
+                                },
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              SideMenuButton(
+                                label: 'Refresh',
+                                iconPath: 'assets/icons/refresh.png',
+                                buttonFunction: () async {
+                                  if (!loading) {
+                                    setState(() {
+                                      loading = true;
+                                    });
+
+                                    await fbFetchData();
+                                  }
+                                },
+                              ),
+                              SideMenuButton(
+                                label: 'Date Range',
+                                iconPath: 'assets/icons/date.png',
+                                buttonFunction: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return Dialog(
+                                          child: SizedBox(
+                                            width: 400,
+                                            height: 380,
+                                            child: SfDateRangePicker(
+                                                onSelectionChanged:
+                                                    (DateRangePickerSelectionChangedArgs
+                                                        args) {
+                                                  if (args.value
+                                                      is PickerDateRange) {
+                                                    rangeStartDate =
+                                                        args.value.startDate;
+                                                    rangeEndDate =
+                                                        args.value.endDate;
+                                                    setState(() {});
+                                                  }
+                                                },
+                                                onCancel: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                onSubmit: (var p0) {
+                                                  filterAccordingSelectedDate();
+                                                  Navigator.pop(context);
+                                                },
+                                                cancelText: 'CANCEL',
+                                                confirmText: 'OK',
+                                                showTodayButton: false,
+                                                showActionButtons: true,
+                                                view: DateRangePickerView.month,
+                                                selectionMode:
+                                                    DateRangePickerSelectionMode
+                                                        .range),
+                                          ),
+                                        );
+                                      });
+                                },
+                              ),
+                            ],
                           ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            staticTextTranslate('Employees'),
-                            style: TextStyle(
-                              fontSize: getMediumFontSize,
-                              color: const Color.fromARGB(255, 0, 0, 0),
-                            ),
-                          )
-                        ]),
-                      ),
-                      const SizedBox(
-                        height: 0,
-                      ),
-                      Expanded(
-                        child: SizedBox(
-                          width: double.maxFinite,
-                          height: 50,
+                        ),
+                        const SizedBox(
+                          width: 0,
+                        ),
+                        Expanded(
                           child: Card(
                               shape: RoundedRectangleBorder(
                                   side: const BorderSide(
@@ -497,379 +342,192 @@ class _EmployeesListPageState extends State<EmployeesListPage> {
                               color: Colors.white,
                               child: Column(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(0.0),
-                                    child: ButtonBarSuper(
-                                      buttonTextTheme: ButtonTextTheme.primary,
-                                      wrapType: WrapType.fit,
-                                      wrapFit: WrapFit.min,
-                                      lineSpacing: 10,
-                                      alignment: engSelectedLanguage
-                                          ? WrapSuperAlignment.left
-                                          : WrapSuperAlignment.right,
-                                      children: [
-                                        Container(
-                                          width: 230,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey,
-                                                  width: 0.5),
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          padding: const EdgeInsets.only(
-                                              right: 10, top: 1, bottom: 3),
-                                          child: TextField(
-                                            decoration: InputDecoration(
-                                                hintText: staticTextTranslate(
-                                                    'Employee ID'),
-                                                hintStyle: TextStyle(
-                                                    color: Colors.grey[600]),
-                                                contentPadding:
-                                                    const EdgeInsets.only(
-                                                        left: 10,
-                                                        right: 5,
-                                                        bottom: 14),
-                                                border: InputBorder.none,
-                                                prefixIcon: const Icon(
-                                                  CupertinoIcons.search,
-                                                  size: 18,
-                                                )),
-                                            onChanged: (val) {
-                                              searchEmpId(val);
-                                            },
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 0,
-                                        ),
-                                        Container(
-                                          width: 230,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey,
-                                                  width: 0.5),
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          padding: const EdgeInsets.only(
-                                              right: 10, top: 1, bottom: 3),
-                                          child: TextField(
-                                              onChanged: (val) {
-                                                searchEmpName(val);
-                                              },
-                                              decoration: InputDecoration(
-                                                  hintText: staticTextTranslate(
-                                                      'Employee Name'),
-                                                  hintStyle: TextStyle(
-                                                      color: Colors.grey[600]),
-                                                  contentPadding:
-                                                      const EdgeInsets.only(
-                                                          left: 10,
-                                                          right: 5,
-                                                          bottom: 14),
-                                                  border: InputBorder.none,
-                                                  prefixIcon: const Icon(
-                                                    CupertinoIcons.search,
-                                                    size: 18,
-                                                  ))),
-                                        ),
-                                        const SizedBox(
-                                          width: 0,
-                                        ),
-                                        Container(
-                                          width: 230,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey,
-                                                  width: 0.5),
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              borderRadius:
-                                                  BorderRadius.circular(3)),
-                                          padding: const EdgeInsets.only(
-                                              right: 10, top: 1, bottom: 3),
-                                          child: Row(
-                                            children: [
-                                              const SizedBox(
-                                                width: 12,
-                                              ),
-                                              Icon(
-                                                CupertinoIcons.search,
-                                                size: 18,
-                                                color: Colors.grey[600],
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              Flexible(
-                                                child: DropdownButton<String>(
-                                                  underline: const SizedBox(),
-                                                  isExpanded: true,
-                                                  hint: Text(
-                                                      staticTextTranslate(
-                                                          'User Role'),
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            getMediumFontSize +
-                                                                2,
-                                                      )),
-                                                  value: selectedSearchedRole,
-                                                  items: [
-                                                        DropdownMenuItem<
-                                                            String>(
-                                                          value: 'All Roles',
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'All Roles'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )),
-                                                        )
-                                                      ] +
-                                                      widget.userGroupsDataLst
-                                                          .map((UserGroupData
-                                                              value) {
-                                                        return DropdownMenuItem<
-                                                            String>(
-                                                          value: value.name,
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  value.name),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )),
-                                                        );
-                                                      }).toList(),
-                                                  onChanged: (val) {
-                                                    setState(() {
-                                                      selectedSearchedRole =
-                                                          val;
-                                                      searchEmpRole(val!);
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
+                                  //filter
+                                  filterWidget(),
                                   if (loading) Expanded(child: showLoading()),
                                   if (!loading)
                                     Expanded(
-                                      child: SfDataGridTheme(
-                                        data: SfDataGridThemeData(
-                                            headerColor:
-                                                const Color(0xffdddfe8),
-                                            headerHoverColor:
-                                                const Color(0xffdddfe8),
-                                            selectionColor: loginBgColor),
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              height: 2,
-                                              width: double.infinity,
-                                              color: Colors.blue,
-                                            ),
-                                            Expanded(
-                                              child: SfDataGrid(
-                                                gridLinesVisibility:
-                                                    GridLinesVisibility.both,
-                                                allowFiltering: true,
-                                                headerGridLinesVisibility:
-                                                    GridLinesVisibility.both,
-                                                isScrollbarAlwaysShown: true,
-                                                onQueryRowHeight: (details) {
-                                                  // Set the row height as 70.0 to the column header row.
-                                                  return details.rowIndex == 0
-                                                      ? 25.0
-                                                      : 23.0;
-                                                },
-                                                allowSorting: true,
-                                                allowTriStateSorting: true,
-                                                controller: dataGridController,
-                                                selectionMode: SelectionMode
-                                                    .singleDeselect,
-                                                source: employeeDataSource!,
-                                                columnWidthMode: ColumnWidthMode
-                                                    .lastColumnFill,
-                                                onSelectionChanged:
-                                                    (addedRows, removedRows) {
-                                                  setState(() {});
-                                                },
-                                                columns: <GridColumn>[
-                                                  GridColumn(
-                                                      columnName:
-                                                          'serialNumberForStyleColor',
-                                                      visible: false,
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(0.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: Colors.white,
-                                                          child: Text(
-                                                            'serialNumberForStyleColor',
-                                                            style: TextStyle(
-                                                              fontSize:
-                                                                  getMediumFontSize,
-                                                            ),
-                                                          ))),
-                                                  GridColumn(
-                                                      width: 120,
-                                                      columnName: 'id',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Emp. Id'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      width: 280,
-                                                      columnName: 'name',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Employee Name'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      width: 180,
-                                                      columnName: 'role',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          child: Text(
-                                                            staticTextTranslate(
-                                                                'User Role'),
-                                                            style: TextStyle(
-                                                              fontSize:
-                                                                  getMediumFontSize,
-                                                            ),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ))),
-                                                  GridColumn(
-                                                      width: 220,
-                                                      columnName: 'username',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Username'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      width: 150,
-                                                      columnName: 'discount',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Max Discount %'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      width: 170,
-                                                      columnName:
-                                                          'created date',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Created Date'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                  GridColumn(
-                                                      width: 200,
-                                                      columnName: 'created by',
-                                                      label: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          color: const Color(
-                                                              0xffdddfe8),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Text(
-                                                              staticTextTranslate(
-                                                                  'Created by'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize,
-                                                              )))),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
+                                      child: Container(
+                                        margin: const EdgeInsets.all(6),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(width: 0.3)),
+                                        child: SfDataGridTheme(
+                                          data: SfDataGridThemeData(
+                                              headerColor:
+                                                  const Color(0xffF1F1F1),
+                                              sortIcon: const Icon(Icons
+                                                  .arrow_drop_down_rounded),
+                                              headerHoverColor:
+                                                  const Color(0xffdddfe8),
+                                              selectionColor: loginBgColor),
+                                          child: SfDataGrid(
+                                            isScrollbarAlwaysShown: true,
+                                            onQueryRowHeight: (details) {
+                                              // Set the row height as 70.0 to the column header row.
+                                              return details.rowIndex == 0
+                                                  ? 25.0
+                                                  : 25.0;
+                                            },
+                                            rowHeight: 25,
+                                            headerRowHeight: 25,
+                                            headerGridLinesVisibility:
+                                                GridLinesVisibility.both,
+                                            allowSorting: true,
+                                            allowTriStateSorting: true,
+                                            controller: dataGridController,
+                                            selectionMode: SelectionMode.single,
+                                            source: employeeDataSource!,
+                                            columnWidthMode:
+                                                ColumnWidthMode.lastColumnFill,
+                                            onSelectionChanged:
+                                                (addedRows, removedRows) {
+                                              setState(() {});
+                                            },
+                                            columns: <GridColumn>[
+                                              GridColumn(
+                                                  columnName:
+                                                      'serialNumberForStyleColor',
+                                                  visible: false,
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              0.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        'serialNumberForStyleColor',
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                        ),
+                                                      ))),
+                                              GridColumn(
+                                                  width: 120,
+                                                  columnName: 'id',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          staticTextTranslate(
+                                                              'Emp. Id'),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                getMediumFontSize,
+                                                          )))),
+                                              GridColumn(
+                                                  width: 280,
+                                                  columnName: 'name',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          staticTextTranslate(
+                                                              'Employee Name'),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                getMediumFontSize,
+                                                          )))),
+                                              GridColumn(
+                                                  width: 180,
+                                                  columnName: 'role',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        staticTextTranslate(
+                                                            'User Role'),
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ))),
+                                              GridColumn(
+                                                  width: 220,
+                                                  columnName: 'username',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          staticTextTranslate(
+                                                              'Username'),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                getMediumFontSize,
+                                                          )))),
+                                              GridColumn(
+                                                  width: 150,
+                                                  columnName: 'discount',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          staticTextTranslate(
+                                                              'Max Discount %'),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                getMediumFontSize,
+                                                          )))),
+                                              GridColumn(
+                                                  width: 170,
+                                                  columnName: 'created date',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          staticTextTranslate(
+                                                              'Created Date'),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                getMediumFontSize,
+                                                          )))),
+                                              GridColumn(
+                                                  width: 200,
+                                                  columnName: 'created by',
+                                                  label: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          staticTextTranslate(
+                                                              'Created by'),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                getMediumFontSize,
+                                                          )))),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     )
                                 ],
                               )),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -878,6 +536,108 @@ class _EmployeesListPageState extends State<EmployeesListPage> {
     );
     // });
     // ;
+  }
+
+  filterWidget() {
+    return FilterContainer(fiterFields: [
+      FilterTextField(
+        onPressed: () {
+          employeeIdController.clear();
+          searchEmpId('');
+        },
+        icon: Icon(
+            employeeIdController.text.isEmpty
+                ? CupertinoIcons.search
+                : Icons.clear,
+            size: 18,
+            color: employeeIdController.text.isEmpty
+                ? Colors.grey[600]
+                : Colors.black),
+        controller: employeeIdController,
+        hintText: 'Employee ID',
+        onChanged: (val) {
+          searchEmpId(val);
+        },
+      ),
+      FilterTextField(
+        onPressed: () {
+          employeeNameController.clear();
+          searchEmpId('');
+        },
+        icon: Icon(
+            employeeNameController.text.isEmpty
+                ? CupertinoIcons.search
+                : Icons.clear,
+            size: 18,
+            color: employeeNameController.text.isEmpty
+                ? Colors.grey[600]
+                : Colors.black),
+        controller: employeeNameController,
+        hintText: 'Employee Name',
+        onChanged: (val) {
+          searchEmpName(val);
+        },
+      ),
+      Container(
+        width: 230,
+        height: 30,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey, width: 0.5),
+            color: const Color.fromARGB(255, 255, 255, 255),
+            borderRadius: BorderRadius.circular(3)),
+        padding: const EdgeInsets.only(right: 10, top: 1, bottom: 3),
+        child: Row(
+          children: [
+            const SizedBox(
+              width: 12,
+            ),
+            Icon(
+              CupertinoIcons.search,
+              size: 18,
+              color: Colors.grey[600],
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Flexible(
+              child: DropdownButton<String>(
+                underline: const SizedBox(),
+                isExpanded: true,
+                hint: Text(staticTextTranslate('User Role'),
+                    style: TextStyle(
+                      fontSize: getMediumFontSize + 2,
+                    )),
+                value: selectedSearchedRole,
+                items: [
+                      DropdownMenuItem<String>(
+                        value: 'All Roles',
+                        child: Text(staticTextTranslate('All Roles'),
+                            style: TextStyle(
+                              fontSize: getMediumFontSize,
+                            )),
+                      )
+                    ] +
+                    widget.userGroupsDataLst.map((UserGroupData value) {
+                      return DropdownMenuItem<String>(
+                        value: value.name,
+                        child: Text(staticTextTranslate(value.name),
+                            style: TextStyle(
+                              fontSize: getMediumFontSize,
+                            )),
+                      );
+                    }).toList(),
+                onChanged: (val) {
+                  setState(() {
+                    selectedSearchedRole = val;
+                    searchEmpRole(val!);
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+      )
+    ]);
   }
 }
 

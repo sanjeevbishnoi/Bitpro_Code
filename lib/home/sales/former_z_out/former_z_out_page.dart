@@ -228,402 +228,188 @@ class _FormerZOutPageState extends State<FormerZOutPage> {
                         ),
                       ),
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                width: double.maxFinite,
-                                child: Card(
-                                    shape: RoundedRectangleBorder(
-                                        side: const BorderSide(
-                                            width: 0.5, color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(4)),
-                                    elevation: 0,
-                                    color: Colors.grey[200],
-                                    child: Column(
+                        child: Card(
+                            shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                    width: 0.5, color: Colors.grey),
+                                borderRadius: BorderRadius.circular(4)),
+                            elevation: 0,
+                            color: Colors.white,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                //filter
+                                filterWidget(),
+
+                                if (loading)
+                                  Expanded(
+                                    child: Center(
+                                      child: showLoading(),
+                                    ),
+                                  ),
+                                if (!loading)
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
-                                        FilterContainer(fiterFields: [
-                                          Container(
-                                            width: 230,
-                                            height: 32,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.grey,
-                                                    width: 0.5),
-                                                color: const Color.fromARGB(
-                                                    255, 255, 255, 255),
-                                                borderRadius:
-                                                    BorderRadius.circular(5)),
-                                            padding: const EdgeInsets.only(
-                                                right: 10, bottom: 3),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                IconButton(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 3),
-                                                  onPressed: () {
-                                                    customerIdController
-                                                        .clear();
-
-                                                    customerDataSource =
-                                                        FormerZoutDataSource(
-                                                            formerZOutData:
-                                                                formerZoutDataLst);
-                                                    setState(() {});
-                                                  },
-                                                  splashRadius: 1,
-                                                  icon: Icon(
-                                                      customerIdController
-                                                              .text.isEmpty
-                                                          ? CupertinoIcons
-                                                              .search
-                                                          : Icons.clear,
-                                                      size: 18,
-                                                      color:
-                                                          customerIdController
-                                                                  .text.isEmpty
-                                                              ? Colors.grey[600]
-                                                              : Colors.black),
-                                                ),
-                                                Flexible(
-                                                  child: TextField(
-                                                    controller:
-                                                        customerIdController,
-                                                    decoration: InputDecoration(
-                                                      hintText:
-                                                          staticTextTranslate(
-                                                              'Zout#'),
-                                                      hintStyle: TextStyle(
-                                                          color:
-                                                              Colors.grey[600]),
-                                                      contentPadding:
-                                                          const EdgeInsets.only(
-                                                              bottom: 15,
-                                                              right: 5),
-                                                      border: InputBorder.none,
-                                                    ),
-                                                    onChanged: (val) {
-                                                      searchById(val);
-                                                    },
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 0,
-                                          ),
-                                          Container(
-                                            width: 230,
-                                            height: 30,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.grey,
-                                                    width: 0.5),
-                                                color: const Color.fromARGB(
-                                                    255, 255, 255, 255),
-                                                borderRadius:
-                                                    BorderRadius.circular(5)),
-                                            padding: const EdgeInsets.only(
-                                                right: 10, bottom: 3),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                IconButton(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 3),
-                                                  onPressed: () {
-                                                    customerNameController
-                                                        .clear();
-
-                                                    customerDataSource =
-                                                        FormerZoutDataSource(
-                                                            formerZOutData:
-                                                                formerZoutDataLst);
-                                                    setState(() {});
-                                                  },
-                                                  splashRadius: 1,
-                                                  icon: Icon(
-                                                      customerNameController
-                                                              .text.isEmpty
-                                                          ? CupertinoIcons
-                                                              .search
-                                                          : Icons.clear,
-                                                      size: 18,
-                                                      color:
-                                                          customerNameController
-                                                                  .text.isEmpty
-                                                              ? Colors.grey[600]
-                                                              : Colors.black),
-                                                ),
-                                                Flexible(
-                                                  child: TextField(
-                                                      controller:
-                                                          customerNameController,
-                                                      onChanged: (val) {
-                                                        searchByCustomerName(
-                                                            val);
-                                                      },
-                                                      decoration:
-                                                          InputDecoration(
-                                                        hintText:
-                                                            staticTextTranslate(
-                                                                'Cashier'),
-                                                        hintStyle: TextStyle(
-                                                            color: Colors
-                                                                .grey[600]),
-                                                        contentPadding:
+                                        Container(
+                                          width: 600,
+                                          margin: const EdgeInsets.all(6),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(width: 0.3)),
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height -
+                                              120,
+                                          child: SfDataGridTheme(
+                                            data: SfDataGridThemeData(
+                                                headerColor:
+                                                    const Color(0xffF1F1F1),
+                                                sortIcon: const Icon(Icons
+                                                    .arrow_drop_down_rounded),
+                                                headerHoverColor:
+                                                    const Color(0xffdddfe8),
+                                                selectionColor: loginBgColor),
+                                            child: SfDataGrid(
+                                              gridLinesVisibility:
+                                                  GridLinesVisibility.both,
+                                              headerRowHeight: 25,
+                                              headerGridLinesVisibility:
+                                                  GridLinesVisibility.both,
+                                              isScrollbarAlwaysShown: true,
+                                              onQueryRowHeight: (details) {
+                                                // Set the row height as 70.0 to the column header row.
+                                                return details.rowIndex == 0
+                                                    ? 25.0
+                                                    : 25.0;
+                                              },
+                                              rowHeight: 25,
+                                              allowSorting: true,
+                                              allowTriStateSorting: true,
+                                              controller: dataGridController,
+                                              selectionMode:
+                                                  SelectionMode.single,
+                                              allowFiltering: true,
+                                              source: customerDataSource!,
+                                              columnWidthMode: ColumnWidthMode
+                                                  .lastColumnFill,
+                                              onSelectionChanged:
+                                                  (addedRows, removedRows) {
+                                                setState(() {});
+                                              },
+                                              columns: <GridColumn>[
+                                                GridColumn(
+                                                    columnName:
+                                                        'serialNumberForStyleColor',
+                                                    visible: false,
+                                                    label: Container(
+                                                        padding:
                                                             const EdgeInsets
-                                                                .only(
-                                                                bottom: 13,
-                                                                right: 5),
-                                                        border:
-                                                            InputBorder.none,
-                                                      )),
-                                                ),
+                                                                .all(0.0),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text(
+                                                          'serialNumberForStyleColor',
+                                                          style: GoogleFonts
+                                                              .roboto(
+                                                            fontSize:
+                                                                getMediumFontSize +
+                                                                    2,
+                                                          ),
+                                                        ))),
+                                                GridColumn(
+                                                    columnName: 'zout#',
+                                                    label: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(1.0),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text(
+                                                          staticTextTranslate(
+                                                              'Z out #'),
+                                                          style: GoogleFonts
+                                                              .roboto(
+                                                            fontSize:
+                                                                getMediumFontSize +
+                                                                    2,
+                                                          ),
+                                                        ))),
+                                                GridColumn(
+                                                    columnName: 'total',
+                                                    label: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(1.0),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text(
+                                                          staticTextTranslate(
+                                                              'Total'),
+                                                          style: GoogleFonts
+                                                              .roboto(
+                                                            fontSize:
+                                                                getMediumFontSize +
+                                                                    2,
+                                                          ),
+                                                        ))),
+                                                GridColumn(
+                                                    columnName: 'cashier_name',
+                                                    label: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(1.0),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text(
+                                                          staticTextTranslate(
+                                                              'Cashier Name'),
+                                                          style: GoogleFonts
+                                                              .roboto(
+                                                            fontSize:
+                                                                getMediumFontSize +
+                                                                    2,
+                                                          ),
+                                                        ))),
+                                                GridColumn(
+                                                    columnName: 'over/short',
+                                                    label: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(1.0),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text(
+                                                          staticTextTranslate(
+                                                              'Over / Short'),
+                                                          style: GoogleFonts
+                                                              .roboto(
+                                                            fontSize:
+                                                                getMediumFontSize +
+                                                                    2,
+                                                          ),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ))),
                                               ],
                                             ),
                                           ),
-                                        ]),
-                                        ButtonBarSuper(
-                                          buttonTextTheme:
-                                              ButtonTextTheme.primary,
-                                          wrapType: WrapType.fit,
-                                          wrapFit: WrapFit.min,
-                                          lineSpacing: 20,
-                                          alignment: engSelectedLanguage
-                                              ? WrapSuperAlignment.left
-                                              : WrapSuperAlignment.right,
-                                          children: [],
                                         ),
-                                        if (loading)
-                                          Expanded(
-                                            child: Center(
-                                              child: showLoading(),
-                                            ),
-                                          ),
-                                        if (!loading)
-                                          SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Container(
-                                                  width: 600,
-                                                  decoration: BoxDecoration(
-                                                      color: homeBgColor,
-                                                      border: Border.all(
-                                                          color:  Colors.black, 
-                                                          width: 0.3),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              4)),
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height -
-                                                      160,
-                                                  child: SfDataGridTheme(
-                                                    data: SfDataGridThemeData(
-                                                        headerColor:
-                                                            const Color(
-                                                                0xffF1F1F1),
-                                                        sortIcon: const Icon(Icons
-                                                            .arrow_drop_down_rounded),
-                                                        headerHoverColor:
-                                                            const Color(
-                                                                0xffdddfe8),
-                                                        selectionColor:
-                                                            loginBgColor),
-                                                    child: SfDataGrid(
-                                                      gridLinesVisibility:
-                                                          GridLinesVisibility
-                                                              .both,
-                                                      headerRowHeight: 25,
-                                                      headerGridLinesVisibility:
-                                                          GridLinesVisibility
-                                                              .both,
-                                                      isScrollbarAlwaysShown:
-                                                          true,
-                                                      onQueryRowHeight:
-                                                          (details) {
-                                                        // Set the row height as 70.0 to the column header row.
-                                                        return details
-                                                                    .rowIndex ==
-                                                                0
-                                                            ? 25.0
-                                                            : 25.0;
-                                                      },
-                                                      rowHeight: 25,
-                                                      allowSorting: true,
-                                                      allowTriStateSorting:
-                                                          true,
-                                                      controller:
-                                                          dataGridController,
-                                                      selectionMode:
-                                                          SelectionMode.single,
-                                                      allowFiltering: true,
-                                                      source:
-                                                          customerDataSource!,
-                                                      columnWidthMode:
-                                                          ColumnWidthMode
-                                                              .lastColumnFill,
-                                                      onSelectionChanged:
-                                                          (addedRows,
-                                                              removedRows) {
-                                                        setState(() {});
-                                                      },
-                                                      columns: <GridColumn>[
-                                                        GridColumn(
-                                                          
-
-                                                             columnName:
-                                                                'serialNumberForStyleColor',
-                                                            visible: false,
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        0.0),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                  'serialNumberForStyleColor',
-                                                                  style:
-                                                                      GoogleFonts
-                                                                          .roboto(
-                                                                    fontSize:
-                                                                        getMediumFontSize +
-                                                                            2,
-                                                                  ),
-                                                                ))),
-                                                        GridColumn(
-                                                            columnName: 'zout#',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        1.0),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                  staticTextTranslate(
-                                                                      'Z out #'),
-                                                                  style:
-                                                                      GoogleFonts
-                                                                          .roboto(
-                                                                    fontSize:
-                                                                        getMediumFontSize +
-                                                                            2,
-                                                                  ),
-                                                                ))),
-                                                        GridColumn(
-                                                            columnName: 'total',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        1.0),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                  staticTextTranslate(
-                                                                      'Total'),
-                                                                  style:
-                                                                      GoogleFonts
-                                                                          .roboto(
-                                                                    fontSize:
-                                                                        getMediumFontSize +
-                                                                            2,
-                                                                  ),
-                                                                ))),
-                                                        GridColumn(
-                                                            columnName:
-                                                                'cashier_name',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        1.0),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                  staticTextTranslate(
-                                                                      'Cashier Name'),
-                                                                  style:
-                                                                      GoogleFonts
-                                                                          .roboto(
-                                                                    fontSize:
-                                                                        getMediumFontSize +
-                                                                            2,
-                                                                  ),
-                                                                ))),
-                                                        GridColumn(
-                                                            columnName:
-                                                                'over/short',
-                                                            label: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        1.0),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                  staticTextTranslate(
-                                                                      'Over / Short'),
-                                                                  style:
-                                                                      GoogleFonts
-                                                                          .roboto(
-                                                                    fontSize:
-                                                                        getMediumFontSize +
-                                                                            2,
-                                                                  ),
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                ))),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                if (dataGridController
-                                                        .selectedIndex !=
-                                                    -1)
-                                                  detailsScreen()
-                                              ],
-                                            ),
-                                          )
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        if (dataGridController.selectedIndex !=
+                                            -1)
+                                          detailsScreen()
                                       ],
-                                    )),
-                              ),
-                            )
-                          ],
-                        ),
+                                    ),
+                                  )
+                              ],
+                            )),
                       )
                     ],
                   ),
@@ -634,6 +420,109 @@ class _FormerZOutPageState extends State<FormerZOutPage> {
         ),
       ),
     );
+  }
+
+  filterWidget() {
+    return FilterContainer(fiterFields: [
+      Container(
+        width: 230,
+        height: 32,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey, width: 0.5),
+            color: const Color.fromARGB(255, 255, 255, 255),
+            borderRadius: BorderRadius.circular(5)),
+        padding: const EdgeInsets.only(right: 10, bottom: 3),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              padding: const EdgeInsets.only(top: 3),
+              onPressed: () {
+                customerIdController.clear();
+
+                customerDataSource =
+                    FormerZoutDataSource(formerZOutData: formerZoutDataLst);
+                setState(() {});
+              },
+              splashRadius: 1,
+              icon: Icon(
+                  customerIdController.text.isEmpty
+                      ? CupertinoIcons.search
+                      : Icons.clear,
+                  size: 18,
+                  color: customerIdController.text.isEmpty
+                      ? Colors.grey[600]
+                      : Colors.black),
+            ),
+            Flexible(
+              child: TextField(
+                controller: customerIdController,
+                decoration: InputDecoration(
+                  hintText: staticTextTranslate('Zout#'),
+                  hintStyle: TextStyle(color: Colors.grey[600]),
+                  contentPadding: const EdgeInsets.only(bottom: 15, right: 5),
+                  border: InputBorder.none,
+                ),
+                onChanged: (val) {
+                  searchById(val);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(
+        width: 0,
+      ),
+      Container(
+        width: 230,
+        height: 30,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey, width: 0.5),
+            color: const Color.fromARGB(255, 255, 255, 255),
+            borderRadius: BorderRadius.circular(5)),
+        padding: const EdgeInsets.only(right: 10, bottom: 3),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              padding: const EdgeInsets.only(top: 3),
+              onPressed: () {
+                customerNameController.clear();
+
+                customerDataSource =
+                    FormerZoutDataSource(formerZOutData: formerZoutDataLst);
+                setState(() {});
+              },
+              splashRadius: 1,
+              icon: Icon(
+                  customerNameController.text.isEmpty
+                      ? CupertinoIcons.search
+                      : Icons.clear,
+                  size: 18,
+                  color: customerNameController.text.isEmpty
+                      ? Colors.grey[600]
+                      : Colors.black),
+            ),
+            Flexible(
+              child: TextField(
+                  controller: customerNameController,
+                  onChanged: (val) {
+                    searchByCustomerName(val);
+                  },
+                  decoration: InputDecoration(
+                    hintText: staticTextTranslate('Cashier'),
+                    hintStyle: TextStyle(color: Colors.grey[600]),
+                    contentPadding: const EdgeInsets.only(bottom: 13, right: 5),
+                    border: InputBorder.none,
+                  )),
+            ),
+          ],
+        ),
+      ),
+    ]);
   }
 
   detailsScreen() {
@@ -665,8 +554,8 @@ class _FormerZOutPageState extends State<FormerZOutPage> {
                 Text(
                   staticTextTranslate('Zout: '),
                   style: GoogleFonts.roboto(
-                    fontSize: getMediumFontSize + 5, fontWeight: FontWeight.bold
-                  ),
+                      fontSize: getMediumFontSize + 5,
+                      fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(
                   height: 0,
@@ -674,8 +563,8 @@ class _FormerZOutPageState extends State<FormerZOutPage> {
                 Text(
                   formerZOutData.formerZoutNo,
                   style: GoogleFonts.roboto(
-                    fontSize: getMediumFontSize + 5,fontWeight: FontWeight.bold
-                  ),
+                      fontSize: getMediumFontSize + 5,
+                      fontWeight: FontWeight.bold),
                 ),
               ],
             ),
