@@ -5,6 +5,7 @@ import 'package:bitpro_hive/widget/filter_text_fileds/fiter_textfield.dart';
 import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:bitpro_hive/home/employess/user_groups/create_edit_user_groups_page.dart';
@@ -346,10 +347,9 @@ class _UserGroupPageState extends State<UserGroupPage> {
                                                   alignment: Alignment.center,
                                                   child: Text(
                                                     'serialNumberForStyleColor',
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          getMediumFontSize,
-                                                    ),
+                                                     style: GoogleFonts.roboto(
+                fontSize: getMediumFontSize + 1,
+              ),
                                                   ))),
                                           GridColumn(
                                               columnName: staticTextTranslate(
@@ -361,10 +361,9 @@ class _UserGroupPageState extends State<UserGroupPage> {
                                                   child: Text(
                                                       staticTextTranslate(
                                                           'Group Name'),
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            getMediumFontSize,
-                                                      )))),
+                                                       style: GoogleFonts.roboto(
+                fontSize: getMediumFontSize + 1,
+              ),))),
                                           GridColumn(
                                               columnName: staticTextTranslate(
                                                   'Group Description'),
@@ -375,10 +374,9 @@ class _UserGroupPageState extends State<UserGroupPage> {
                                                   child: Text(
                                                       staticTextTranslate(
                                                           'Group Description'),
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            getMediumFontSize,
-                                                      )))),
+                                                       style: GoogleFonts.roboto(
+                fontSize: getMediumFontSize + 1,
+              ),))),
                                           GridColumn(
                                               columnName: staticTextTranslate(
                                                   'Created Date'),
@@ -389,10 +387,9 @@ class _UserGroupPageState extends State<UserGroupPage> {
                                                   child: Text(
                                                       staticTextTranslate(
                                                           'Created Date'),
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            getMediumFontSize,
-                                                      )))),
+                                                      style: GoogleFonts.roboto(
+                fontSize: getMediumFontSize + 1,
+              ),))),
                                           GridColumn(
                                               columnName: staticTextTranslate(
                                                   'Created by'),
@@ -403,10 +400,9 @@ class _UserGroupPageState extends State<UserGroupPage> {
                                                   child: Text(
                                                       staticTextTranslate(
                                                           'Created by'),
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            getMediumFontSize,
-                                                      )))),
+                                                       style: GoogleFonts.roboto(
+                fontSize: getMediumFontSize + 1,
+              ),))),
                                         ],
                                       ),
                                     ),
@@ -486,7 +482,7 @@ class UserGroupsDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         color: row.getCells()[0].value.isEven
-            ? const Color.fromARGB(255, 246, 247, 255)
+            ? const Color(0xffF1F1F1)
             : Colors.white,
         cells: row.getCells().map<Widget>((e) {
           return Container(
@@ -494,10 +490,9 @@ class UserGroupsDataSource extends DataGridSource {
             padding: const EdgeInsets.all(3.0),
             child: Text(
               e.value.toString(),
-              style: TextStyle(
-                  fontSize: getMediumFontSize,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400),
+              style: GoogleFonts.roboto(
+                fontSize: getMediumFontSize + 1,
+              ),
             ),
           );
         }).toList());

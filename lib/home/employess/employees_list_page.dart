@@ -9,6 +9,7 @@ import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:bitpro_hive/home/employess/create_edit_employess_page.dart';
@@ -411,12 +412,15 @@ class _EmployeesListPageState extends State<EmployeesListPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                          staticTextTranslate(
-                                                              'Emp. Id'),
-                                                          style: TextStyle(
-                                                            fontSize:
-                                                                getMediumFontSize,
-                                                          )))),
+                                                        staticTextTranslate(
+                                                            'Emp. Id'),
+                                                        style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize:
+                                                              getMediumFontSize +
+                                                                  1,
+                                                        ),
+                                                      ))),
                                               GridColumn(
                                                   width: 280,
                                                   columnName: 'name',
@@ -427,12 +431,15 @@ class _EmployeesListPageState extends State<EmployeesListPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                          staticTextTranslate(
-                                                              'Employee Name'),
-                                                          style: TextStyle(
-                                                            fontSize:
-                                                                getMediumFontSize,
-                                                          )))),
+                                                        staticTextTranslate(
+                                                            'Employee Name'),
+                                                        style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize:
+                                                              getMediumFontSize +
+                                                                  1,
+                                                        ),
+                                                      ))),
                                               GridColumn(
                                                   width: 180,
                                                   columnName: 'role',
@@ -445,9 +452,11 @@ class _EmployeesListPageState extends State<EmployeesListPage> {
                                                       child: Text(
                                                         staticTextTranslate(
                                                             'User Role'),
-                                                        style: TextStyle(
+                                                        style:
+                                                            GoogleFonts.roboto(
                                                           fontSize:
-                                                              getMediumFontSize,
+                                                              getMediumFontSize +
+                                                                  1,
                                                         ),
                                                         overflow: TextOverflow
                                                             .ellipsis,
@@ -462,12 +471,15 @@ class _EmployeesListPageState extends State<EmployeesListPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                          staticTextTranslate(
-                                                              'Username'),
-                                                          style: TextStyle(
-                                                            fontSize:
-                                                                getMediumFontSize,
-                                                          )))),
+                                                        staticTextTranslate(
+                                                            'Username'),
+                                                        style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize:
+                                                              getMediumFontSize +
+                                                                  1,
+                                                        ),
+                                                      ))),
                                               GridColumn(
                                                   width: 150,
                                                   columnName: 'discount',
@@ -478,12 +490,15 @@ class _EmployeesListPageState extends State<EmployeesListPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                          staticTextTranslate(
-                                                              'Max Discount %'),
-                                                          style: TextStyle(
-                                                            fontSize:
-                                                                getMediumFontSize,
-                                                          )))),
+                                                        staticTextTranslate(
+                                                            'Max Discount %'),
+                                                        style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize:
+                                                              getMediumFontSize +
+                                                                  1,
+                                                        ),
+                                                      ))),
                                               GridColumn(
                                                   width: 170,
                                                   columnName: 'created date',
@@ -494,12 +509,15 @@ class _EmployeesListPageState extends State<EmployeesListPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                          staticTextTranslate(
-                                                              'Created Date'),
-                                                          style: TextStyle(
-                                                            fontSize:
-                                                                getMediumFontSize,
-                                                          )))),
+                                                        staticTextTranslate(
+                                                            'Created Date'),
+                                                        style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize:
+                                                              getMediumFontSize +
+                                                                  1,
+                                                        ),
+                                                      ))),
                                               GridColumn(
                                                   width: 200,
                                                   columnName: 'created by',
@@ -510,12 +528,15 @@ class _EmployeesListPageState extends State<EmployeesListPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                          staticTextTranslate(
-                                                              'Created by'),
-                                                          style: TextStyle(
-                                                            fontSize:
-                                                                getMediumFontSize,
-                                                          )))),
+                                                        staticTextTranslate(
+                                                            'Created by'),
+                                                        style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize:
+                                                              getMediumFontSize +
+                                                                  1,
+                                                        ),
+                                                      ))),
                                             ],
                                           ),
                                         ),
@@ -580,7 +601,7 @@ class _EmployeesListPageState extends State<EmployeesListPage> {
       ),
       Container(
         width: 230,
-        height: 30,
+        height: 32,
         decoration: BoxDecoration(
             border: Border.all(color: Colors.grey, width: 0.5),
             color: const Color.fromARGB(255, 255, 255, 255),
@@ -706,7 +727,7 @@ class EmployeeDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         color: row.getCells()[0].value.isEven
-            ? const Color.fromARGB(255, 246, 247, 255)
+            ? const Color(0xffF1F1F1)
             : Colors.white,
         cells: row.getCells().map<Widget>((e) {
           return Container(
@@ -714,10 +735,9 @@ class EmployeeDataSource extends DataGridSource {
             padding: const EdgeInsets.all(2.0),
             child: Text(
               e.value.toString(),
-              style: TextStyle(
-                  fontSize: getMediumFontSize,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400),
+              style: GoogleFonts.roboto(
+                fontSize: getMediumFontSize + 1,
+              ),
             ),
           );
         }).toList());
