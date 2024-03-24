@@ -668,12 +668,14 @@ class VendorDataSource extends DataGridSource {
         cells: row.getCells().map<Widget>((e) {
           return Container(
             alignment: Alignment.center,
-            padding: const EdgeInsets.all(1.0),
+            padding: const EdgeInsets.all(3.0),
             child: Text(
               e.value.toString(),
-              style: GoogleFonts.roboto(
-                fontSize: getMediumFontSize + 2,
-              ),
+               style: GoogleFonts.roboto(
+                  fontSize: getMediumFontSize + 1,
+                  color:  Colors.black,
+                  fontWeight: FontWeight.w400),
+
             ),
           );
         }).toList());

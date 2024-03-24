@@ -127,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                                     Text(
                                       staticTextTranslate('Login to Bitpro'),
                                       style: GoogleFonts.roboto(
-                                          fontSize: getExtraLargeFontSize + 16,
+                                          fontSize: getExtraLargeFontSize + 12,
                                           fontWeight: FontWeight.w600),
                                     ),
                                     const SizedBox(

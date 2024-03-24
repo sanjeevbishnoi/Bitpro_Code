@@ -22,6 +22,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:bitpro_hive/home/merchandise/inventory/inventory_create_edit.dart';
@@ -398,7 +399,7 @@ class _InventoryPageState extends State<InventoryPage> {
                             ),
                             SideMenuButton(
                                 label: 'Print Tag',
-                                iconPath: 'assets/icons/date.png',
+                                iconPath: 'assets/icons/tag.png',
                                 buttonFunction: () async {
                                   if (dataGridController.selectedRow != null) {
                                     String productName = '';
@@ -456,7 +457,7 @@ class _InventoryPageState extends State<InventoryPage> {
                                 }),
                             SideMenuButton(
                               label: 'Export',
-                              iconPath: 'assets/icons/date.png',
+                              iconPath: 'assets/icons/export.png',
                               buttonFunction: () async {
                                 setState(() {
                                   loading = true;
@@ -474,14 +475,14 @@ class _InventoryPageState extends State<InventoryPage> {
                             ),
                             SideMenuButton(
                               label: 'Import Items',
-                              iconPath: 'assets/icons/date.png',
+                              iconPath: 'assets/icons/import.png',
                               buttonFunction: () async {
                                 showImportDialog();
                               },
                             ),
                             SideMenuButton(
                               label: 'Update Quantity',
-                              iconPath: 'assets/icons/date.png',
+                              iconPath: 'assets/icons/update.png',
                               buttonFunction: () async {
                                 showImportQuantityDialog();
                               },
@@ -574,10 +575,11 @@ class _InventoryPageState extends State<InventoryPage> {
                                                     child: Text(
                                                         staticTextTranslate(
                                                             'Barcode'),
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              getMediumFontSize,
-                                                        )))),
+                                                        style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),))),
                                             GridColumn(
                                                 width: 170,
                                                 columnName: 'itemCode',
@@ -589,10 +591,11 @@ class _InventoryPageState extends State<InventoryPage> {
                                                     child: Text(
                                                         staticTextTranslate(
                                                             'Item Code'),
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              getMediumFontSize,
-                                                        )))),
+                                                        style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),))),
                                             GridColumn(
                                                 width: 250,
                                                 columnName: 'productName',
@@ -604,9 +607,10 @@ class _InventoryPageState extends State<InventoryPage> {
                                                     child: Text(
                                                       staticTextTranslate(
                                                           'Product Name'),
-                                                      style: TextStyle(
+                                                      style: GoogleFonts.roboto(
                                                         fontSize:
-                                                            getMediumFontSize,
+                                                            getMediumFontSize +
+                                                                1,
                                                       ),
                                                       overflow:
                                                           TextOverflow.ellipsis,
@@ -622,10 +626,11 @@ class _InventoryPageState extends State<InventoryPage> {
                                                     child: Text(
                                                         staticTextTranslate(
                                                             'Store OH'),
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              getMediumFontSize,
-                                                        )))),
+                                                        style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),))),
                                             GridColumn(
                                                 width: 150,
                                                 columnName: 'companyOhQty',
@@ -637,10 +642,11 @@ class _InventoryPageState extends State<InventoryPage> {
                                                     child: Text(
                                                         staticTextTranslate(
                                                             'Company OH'),
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              getMediumFontSize,
-                                                        )))),
+                                                        style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),))),
                                             GridColumn(
                                                 width: 120,
                                                 columnName: 'cost',
@@ -652,10 +658,11 @@ class _InventoryPageState extends State<InventoryPage> {
                                                     child: Text(
                                                         staticTextTranslate(
                                                             'Cost'),
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              getMediumFontSize,
-                                                        )))),
+                                                        style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),))),
                                             GridColumn(
                                                 width: 120,
                                                 columnName: 'price',
@@ -667,10 +674,11 @@ class _InventoryPageState extends State<InventoryPage> {
                                                     child: Text(
                                                         staticTextTranslate(
                                                             'Price'),
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              getMediumFontSize,
-                                                        )))),
+                                                        style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),))),
                                             GridColumn(
                                                 width: 140,
                                                 columnName: 'priceWT',
@@ -682,10 +690,11 @@ class _InventoryPageState extends State<InventoryPage> {
                                                     child: Text(
                                                         staticTextTranslate(
                                                             'Price W/T'),
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              getMediumFontSize,
-                                                        )))),
+                                                       style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),))),
                                             GridColumn(
                                                 width: 160,
                                                 columnName: 'extCost',
@@ -697,10 +706,11 @@ class _InventoryPageState extends State<InventoryPage> {
                                                     child: Text(
                                                         staticTextTranslate(
                                                             'Ext Cost'),
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              getMediumFontSize,
-                                                        )))),
+                                                        style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),))),
                                             GridColumn(
                                                 width: 160,
                                                 columnName: 'extPriceWt',
@@ -712,10 +722,11 @@ class _InventoryPageState extends State<InventoryPage> {
                                                     child: Text(
                                                         staticTextTranslate(
                                                             'Ext Price W/T'),
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              getMediumFontSize,
-                                                        )))),
+                                                        style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                1,
+                                                      ),))),
                                           ],
                                         ),
                                       ),
@@ -785,7 +796,7 @@ class _InventoryPageState extends State<InventoryPage> {
       ),
       Container(
         width: 230,
-        height: 30,
+        height: 32,
         decoration: BoxDecoration(
             border: Border.all(color: Colors.grey, width: 0.5),
             color: const Color.fromARGB(255, 255, 255, 255),
@@ -867,7 +878,7 @@ class _InventoryPageState extends State<InventoryPage> {
       ),
       Container(
         width: 230,
-        height: 30,
+        height: 32,
         decoration: BoxDecoration(
             border: Border.all(color: Colors.grey, width: 0.5),
             color: const Color.fromARGB(255, 255, 255, 255),
@@ -950,7 +961,7 @@ class _InventoryPageState extends State<InventoryPage> {
       ),
       Container(
           width: 230,
-          height: 30,
+          height: 32,
           decoration: BoxDecoration(
               border: Border.all(width: 0.5, color: Colors.grey),
               color: const Color.fromARGB(255, 255, 255, 255),
@@ -1881,7 +1892,7 @@ class EmployeeDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         color: row.getCells()[0].value.isEven
-            ? const Color.fromARGB(255, 246, 247, 255)
+            ? const Color(0xffF1F1F1)
             : Colors.white,
         cells: row.getCells().map<Widget>((e) {
           return Container(
@@ -1889,9 +1900,9 @@ class EmployeeDataSource extends DataGridSource {
             padding: const EdgeInsets.all(1.0),
             child: Text(
               e.value.toString(),
-              style: TextStyle(
-                  fontSize: getMediumFontSize,
-                  color: Colors.black,
+              style: GoogleFonts.roboto(
+                  fontSize: getMediumFontSize + 1,
+                  color:  Colors.black,
                   fontWeight: FontWeight.w400),
             ),
           );

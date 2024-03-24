@@ -8,6 +8,7 @@ import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -527,10 +528,9 @@ class _VoucherPageState extends State<VoucherPage> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    const Icon(
-                                      size: 19,
-                                      Iconsax.export4,
-                                      color: Color.fromARGB(255, 0, 0, 0),
+                                    Image.asset(
+                                      'assets/icons/export.png',
+                                      width: 20,
                                     ),
                                     const SizedBox(
                                       width: 10,
@@ -645,12 +645,17 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                          staticTextTranslate(
-                                                              'Voucher #'),
-                                                          style: TextStyle(
+                                                        staticTextTranslate(
+                                                            'Voucher #'),
+                                                        style: GoogleFonts.roboto(
                                                             fontSize:
-                                                                getMediumFontSize,
-                                                          )))),
+                                                                getMediumFontSize +
+                                                                    1,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ))),
                                               GridColumn(
                                                   width: 100,
                                                   columnName: 'type',
@@ -661,12 +666,17 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                          staticTextTranslate(
-                                                              'Type'),
-                                                          style: TextStyle(
+                                                        staticTextTranslate(
+                                                            'Type'),
+                                                        style: GoogleFonts.roboto(
                                                             fontSize:
-                                                                getMediumFontSize,
-                                                          )))),
+                                                                getMediumFontSize +
+                                                                    1,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ))),
                                               GridColumn(
                                                   width: 300,
                                                   columnName: 'vendor',
@@ -679,10 +689,14 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       child: Text(
                                                         staticTextTranslate(
                                                             'Vendor'),
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              getMediumFontSize,
-                                                        ),
+                                                        style: GoogleFonts.roboto(
+                                                            fontSize:
+                                                                getMediumFontSize +
+                                                                    1,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                       ))),
@@ -696,12 +710,17 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                          staticTextTranslate(
-                                                              'Qty Received'),
-                                                          style: TextStyle(
+                                                        staticTextTranslate(
+                                                            'Qty Received'),
+                                                        style: GoogleFonts.roboto(
                                                             fontSize:
-                                                                getMediumFontSize,
-                                                          )))),
+                                                                getMediumFontSize +
+                                                                    1,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ))),
                                               GridColumn(
                                                   width: 150,
                                                   columnName: 'voucher_total',
@@ -712,12 +731,17 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                          staticTextTranslate(
-                                                              'Voucher Total'),
-                                                          style: TextStyle(
+                                                        staticTextTranslate(
+                                                            'Voucher Total'),
+                                                        style: GoogleFonts.roboto(
                                                             fontSize:
-                                                                getMediumFontSize,
-                                                          )))),
+                                                                getMediumFontSize +
+                                                                    1,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ))),
                                               GridColumn(
                                                   width: 150,
                                                   columnName: 'vendor_inv',
@@ -728,12 +752,17 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                          staticTextTranslate(
-                                                              'Vendor Inv#'),
-                                                          style: TextStyle(
+                                                        staticTextTranslate(
+                                                            'Vendor Inv#'),
+                                                        style: GoogleFonts.roboto(
                                                             fontSize:
-                                                                getMediumFontSize,
-                                                          )))),
+                                                                getMediumFontSize +
+                                                                    1,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ))),
                                               GridColumn(
                                                   width: 150,
                                                   columnName: 'store',
@@ -744,12 +773,17 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                          staticTextTranslate(
-                                                              'Store'),
-                                                          style: TextStyle(
+                                                        staticTextTranslate(
+                                                            'Store'),
+                                                        style: GoogleFonts.roboto(
                                                             fontSize:
-                                                                getMediumFontSize,
-                                                          )))),
+                                                                getMediumFontSize +
+                                                                    1,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ))),
                                               GridColumn(
                                                   width: 190,
                                                   columnName: 'created_date',
@@ -760,12 +794,17 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                          staticTextTranslate(
-                                                              'Created Date'),
-                                                          style: TextStyle(
+                                                        staticTextTranslate(
+                                                            'Created Date'),
+                                                        style: GoogleFonts.roboto(
                                                             fontSize:
-                                                                getMediumFontSize,
-                                                          )))),
+                                                                getMediumFontSize +
+                                                                    1,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ))),
                                               GridColumn(
                                                   width: 150,
                                                   columnName: 'created_by',
@@ -776,12 +815,17 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                          staticTextTranslate(
-                                                              'Created By'),
-                                                          style: TextStyle(
+                                                        staticTextTranslate(
+                                                            'Created By'),
+                                                        style: GoogleFonts.roboto(
                                                             fontSize:
-                                                                getMediumFontSize,
-                                                          )))),
+                                                                getMediumFontSize +
+                                                                    1,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ))),
                                             ],
                                             gridLinesVisibility:
                                                 GridLinesVisibility.both,
@@ -1126,7 +1170,7 @@ class VoucherDataSource extends DataGridSource {
         -1) isReturnVoucher = true;
     return DataGridRowAdapter(
         color: row.getCells()[0].value.isEven
-            ? const Color.fromARGB(255, 246, 247, 255)
+            ? const Color(0xffF1F1F1)
             : Colors.white,
         cells: row.getCells().map<Widget>((e) {
           return Container(
@@ -1134,8 +1178,8 @@ class VoucherDataSource extends DataGridSource {
             padding: const EdgeInsets.all(1.0),
             child: Text(
               e.value.toString(),
-              style: TextStyle(
-                  fontSize: getMediumFontSize,
+              style: GoogleFonts.roboto(
+                  fontSize: getMediumFontSize + 1,
                   color: isReturnVoucher ? Colors.red[700] : Colors.black,
                   fontWeight: FontWeight.w400),
             ),

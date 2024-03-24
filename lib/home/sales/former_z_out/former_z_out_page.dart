@@ -264,7 +264,7 @@ class _FormerZOutPageState extends State<FormerZOutPage> {
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .height -
-                                              120,
+                                              155,
                                           child: SfDataGridTheme(
                                             data: SfDataGridThemeData(
                                                 headerColor:
@@ -545,7 +545,7 @@ class _FormerZOutPageState extends State<FormerZOutPage> {
             border: Border.all(color: Colors.grey, width: 0.5),
             color: Colors.white,
             borderRadius: BorderRadius.circular(4)),
-        height: MediaQuery.of(context).size.height - 162,
+        height: MediaQuery.of(context).size.height - 170,
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         child: Column(
           children: [

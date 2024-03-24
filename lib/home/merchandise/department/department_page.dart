@@ -557,7 +557,7 @@ class DepartmentDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         color: row.getCells()[0].value.isEven
-            ? const Color.fromARGB(255, 246, 247, 255)
+            ? const Color(0xffF1F1F1)
             : Colors.white,
         cells: row.getCells().map<Widget>((e) {
           return Container(
@@ -565,9 +565,11 @@ class DepartmentDataSource extends DataGridSource {
             padding: const EdgeInsets.all(1.0),
             child: Text(
               e.value.toString(),
-              style: GoogleFonts.roboto(
-                fontSize: getMediumFontSize + 2,
-              ),
+               style: GoogleFonts.roboto(
+                  fontSize: getMediumFontSize + 1,
+                  color:  Colors.black,
+                  fontWeight: FontWeight.w400),
+
             ),
           );
         }).toList());

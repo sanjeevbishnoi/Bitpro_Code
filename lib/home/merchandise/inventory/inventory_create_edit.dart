@@ -673,6 +673,7 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                                                       // height: 37,
                                                                       child:
                                                                           TextFormField(
+                                                                            keyboardType: TextInputType.number,
                                                                         initialValue:
                                                                             cost ??
                                                                                 '0',
@@ -940,8 +941,10 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                                                     SizedBox(
                                                                       child:
                                                                           TextFormField(
+                                                                            keyboardType: TextInputType.number,
                                                                         controller:
                                                                             priceWtController,
+                                                                            
                                                                         maxLines:
                                                                             1,
                                                                         style: const TextStyle(
@@ -954,6 +957,14 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                                                           FocusScope.of(context)
                                                                               .requestFocus(barcodefocus);
                                                                         },
+                                                                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                        
+                                                                        validator: (val) {
+                                                                          if (double.tryParse(val!) ==
+                                                                              null) {
+                                                                            return staticTextTranslate('Enter a number');
+                                                                          }
+                                                                          return null;},
                                                                         decoration: const InputDecoration(
                                                                             isDense:
                                                                                 true,

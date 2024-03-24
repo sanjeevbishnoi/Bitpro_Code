@@ -778,6 +778,7 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                                                                           ),
                                                                                         ))),
                                                                                 GridColumn(
+                                                                                  width: 100,
                                                                                     allowEditing: false,
                                                                                     columnName: 'barcode',
                                                                                     label: Container(
@@ -790,6 +791,7 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                                                                           ),
                                                                                         ))),
                                                                                 GridColumn(
+                                                                                  width: 100,
                                                                                     allowEditing: false,
                                                                                     columnName: 'itemCode',
                                                                                     label: Container(
@@ -803,7 +805,8 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                                                                         ))),
                                                                                 GridColumn(
                                                                                     allowEditing: false,
-                                                                                    maximumWidth: 260,
+                                                                                    maximumWidth: 320,
+                                                                                    width: 200,
                                                                                     columnName: 'productName',
                                                                                     label: Container(
                                                                                         padding: const EdgeInsets.all(2.0),
@@ -816,6 +819,7 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                                                                           overflow: TextOverflow.ellipsis,
                                                                                         ))),
                                                                                 GridColumn(
+                                                                                  width: 100,
                                                                                     allowEditing: true,
                                                                                     columnName: 'qty',
                                                                                     label: Container(
@@ -841,6 +845,7 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                                                                           ),
                                                                                         ))),
                                                                                 GridColumn(
+                                                                                  maximumWidth: 230,
                                                                                     width: 100,
                                                                                     allowEditing: true,
                                                                                     columnName: 'price',
@@ -2918,7 +2923,7 @@ class VoucherDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         color: row.getCells()[0].value.isEven
-            ? const Color(0xffF1F1F1)
+              ? const Color(0xffF1F1F1)
             : Colors.white,
         cells: row.getCells().map<Widget>((e) {
           return Container(
@@ -2927,8 +2932,9 @@ class VoucherDataSource extends DataGridSource {
             child: Text(
               e.value.toString(),
               style: GoogleFonts.roboto(
-                fontSize: getMediumFontSize + 2,
-              ),
+                  fontSize: getMediumFontSize + 1,
+                  color:  Colors.black,
+                  fontWeight: FontWeight.w400),
             ),
           );
         }).toList());
