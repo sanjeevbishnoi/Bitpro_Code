@@ -1,10 +1,13 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:bitpro_hive/services/firestore_api/fb_user_db_service.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import '../shared/global_variables/font_sizes.dart';
 import '../shared/loading.dart';
@@ -56,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
           LoginCallbackShortcutsIntent:
               CallbackAction<LoginCallbackShortcutsIntent>(
                   onInvoke: (LoginCallbackShortcutsIntent intent) =>
-                      onEnterLogin()),
+                      onTapLogin()),
         },
         child: Scaffold(
           backgroundColor: Colors.white,
@@ -68,203 +71,266 @@ class _LoginPageState extends State<LoginPage> {
                       width: double.infinity,
                       foregroundDecoration: const BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage('assets/bcc.jpg'),
-                            fit: BoxFit.fill,
-                            opacity: 50),
+                            image: AssetImage('assets/bck.jpg'),
+                            fit: BoxFit.cover,
+                            opacity: 100),
                       ),
                       color: const Color.fromARGB(255, 201, 201, 201),
                     ),
                     Container(
                       width: 400,
                       height: 480,
-                      padding: const EdgeInsets.all(30),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: const Color.fromARGB(255, 223, 223, 223)
-                            .withOpacity(0.85),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color.fromARGB(255, 15, 15, 15)
-                                .withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: const Offset(
-                                0, 6), // changes position of shadow
+                      color: Colors.transparent,
+                      //we use Stack(); because we want the effects be on top of each other,
+                      //  just like layer in photoshop.
+                      child: Stack(
+                        children: [
+                          //blur effect ==> the third layer of stack
+                          BackdropFilter(
+                            filter: ImageFilter.blur(
+                              //sigmaX is the Horizontal blur
+                              sigmaX: 5.0,
+                              //sigmaY is the Vertical blur
+                              sigmaY: 5.0,
+                            ),
+                            //we use this container to scale up the blur effect to fit its
+                            //  parent, without this container the blur effect doesn't appear.
+                            child: Container(),
+                          ),
+                          //gradient effect ==> the second layer of stack
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: Colors.white.withOpacity(0.13)),
+                              gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    //begin color
+                                    Colors.white.withOpacity(0.2),
+                                    //end color
+                                    Colors.white.withOpacity(0.9),
+                                  ]),
+                            ),
+                          ),
+                          //child ==> the first/top layer of stack
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(31.0),
+                              child: Form(
+                                key: formKey,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      staticTextTranslate('Login to Bitpro'),
+                                      style: GoogleFonts.roboto(
+                                          fontSize: getExtraLargeFontSize + 16,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Column(
+                                      children: [
+                                        TextFormField(
+                                          style: GoogleFonts.roboto(
+                                              fontSize: 18,
+                                              color: Colors.black),
+                                          validator: (value) => value!.isEmpty
+                                              ? staticTextTranslate(
+                                                  'Please enter your username')
+                                              : null,
+                                          decoration: InputDecoration(
+                                              fillColor: Colors.grey[400],
+                                              filled: true,
+                                              hintStyle: GoogleFonts.roboto(
+                                                  fontSize: 18,
+                                                  color: Colors.grey[700]),
+                                              hintText: staticTextTranslate(
+                                                'Username',
+                                              ),
+                                              border:
+                                                  const OutlineInputBorder(),
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: Color.fromARGB(
+                                                          255, 19, 101, 148))),
+                                              enabledBorder:
+                                                  const OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          width: 0.6,
+                                                          color:
+                                                              Colors.black))),
+                                          onChanged: (val) {
+                                            setState(() {
+                                              username = val;
+                                            });
+                                          },
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        TextFormField(
+                                          style: GoogleFonts.roboto(
+                                              fontSize: 18,
+                                              color: Colors.black),
+                                          obscureText: obscurePassword,
+                                          validator: (value) => value!.isEmpty
+                                              ? staticTextTranslate(
+                                                  'Please enter your password')
+                                              : null,
+                                          decoration: InputDecoration(
+                                              fillColor: Colors.grey[400],
+                                              filled: true,
+                                              hintStyle: GoogleFonts.roboto(
+                                                  fontSize: 18,
+                                                  color: Colors.grey[700]),
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: Color.fromARGB(
+                                                          255, 19, 101, 148))),
+                                              enabledBorder:
+                                                  const OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          width: 0.6,
+                                                          color: Colors.black)),
+                                              suffixIcon: IconButton(
+                                                  splashRadius: 1,
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      obscurePassword =
+                                                          !obscurePassword;
+                                                    });
+                                                  },
+                                                  icon: obscurePassword
+                                                      ? Icon(Icons.show_chart)
+                                                      : Icon(Icons.hide_image)),
+                                              hintText: staticTextTranslate(
+                                                  'Password'),
+                                              border:
+                                                  const OutlineInputBorder()),
+                                          onChanged: (val) {
+                                            setState(() {
+                                              password = val;
+                                            });
+                                          },
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            SizedBox(
+                                              height: 45,
+                                              width: 163,
+                                              child: ElevatedButton(
+                                                  onPressed: () {
+                                                    exit(0);
+                                                  },
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      const Icon(
+                                                        Icons.cancel,
+                                                        color: Colors.white,
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                        staticTextTranslate(
+                                                            'Cancel'),
+                                                        style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize:
+                                                              getMediumFontSize +
+                                                                  2,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            SizedBox(
+                                              height: 45,
+                                              width: 165,
+                                              child: ElevatedButton(
+                                                  onPressed: () async {
+                                                    onTapLogin();
+                                                  },
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      const Icon(Icons.login),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                          staticTextTranslate(
+                                                              'Login'),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                getMediumFontSize,
+                                                          )),
+                                                    ],
+                                                  )),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 30,
+                                        ),
+                                        Text(
+                                          staticTextTranslate(
+                                              """Bitpro is a trademark of Bitpro\nInternational, www.bitproglobal.com"""),
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.roboto(
+                                            fontSize: getMediumFontSize + 2,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          staticTextTranslate('Version 3.0.1'),
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.roboto(
+                                            fontSize: getMediumFontSize + 2,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
+                                        Text(
+                                          staticTextTranslate(
+                                              'Licensed Up to: ${DateFormat('MM-dd-yyyy').format(widget.licenseExpiryDate)}'),
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.roboto(
+                                              fontSize: getMediumFontSize + 2,
+                                              color: const Color.fromARGB(
+                                                  255, 34, 82, 105)),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
                         ],
-                      ),
-                      child: SizedBox(
-                        width: 300,
-                        child: Form(
-                          key: formKey,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                staticTextTranslate('Login to Bitpro'),
-                                style: TextStyle(
-                                    fontSize: getExtraLargeFontSize + 6,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Column(
-                                children: [
-                                  TextFormField(
-                                    validator: (value) => value!.isEmpty
-                                        ? staticTextTranslate(
-                                            'Please enter your username')
-                                        : null,
-                                    decoration: InputDecoration(
-                                        hintText:
-                                            staticTextTranslate('Username'),
-                                        border: const OutlineInputBorder()),
-                                    onChanged: (val) {
-                                      setState(() {
-                                        username = val;
-                                      });
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  TextFormField(
-                                    obscureText: obscurePassword,
-                                    validator: (value) => value!.isEmpty
-                                        ? staticTextTranslate(
-                                            'Please enter your password')
-                                        : null,
-                                    decoration: InputDecoration(
-                                        suffixIcon: IconButton(
-                                            splashRadius: 1,
-                                            onPressed: () {
-                                              setState(() {
-                                                obscurePassword =
-                                                    !obscurePassword;
-                                              });
-                                            },
-                                            icon: SvgPicture.asset(
-                                              obscurePassword
-                                                  ? 'assets/icons/password-show.svg'
-                                                  : 'assets/icons/password-hide.svg',
-                                              width: 20,
-                                              color: Colors.grey[700],
-                                            )),
-                                        hintText:
-                                            staticTextTranslate('Password'),
-                                        border: const OutlineInputBorder()),
-                                    onChanged: (val) {
-                                      setState(() {
-                                        password = val;
-                                      });
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      SizedBox(
-                                        height: 45,
-                                        width: 163,
-                                        child: ElevatedButton(
-                                            onPressed: () {
-                                              exit(0);
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                const Icon(
-                                                  Icons.cancel,
-                                                  color: Colors.white,
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                    staticTextTranslate(
-                                                        'Cancel'),
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          getMediumFontSize,
-                                                    )),
-                                              ],
-                                            )),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      SizedBox(
-                                        height: 45,
-                                        width: 165,
-                                        child: ElevatedButton(
-                                            onPressed: () async {
-                                              onEnterLogin();
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                const Icon(Icons.login),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                    staticTextTranslate(
-                                                        'Login'),
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          getMediumFontSize,
-                                                    )),
-                                              ],
-                                            )),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 30,
-                                  ),
-                                  Text(
-                                    staticTextTranslate(
-                                        """Bitpro is a trademark of Bitpro\nInternational, www.bitproglobal.com"""),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: getMediumFontSize,
-                                        color: const Color.fromARGB(
-                                            255, 83, 83, 83)),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    staticTextTranslate('Version 1.0.0'),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: getMediumFontSize,
-                                        color: const Color.fromARGB(
-                                            255, 43, 42, 42)),
-                                  ),
-                                  const SizedBox(
-                                    height: 2,
-                                  ),
-                                  Text(
-                                    staticTextTranslate(
-                                        'Licensed Up to: ${DateFormat('MM-dd-yyyy').format(widget.licenseExpiryDate)}'),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: getMediumFontSize,
-                                        color: const Color.fromARGB(
-                                            255, 27, 27, 27)),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
                       ),
                     ),
                   ]),
@@ -274,7 +340,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  onEnterLogin() async {
+  onTapLogin() async {
     if (formKey.currentState!.validate()) {
       setState(() {
         loading = true;

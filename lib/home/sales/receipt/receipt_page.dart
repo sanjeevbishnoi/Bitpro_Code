@@ -523,937 +523,865 @@ class _ReceiptPageState extends State<ReceiptPage> {
                           ),
                         ),
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: SizedBox(
-                                  width: double.maxFinite,
-                                  height: 120,
-                                  child: Card(
-                                      shape: RoundedRectangleBorder(
-                                          side: const BorderSide(
-                                              color: Colors.grey, width: 0.5),
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                      elevation: 0,
-                                      color: Colors.white,
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            decoration: const BoxDecoration(
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(4),
-                                                    topRight:
-                                                        Radius.circular(4)),
-                                                gradient: LinearGradient(
-                                                    end: Alignment.bottomCenter,
-                                                    colors: [
-                                                      Color.fromARGB(
-                                                          255, 180, 180, 180),
-                                                      Color.fromARGB(
-                                                          255, 105, 105, 105),
-                                                    ],
-                                                    begin:
-                                                        Alignment.topCenter)),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(0.0),
-                                              child: ButtonBarSuper(
-                                                buttonTextTheme:
-                                                    ButtonTextTheme.primary,
-                                                wrapType: WrapType.fit,
-                                                wrapFit: WrapFit.min,
-                                                lineSpacing: 20,
-                                                alignment: engSelectedLanguage
-                                                    ? WrapSuperAlignment.left
-                                                    : WrapSuperAlignment.right,
+                          child: SizedBox(
+                            width: double.maxFinite,
+                            height: 120,
+                            child: Card(
+                                shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                        color: Colors.grey, width: 0.5),
+                                    borderRadius: BorderRadius.circular(5)),
+                                elevation: 0,
+                                color: Colors.white,
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(4),
+                                              topRight: Radius.circular(4)),
+                                          gradient: LinearGradient(
+                                              end: Alignment.bottomCenter,
+                                              colors: [
+                                                Color.fromARGB(
+                                                    255, 180, 180, 180),
+                                                Color.fromARGB(
+                                                    255, 105, 105, 105),
+                                              ],
+                                              begin: Alignment.topCenter)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(0.0),
+                                        child: ButtonBarSuper(
+                                          buttonTextTheme:
+                                              ButtonTextTheme.primary,
+                                          wrapType: WrapType.fit,
+                                          wrapFit: WrapFit.min,
+                                          lineSpacing: 20,
+                                          alignment: engSelectedLanguage
+                                              ? WrapSuperAlignment.left
+                                              : WrapSuperAlignment.right,
+                                          children: [
+                                            Container(
+                                              width: 230,
+                                              height: 32,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      width: 0.5,
+                                                      color: Colors.grey),
+                                                  color: const Color.fromARGB(
+                                                      255, 255, 255, 255),
+                                                  borderRadius:
+                                                      BorderRadius.circular(4)),
+                                              padding: const EdgeInsets.only(
+                                                  right: 10, bottom: 3),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: [
-                                                  Container(
-                                                    width: 230,
-                                                    height: 32,
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            width: 0.5,
-                                                            color: Colors.grey),
-                                                        color: const Color
-                                                            .fromARGB(
-                                                            255, 255, 255, 255),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4)),
+                                                  IconButton(
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            right: 10,
-                                                            bottom: 3),
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        IconButton(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(top: 2),
-                                                          onPressed: () {
+                                                            top: 2),
+                                                    onPressed: () {
+                                                      customerIdController
+                                                          .clear();
+
+                                                      customerDataSource = CustomerDataSource(
+                                                          customerDataLst:
+                                                              customerDataLst,
+                                                          dbReceiptData: selectedStoreDocId ==
+                                                                  'All'
+                                                              ? dbReceiptDataLst
+                                                              : dbReceiptDataLst
+                                                                  .where((e) =>
+                                                                      e.selectedStoreDocId ==
+                                                                      selectedStoreDocId)
+                                                                  .toList(),
+                                                          allStoreDataLst:
+                                                              allStoreDataLst);
+                                                      setState(() {});
+                                                    },
+                                                    splashRadius: 1,
+                                                    icon: Icon(
+                                                        customerIdController
+                                                                .text.isEmpty
+                                                            ? CupertinoIcons
+                                                                .search
+                                                            : Icons.clear,
+                                                        size: 18,
+                                                        color:
                                                             customerIdController
-                                                                .clear();
-
-                                                            customerDataSource = CustomerDataSource(
-                                                                customerDataLst:
-                                                                    customerDataLst,
-                                                                dbReceiptData: selectedStoreDocId ==
-                                                                        'All'
-                                                                    ? dbReceiptDataLst
-                                                                    : dbReceiptDataLst
-                                                                        .where((e) =>
-                                                                            e.selectedStoreDocId ==
-                                                                            selectedStoreDocId)
-                                                                        .toList(),
-                                                                allStoreDataLst:
-                                                                    allStoreDataLst);
-                                                            setState(() {});
-                                                          },
-                                                          splashRadius: 1,
-                                                          icon: Icon(
-                                                              customerIdController
-                                                                      .text
-                                                                      .isEmpty
-                                                                  ? CupertinoIcons
-                                                                      .search
-                                                                  : Icons.clear,
-                                                              size: 18,
-                                                              color: customerIdController
-                                                                      .text
-                                                                      .isEmpty
-                                                                  ? Colors
-                                                                      .grey[600]
-                                                                  : Colors
-                                                                      .black),
-                                                        ),
-                                                        Flexible(
-                                                          child: TextField(
-                                                            controller:
-                                                                customerIdController,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              hintText:
-                                                                  staticTextTranslate(
-                                                                      'Receipt #'),
-                                                              hintStyle: TextStyle(
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      600]),
-                                                              contentPadding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      bottom:
-                                                                          15,
-                                                                      right: 5),
-                                                              border:
-                                                                  InputBorder
-                                                                      .none,
-                                                            ),
-                                                            onChanged: (val) {
-                                                              searchById(val);
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
+                                                                    .text
+                                                                    .isEmpty
+                                                                ? Colors
+                                                                    .grey[600]
+                                                                : Colors.black),
                                                   ),
-                                                  const SizedBox(
-                                                    width: 0,
-                                                  ),
-                                                  Container(
-                                                    width: 230,
-                                                    height: 32,
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            width: 0.5,
-                                                            color: Colors.grey),
-                                                        color: const Color
-                                                            .fromARGB(
-                                                            255, 255, 255, 255),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4)),
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 10,
-                                                            bottom: 3),
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        IconButton(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(top: 2),
-                                                          onPressed: () {
-                                                            customerNameController
-                                                                .clear();
-
-                                                            customerDataSource = CustomerDataSource(
-                                                                customerDataLst:
-                                                                    customerDataLst,
-                                                                dbReceiptData: selectedStoreDocId ==
-                                                                        'All'
-                                                                    ? dbReceiptDataLst
-                                                                    : dbReceiptDataLst
-                                                                        .where((e) =>
-                                                                            e.selectedStoreDocId ==
-                                                                            selectedStoreDocId)
-                                                                        .toList(),
-                                                                allStoreDataLst:
-                                                                    allStoreDataLst);
-                                                            setState(() {});
-                                                          },
-                                                          splashRadius: 1,
-                                                          icon: Icon(
-                                                              customerNameController
-                                                                      .text
-                                                                      .isEmpty
-                                                                  ? CupertinoIcons
-                                                                      .search
-                                                                  : Icons.clear,
-                                                              size: 18,
-                                                              color: customerNameController
-                                                                      .text
-                                                                      .isEmpty
-                                                                  ? Colors
-                                                                      .grey[600]
-                                                                  : Colors
-                                                                      .black),
-                                                        ),
-                                                        Flexible(
-                                                          child: TextField(
-                                                              controller:
-                                                                  customerNameController,
-                                                              onChanged: (val) {
-                                                                searchByCustomerName(
-                                                                    val);
-                                                              },
-                                                              decoration:
-                                                                  InputDecoration(
-                                                                hintText:
-                                                                    staticTextTranslate(
-                                                                        'Customer'),
-                                                                hintStyle: TextStyle(
-                                                                    color: Colors
-                                                                            .grey[
-                                                                        600]),
-                                                                contentPadding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                        bottom:
-                                                                            14,
-                                                                        right:
-                                                                            5),
-                                                                border:
-                                                                    InputBorder
-                                                                        .none,
-                                                              )),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 0,
-                                                  ),
-                                                  Container(
-                                                    width: 230,
-                                                    height: 32,
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            width: 0.5,
-                                                            color: Colors.grey),
-                                                        color: const Color
-                                                            .fromARGB(
-                                                            255, 255, 255, 255),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4)),
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 10,
-                                                            bottom: 3),
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        IconButton(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(top: 2),
-                                                          onPressed: () {
-                                                            customerPhoneController
-                                                                .clear();
-
-                                                            customerDataSource = CustomerDataSource(
-                                                                customerDataLst:
-                                                                    customerDataLst,
-                                                                dbReceiptData: selectedStoreDocId ==
-                                                                        'All'
-                                                                    ? dbReceiptDataLst
-                                                                    : dbReceiptDataLst
-                                                                        .where((e) =>
-                                                                            e.selectedStoreDocId ==
-                                                                            selectedStoreDocId)
-                                                                        .toList(),
-                                                                allStoreDataLst:
-                                                                    allStoreDataLst);
-                                                            setState(() {});
-                                                          },
-                                                          splashRadius: 1,
-                                                          icon: Icon(
-                                                              customerPhoneController
-                                                                      .text
-                                                                      .isEmpty
-                                                                  ? CupertinoIcons
-                                                                      .search
-                                                                  : Icons.clear,
-                                                              size: 18,
-                                                              color: customerPhoneController
-                                                                      .text
-                                                                      .isEmpty
-                                                                  ? Colors
-                                                                      .grey[600]
-                                                                  : Colors
-                                                                      .black),
-                                                        ),
-                                                        Flexible(
-                                                            child: Container(
-                                                                width: 200,
-                                                                height: 32,
-                                                                decoration: BoxDecoration(
-                                                                    color: const Color
-                                                                        .fromARGB(
-                                                                        255,
-                                                                        255,
-                                                                        255,
-                                                                        255),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            8)),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                        right:
-                                                                            10,
-                                                                        left:
-                                                                            10),
-                                                                child:
-                                                                    DropdownButton<
-                                                                        String>(
-                                                                  isExpanded:
-                                                                      true,
-                                                                  value:
-                                                                      regularReturnDropDownFilter,
-                                                                  underline:
-                                                                      const SizedBox(),
-                                                                  hint: Text(
-                                                                    staticTextTranslate(
-                                                                        'Receipt Type'),
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          getMediumFontSize +
-                                                                              2,
-                                                                    ),
-                                                                  ),
-                                                                  items: <String>[
-                                                                    'All',
-                                                                    'Regular',
-                                                                    'Return'
-                                                                  ].map((String
-                                                                      value) {
-                                                                    return DropdownMenuItem<
-                                                                        String>(
-                                                                      value:
-                                                                          value,
-                                                                      child:
-                                                                          Text(
-                                                                        staticTextTranslate(
-                                                                            value),
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              getMediumFontSize + 2,
-                                                                        ),
-                                                                      ),
-                                                                    );
-                                                                  }).toList(),
-                                                                  onChanged:
-                                                                      (val) {
-                                                                    setState(
-                                                                        () {
-                                                                      regularReturnDropDownFilter =
-                                                                          val;
-                                                                      filterReturnRegularReceipt(
-                                                                          val ??
-                                                                              "");
-                                                                    });
-                                                                  },
-                                                                ))),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    width: 230,
-                                                    height: 32,
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            width: 0.5,
-                                                            color: Colors.grey),
-                                                        color: const Color
-                                                            .fromARGB(
-                                                            255, 255, 255, 255),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4)),
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 10,
-                                                            bottom: 3),
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        IconButton(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(top: 2),
-                                                          onPressed: () {
-                                                            customerDataSource = CustomerDataSource(
-                                                                customerDataLst:
-                                                                    customerDataLst,
-                                                                dbReceiptData: selectedStoreDocId ==
-                                                                        'All'
-                                                                    ? dbReceiptDataLst
-                                                                    : dbReceiptDataLst
-                                                                        .where((e) =>
-                                                                            e.selectedStoreDocId ==
-                                                                            selectedStoreDocId)
-                                                                        .toList(),
-                                                                allStoreDataLst:
-                                                                    allStoreDataLst);
-                                                            setState(() {});
-                                                          },
-                                                          splashRadius: 1,
-                                                          icon: Icon(
-                                                              customerPhoneController
-                                                                      .text
-                                                                      .isEmpty
-                                                                  ? CupertinoIcons
-                                                                      .search
-                                                                  : Icons.clear,
-                                                              size: 18,
-                                                              color: customerPhoneController
-                                                                      .text
-                                                                      .isEmpty
-                                                                  ? Colors
-                                                                      .grey[600]
-                                                                  : Colors
-                                                                      .black),
-                                                        ),
-                                                        Flexible(
-                                                            child: Container(
-                                                                width: 200,
-                                                                height: 30,
-                                                                decoration: BoxDecoration(
-                                                                    color: const Color
-                                                                        .fromARGB(
-                                                                        255,
-                                                                        255,
-                                                                        255,
-                                                                        255),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            8)),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                        right:
-                                                                            10,
-                                                                        left:
-                                                                            10),
-                                                                child:
-                                                                    DropdownButton<
-                                                                        String>(
-                                                                  isExpanded:
-                                                                      true,
-                                                                  value:
-                                                                      selectedStoreDocId,
-                                                                  underline:
-                                                                      const SizedBox(),
-                                                                  hint: Text(
-                                                                    staticTextTranslate(
-                                                                        'Stores'),
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          getMediumFontSize +
-                                                                              2,
-                                                                    ),
-                                                                  ),
-                                                                  items: <String>[
-                                                                        'All'
-                                                                      ].map((String
-                                                                          value) {
-                                                                        return DropdownMenuItem<
-                                                                            String>(
-                                                                          value:
-                                                                              value,
-                                                                          child:
-                                                                              Text(
-                                                                            staticTextTranslate(value),
-                                                                            style:
-                                                                                TextStyle(
-                                                                              fontSize: getMediumFontSize + 2,
-                                                                            ),
-                                                                          ),
-                                                                        );
-                                                                      }).toList() +
-                                                                      allStoreDataLst.map(
-                                                                          (StoreData
-                                                                              value) {
-                                                                        return DropdownMenuItem<
-                                                                            String>(
-                                                                          value:
-                                                                              value.docId,
-                                                                          child:
-                                                                              Text(
-                                                                            staticTextTranslate(value.storeName),
-                                                                            style:
-                                                                                TextStyle(
-                                                                              fontSize: getMediumFontSize + 2,
-                                                                            ),
-                                                                          ),
-                                                                        );
-                                                                      }).toList(),
-                                                                  onChanged:
-                                                                      (val) {
-                                                                    if (val !=
-                                                                        null) {
-                                                                      selectedStoreDocId =
-                                                                          val;
-
-                                                                      print(
-                                                                          val);
-
-                                                                      print(dbReceiptDataLst
-                                                                          .map((element) =>
-                                                                              element.selectedStoreDocId)
-                                                                          .toList());
-                                                                      customerDataSource = CustomerDataSource(
-                                                                          customerDataLst:
-                                                                              customerDataLst,
-                                                                          dbReceiptData: val == 'All'
-                                                                              ? dbReceiptDataLst
-                                                                              : dbReceiptDataLst.where((e) => e.selectedStoreDocId == val).toList(),
-                                                                          allStoreDataLst: allStoreDataLst);
-                                                                      setState(
-                                                                          () {});
-                                                                    }
-                                                                  },
-                                                                ))),
-                                                      ],
+                                                  Flexible(
+                                                    child: TextField(
+                                                      controller:
+                                                          customerIdController,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        hintText:
+                                                            staticTextTranslate(
+                                                                'Receipt #'),
+                                                        hintStyle: TextStyle(
+                                                            color: Colors
+                                                                .grey[600]),
+                                                        contentPadding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                bottom: 15,
+                                                                right: 5),
+                                                        border:
+                                                            InputBorder.none,
+                                                      ),
+                                                      onChanged: (val) {
+                                                        searchById(val);
+                                                      },
                                                     ),
                                                   ),
                                                 ],
                                               ),
                                             ),
-                                          ),
-                                          if (loading)
-                                            Expanded(child: showLoading()),
-                                          if (!loading)
-                                            Expanded(
-                                              child: Container(
-                                                margin: const EdgeInsets.all(6),
-                                                decoration: BoxDecoration(
-                                                    border:
-                                                        Border.all(width: 0.3)),
-                                                child: SfDataGridTheme(
-                                                  data: SfDataGridThemeData(
-                                                      headerColor: const Color(
-                                                          0xffF1F1F1),
-                                                      sortIcon: const Icon(Icons
-                                                          .arrow_drop_down_rounded),
-                                                      headerHoverColor:
-                                                          const Color(
-                                                              0xffdddfe8),
-                                                      selectionColor:
-                                                          loginBgColor),
-                                                  child: Column(
-                                                    children: [
-                                                      Expanded(
-                                                        child: SfDataGrid(
-                                                          isScrollbarAlwaysShown:
-                                                              true,
-                                                          onQueryRowHeight:
-                                                              (details) {
-                                                            // Set the row height as 70.0 to the column header row.
-                                                            return details
-                                                                        .rowIndex ==
-                                                                    0
-                                                                ? 25.0
-                                                                : 25.0;
-                                                          },
-                                                          rowHeight: 25,
-                                                          headerRowHeight: 25,
-                                                          headerGridLinesVisibility:
-                                                              GridLinesVisibility
-                                                                  .both,
-                                                          allowColumnsResizing:
-                                                              true,
-                                                          allowFiltering: true,
-                                                          gridLinesVisibility:
-                                                              GridLinesVisibility
-                                                                  .both,
-                                                          allowSorting: true,
-                                                          allowTriStateSorting:
-                                                              true,
-                                                          controller:
-                                                              dataGridController,
-                                                          selectionMode:
-                                                              SelectionMode
-                                                                  .single,
-                                                          source:
-                                                              customerDataSource!,
-                                                          columnWidthMode:
-                                                              ColumnWidthMode
-                                                                  .lastColumnFill,
-                                                          onSelectionChanged:
-                                                              (addedRows,
-                                                                  removedRows) {
-                                                            setState(() {});
-                                                          },
-                                                          columns: <GridColumn>[
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'serialNumberForStyleColor',
-                                                                visible: false,
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            0.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child:
-                                                                            Text(
-                                                                          'serialNumberForStyleColor',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontSize:
-                                                                                getMediumFontSize,
-                                                                          ),
-                                                                        ))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'receipt',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            0.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              'Receipt #'),
-                                                                          style:
-                                                                              GoogleFonts.roboto(
-                                                                            fontSize:
-                                                                                getMediumFontSize + 1,
-                                                                          ),
-                                                                        ))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'type',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            1.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              'Type'),
-                                                                          style:
-                                                                              GoogleFonts.roboto(
-                                                                            fontSize:
-                                                                                getMediumFontSize + 1,
-                                                                          ),
-                                                                        ))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'customer',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            1.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              'Customer Name'),
-                                                                          style:
-                                                                              GoogleFonts.roboto(
-                                                                            fontSize:
-                                                                                getMediumFontSize + 1,
-                                                                          ),
-                                                                        ))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'orgTotal',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            2.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              'Original Total'),
-                                                                          style:
-                                                                              GoogleFonts.roboto(
-                                                                            fontSize:
-                                                                                getMediumFontSize + 1,
-                                                                          ),
-                                                                        ))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'disc%',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            1.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              'Disc %'),
-                                                                          style:
-                                                                              GoogleFonts.roboto(
-                                                                            fontSize:
-                                                                                getMediumFontSize + 1,
-                                                                          ),
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                        ))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'disc\$',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            1.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              'Disc \$'),
-                                                                          style:
-                                                                              GoogleFonts.roboto(
-                                                                            fontSize:
-                                                                                getMediumFontSize + 1,
-                                                                          ),
-                                                                        ))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'tax%',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            1.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              'Tax %'),
-                                                                          style:
-                                                                              GoogleFonts.roboto(
-                                                                            fontSize:
-                                                                                getMediumFontSize + 1,
-                                                                          ),
-                                                                        ))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'Tax \$',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            1.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              'Tax \$'),
-                                                                          style:
-                                                                              GoogleFonts.roboto(
-                                                                            fontSize:
-                                                                                getMediumFontSize + 1,
-                                                                          ),
-                                                                        ))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'store',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            1.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              'Store'),
-                                                                          style:
-                                                                              GoogleFonts.roboto(
-                                                                            fontSize:
-                                                                                getMediumFontSize + 1,
-                                                                          ),
-                                                                        ))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'paymentType',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            1.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              'Payment Type'),
-                                                                          style:
-                                                                              GoogleFonts.roboto(
-                                                                            fontSize:
-                                                                                getMediumFontSize + 1,
-                                                                          ),
-                                                                        ))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'receiptTotal',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            1.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              'Receipt Total'),
-                                                                          style:
-                                                                              GoogleFonts.roboto(
-                                                                            fontSize:
-                                                                                getMediumFontSize + 1,
-                                                                          ),
-                                                                        ))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'created date',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            1.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              'Created Date'),
-                                                                          style:
-                                                                              GoogleFonts.roboto(
-                                                                            fontSize:
-                                                                                getMediumFontSize + 1,
-                                                                          ),
-                                                                        ))),
-                                                            GridColumn(
-                                                                columnName:
-                                                                    'created by',
-                                                                label:
-                                                                    Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            1.0),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        child:
-                                                                            Text(
-                                                                          staticTextTranslate(
-                                                                              'Created by'),
-                                                                          style:
-                                                                              GoogleFonts.roboto(
-                                                                            fontSize:
-                                                                                getMediumFontSize + 1,
-                                                                          ),
-                                                                        ))),
-                                                          ],
-                                                        ),
-                                                      ),
+                                            const SizedBox(
+                                              width: 0,
+                                            ),
+                                            Container(
+                                              width: 230,
+                                              height: 32,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      width: 0.5,
+                                                      color: Colors.grey),
+                                                  color: const Color.fromARGB(
+                                                      255, 255, 255, 255),
+                                                  borderRadius:
+                                                      BorderRadius.circular(4)),
+                                              padding: const EdgeInsets.only(
+                                                  right: 10, bottom: 3),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  IconButton(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 2),
+                                                    onPressed: () {
+                                                      customerNameController
+                                                          .clear();
+
+                                                      customerDataSource = CustomerDataSource(
+                                                          customerDataLst:
+                                                              customerDataLst,
+                                                          dbReceiptData: selectedStoreDocId ==
+                                                                  'All'
+                                                              ? dbReceiptDataLst
+                                                              : dbReceiptDataLst
+                                                                  .where((e) =>
+                                                                      e.selectedStoreDocId ==
+                                                                      selectedStoreDocId)
+                                                                  .toList(),
+                                                          allStoreDataLst:
+                                                              allStoreDataLst);
+                                                      setState(() {});
+                                                    },
+                                                    splashRadius: 1,
+                                                    icon: Icon(
+                                                        customerNameController
+                                                                .text.isEmpty
+                                                            ? CupertinoIcons
+                                                                .search
+                                                            : Icons.clear,
+                                                        size: 18,
+                                                        color:
+                                                            customerNameController
+                                                                    .text
+                                                                    .isEmpty
+                                                                ? Colors
+                                                                    .grey[600]
+                                                                : Colors.black),
+                                                  ),
+                                                  Flexible(
+                                                    child: TextField(
+                                                        controller:
+                                                            customerNameController,
+                                                        onChanged: (val) {
+                                                          searchByCustomerName(
+                                                              val);
+                                                        },
+                                                        decoration:
+                                                            InputDecoration(
+                                                          hintText:
+                                                              staticTextTranslate(
+                                                                  'Customer'),
+                                                          hintStyle: TextStyle(
+                                                              color: Colors
+                                                                  .grey[600]),
+                                                          contentPadding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  bottom: 14,
+                                                                  right: 5),
+                                                          border:
+                                                              InputBorder.none,
+                                                        )),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 0,
+                                            ),
+                                            Container(
+                                              width: 230,
+                                              height: 32,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      width: 0.5,
+                                                      color: Colors.grey),
+                                                  color: const Color.fromARGB(
+                                                      255, 255, 255, 255),
+                                                  borderRadius:
+                                                      BorderRadius.circular(4)),
+                                              padding: const EdgeInsets.only(
+                                                  right: 10, bottom: 3),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  IconButton(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 2),
+                                                    onPressed: () {
+                                                      customerPhoneController
+                                                          .clear();
+
+                                                      customerDataSource = CustomerDataSource(
+                                                          customerDataLst:
+                                                              customerDataLst,
+                                                          dbReceiptData: selectedStoreDocId ==
+                                                                  'All'
+                                                              ? dbReceiptDataLst
+                                                              : dbReceiptDataLst
+                                                                  .where((e) =>
+                                                                      e.selectedStoreDocId ==
+                                                                      selectedStoreDocId)
+                                                                  .toList(),
+                                                          allStoreDataLst:
+                                                              allStoreDataLst);
+                                                      setState(() {});
+                                                    },
+                                                    splashRadius: 1,
+                                                    icon: Icon(
+                                                        customerPhoneController
+                                                                .text.isEmpty
+                                                            ? CupertinoIcons
+                                                                .search
+                                                            : Icons.clear,
+                                                        size: 18,
+                                                        color:
+                                                            customerPhoneController
+                                                                    .text
+                                                                    .isEmpty
+                                                                ? Colors
+                                                                    .grey[600]
+                                                                : Colors.black),
+                                                  ),
+                                                  Flexible(
+                                                      child: Container(
+                                                          width: 200,
+                                                          height: 32,
+                                                          decoration: BoxDecoration(
+                                                              color: const Color
+                                                                  .fromARGB(
+                                                                  255,
+                                                                  255,
+                                                                  255,
+                                                                  255),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8)),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  right: 10,
+                                                                  left: 10),
+                                                          child: DropdownButton<
+                                                              String>(
+                                                            isExpanded: true,
+                                                            value:
+                                                                regularReturnDropDownFilter,
+                                                            underline:
+                                                                const SizedBox(),
+                                                            hint: Text(
+                                                              staticTextTranslate(
+                                                                  'Receipt Type'),
+                                                              style: TextStyle(
+                                                                fontSize:
+                                                                    getMediumFontSize +
+                                                                        2,
+                                                              ),
+                                                            ),
+                                                            items: <String>[
+                                                              'All',
+                                                              'Regular',
+                                                              'Return'
+                                                            ].map(
+                                                                (String value) {
+                                                              return DropdownMenuItem<
+                                                                  String>(
+                                                                value: value,
+                                                                child: Text(
+                                                                  staticTextTranslate(
+                                                                      value),
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        getMediumFontSize +
+                                                                            2,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            }).toList(),
+                                                            onChanged: (val) {
+                                                              setState(() {
+                                                                regularReturnDropDownFilter =
+                                                                    val;
+                                                                filterReturnRegularReceipt(
+                                                                    val ?? "");
+                                                              });
+                                                            },
+                                                          ))),
+                                                ],
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 230,
+                                              height: 32,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      width: 0.5,
+                                                      color: Colors.grey),
+                                                  color: const Color.fromARGB(
+                                                      255, 255, 255, 255),
+                                                  borderRadius:
+                                                      BorderRadius.circular(4)),
+                                              padding: const EdgeInsets.only(
+                                                  right: 10, bottom: 3),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  IconButton(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 2),
+                                                    onPressed: () {
+                                                      customerDataSource = CustomerDataSource(
+                                                          customerDataLst:
+                                                              customerDataLst,
+                                                          dbReceiptData: selectedStoreDocId ==
+                                                                  'All'
+                                                              ? dbReceiptDataLst
+                                                              : dbReceiptDataLst
+                                                                  .where((e) =>
+                                                                      e.selectedStoreDocId ==
+                                                                      selectedStoreDocId)
+                                                                  .toList(),
+                                                          allStoreDataLst:
+                                                              allStoreDataLst);
+                                                      setState(() {});
+                                                    },
+                                                    splashRadius: 1,
+                                                    icon: Icon(
+                                                        customerPhoneController
+                                                                .text.isEmpty
+                                                            ? CupertinoIcons
+                                                                .search
+                                                            : Icons.clear,
+                                                        size: 18,
+                                                        color:
+                                                            customerPhoneController
+                                                                    .text
+                                                                    .isEmpty
+                                                                ? Colors
+                                                                    .grey[600]
+                                                                : Colors.black),
+                                                  ),
+                                                  Flexible(
+                                                      child: Container(
+                                                          width: 200,
+                                                          height: 30,
+                                                          decoration: BoxDecoration(
+                                                              color: const Color
+                                                                  .fromARGB(
+                                                                  255,
+                                                                  255,
+                                                                  255,
+                                                                  255),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8)),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  right: 10,
+                                                                  left: 10),
+                                                          child: DropdownButton<
+                                                              String>(
+                                                            isExpanded: true,
+                                                            value:
+                                                                selectedStoreDocId,
+                                                            underline:
+                                                                const SizedBox(),
+                                                            hint: Text(
+                                                              staticTextTranslate(
+                                                                  'Stores'),
+                                                              style: TextStyle(
+                                                                fontSize:
+                                                                    getMediumFontSize +
+                                                                        2,
+                                                              ),
+                                                            ),
+                                                            items: <String>[
+                                                                  'All'
+                                                                ].map((String
+                                                                    value) {
+                                                                  return DropdownMenuItem<
+                                                                      String>(
+                                                                    value:
+                                                                        value,
+                                                                    child: Text(
+                                                                      staticTextTranslate(
+                                                                          value),
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            getMediumFontSize +
+                                                                                2,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                }).toList() +
+                                                                allStoreDataLst
+                                                                    .map((StoreData
+                                                                        value) {
+                                                                  return DropdownMenuItem<
+                                                                      String>(
+                                                                    value: value
+                                                                        .docId,
+                                                                    child: Text(
+                                                                      staticTextTranslate(
+                                                                          value
+                                                                              .storeName),
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            getMediumFontSize +
+                                                                                2,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                }).toList(),
+                                                            onChanged: (val) {
+                                                              if (val != null) {
+                                                                selectedStoreDocId =
+                                                                    val;
+
+                                                                print(val);
+
+                                                                print(dbReceiptDataLst
+                                                                    .map((element) =>
+                                                                        element
+                                                                            .selectedStoreDocId)
+                                                                    .toList());
+                                                                customerDataSource = CustomerDataSource(
+                                                                    customerDataLst:
+                                                                        customerDataLst,
+                                                                    dbReceiptData: val ==
+                                                                            'All'
+                                                                        ? dbReceiptDataLst
+                                                                        : dbReceiptDataLst
+                                                                            .where((e) =>
+                                                                                e.selectedStoreDocId ==
+                                                                                val)
+                                                                            .toList(),
+                                                                    allStoreDataLst:
+                                                                        allStoreDataLst);
+                                                                setState(() {});
+                                                              }
+                                                            },
+                                                          ))),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    if (loading) Expanded(child: showLoading()),
+                                    if (!loading)
+                                      Expanded(
+                                        child: Container(
+                                          margin: const EdgeInsets.all(6),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(width: 0.3)),
+                                          child: SfDataGridTheme(
+                                            data: SfDataGridThemeData(
+                                                headerColor:
+                                                    const Color(0xffF1F1F1),
+                                                sortIcon: const Icon(Icons
+                                                    .arrow_drop_down_rounded),
+                                                headerHoverColor:
+                                                    const Color(0xffdddfe8),
+                                                selectionColor: loginBgColor),
+                                            child: Column(
+                                              children: [
+                                                Expanded(
+                                                  child: SfDataGrid(
+                                                    isScrollbarAlwaysShown:
+                                                        true,
+                                                    onQueryRowHeight:
+                                                        (details) {
+                                                      // Set the row height as 70.0 to the column header row.
+                                                      return details.rowIndex ==
+                                                              0
+                                                          ? 25.0
+                                                          : 25.0;
+                                                    },
+                                                    rowHeight: 25,
+                                                    headerRowHeight: 25,
+                                                    headerGridLinesVisibility:
+                                                        GridLinesVisibility
+                                                            .both,
+                                                    allowSorting: true,
+                                                    allowTriStateSorting: true,
+                                                    controller:
+                                                        dataGridController,
+                                                    selectionMode:
+                                                        SelectionMode.single,
+                                                    source: customerDataSource!,
+                                                    columnWidthMode:
+                                                        ColumnWidthMode
+                                                            .lastColumnFill,
+                                                    onSelectionChanged:
+                                                        (addedRows,
+                                                            removedRows) {
+                                                      setState(() {});
+                                                    },
+                                                    columns: <GridColumn>[
+                                                      GridColumn(
+                                                          columnName:
+                                                              'serialNumberForStyleColor',
+                                                          visible: false,
+                                                          label: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(0.0),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                'serialNumberForStyleColor',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize:
+                                                                      getMediumFontSize,
+                                                                ),
+                                                              ))),
+                                                      GridColumn(
+                                                          columnName: 'receipt',
+                                                          label: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(0.0),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                staticTextTranslate(
+                                                                    'Receipt #'),
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .roboto(
+                                                                  fontSize:
+                                                                      getMediumFontSize +
+                                                                          1,
+                                                                ),
+                                                              ))),
+                                                      GridColumn(
+                                                          columnName: 'type',
+                                                          label: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(1.0),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                staticTextTranslate(
+                                                                    'Type'),
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .roboto(
+                                                                  fontSize:
+                                                                      getMediumFontSize +
+                                                                          1,
+                                                                ),
+                                                              ))),
+                                                      GridColumn(
+                                                          columnName:
+                                                              'customer',
+                                                          label: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(1.0),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                staticTextTranslate(
+                                                                    'Customer Name'),
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .roboto(
+                                                                  fontSize:
+                                                                      getMediumFontSize +
+                                                                          1,
+                                                                ),
+                                                              ))),
+                                                      GridColumn(
+                                                          columnName:
+                                                              'orgTotal',
+                                                          label: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(2.0),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                staticTextTranslate(
+                                                                    'Original Total'),
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .roboto(
+                                                                  fontSize:
+                                                                      getMediumFontSize +
+                                                                          1,
+                                                                ),
+                                                              ))),
+                                                      GridColumn(
+                                                          columnName: 'disc%',
+                                                          label: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(1.0),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                staticTextTranslate(
+                                                                    'Disc %'),
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .roboto(
+                                                                  fontSize:
+                                                                      getMediumFontSize +
+                                                                          1,
+                                                                ),
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                              ))),
+                                                      GridColumn(
+                                                          columnName: 'disc\$',
+                                                          label: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(1.0),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                staticTextTranslate(
+                                                                    'Disc \$'),
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .roboto(
+                                                                  fontSize:
+                                                                      getMediumFontSize +
+                                                                          1,
+                                                                ),
+                                                              ))),
+                                                      GridColumn(
+                                                          columnName: 'tax%',
+                                                          label: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(1.0),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                staticTextTranslate(
+                                                                    'Tax %'),
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .roboto(
+                                                                  fontSize:
+                                                                      getMediumFontSize +
+                                                                          1,
+                                                                ),
+                                                              ))),
+                                                      GridColumn(
+                                                          columnName: 'Tax \$',
+                                                          label: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(1.0),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                staticTextTranslate(
+                                                                    'Tax \$'),
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .roboto(
+                                                                  fontSize:
+                                                                      getMediumFontSize +
+                                                                          1,
+                                                                ),
+                                                              ))),
+                                                      GridColumn(
+                                                          columnName: 'store',
+                                                          label: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(1.0),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                staticTextTranslate(
+                                                                    'Store'),
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .roboto(
+                                                                  fontSize:
+                                                                      getMediumFontSize +
+                                                                          1,
+                                                                ),
+                                                              ))),
+                                                      GridColumn(
+                                                          columnName:
+                                                              'paymentType',
+                                                          label: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(1.0),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                staticTextTranslate(
+                                                                    'Payment Type'),
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .roboto(
+                                                                  fontSize:
+                                                                      getMediumFontSize +
+                                                                          1,
+                                                                ),
+                                                              ))),
+                                                      GridColumn(
+                                                          columnName:
+                                                              'receiptTotal',
+                                                          label: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(1.0),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                staticTextTranslate(
+                                                                    'Receipt Total'),
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .roboto(
+                                                                  fontSize:
+                                                                      getMediumFontSize +
+                                                                          1,
+                                                                ),
+                                                              ))),
+                                                      GridColumn(
+                                                          columnName:
+                                                              'created date',
+                                                          label: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(1.0),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                staticTextTranslate(
+                                                                    'Created Date'),
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .roboto(
+                                                                  fontSize:
+                                                                      getMediumFontSize +
+                                                                          1,
+                                                                ),
+                                                              ))),
+                                                      GridColumn(
+                                                          columnName:
+                                                              'created by',
+                                                          label: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(1.0),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                staticTextTranslate(
+                                                                    'Created by'),
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .roboto(
+                                                                  fontSize:
+                                                                      getMediumFontSize +
+                                                                          1,
+                                                                ),
+                                                              ))),
                                                     ],
                                                   ),
                                                 ),
-                                              ),
+                                              ],
                                             ),
-                                        ],
-                                      )),
-                                ),
-                              ),
-                            ],
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                )),
                           ),
                         )
                       ],

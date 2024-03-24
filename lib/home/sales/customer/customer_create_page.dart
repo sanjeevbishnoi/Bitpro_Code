@@ -47,7 +47,7 @@ class _CustomerCreateEditPageState extends State<CustomerCreateEditPage> {
   String? openingBalance = '0';
   String? vatNumber;
   String? companyName;
-  var formKey = GlobalKey<FormState>();
+
   bool loading = false;
 
   @override
@@ -108,88 +108,9 @@ class _CustomerCreateEditPageState extends State<CustomerCreateEditPage> {
                             },
                           ),
                           SideMenuButton(
-                            label: 'Save',
-                            iconPath: 'assets/icons/save.png',
-                            buttonFunction: () async {
-                              if (formKey.currentState!.validate()) {
-                                setState(() {
-                                  loading = true;
-                                });
-
-                                await FbCustomerDbService(context: context)
-                                    .addCustomerData([
-                                  CustomerData(
-                                      docId: widget.edit &&
-                                              widget.selectedRowData != null
-                                          ? widget.selectedRowData!.docId
-                                          : getRandomString(20),
-                                      createdDate: widget.edit &&
-                                              widget.selectedRowData != null
-                                          ? widget.selectedRowData!.createdDate
-                                          : DateTime.now(),
-                                      address1: address1 ?? '',
-                                      address2: address2 ?? '',
-                                      companyName: companyName ?? '',
-                                      createdBy: widget.userData.username,
-                                      customerId: customerId ?? '',
-                                      customerName: customerName ?? '',
-                                      email: email ?? '',
-                                      phone1: phone1 ?? '',
-                                      phone2: phone2 ?? '',
-                                      vatNo: vatNumber ?? '',
-                                      openingBalance: openingBalance ?? '0')
-                                ]);
-
-                                // await CustomerDbService()
-                                //     .addCustomerData(
-                                //   CustomerData(
-                                //       docId: widget.edit && widget.selectedRowData != null
-                                //           ? widget
-                                //               .selectedRowData!
-                                //               .docId
-                                //           : getRandomString(
-                                //               20),
-                                //       createdDate: widget.edit && widget.selectedRowData != null
-                                //           ? widget
-                                //               .selectedRowData!
-                                //               .createdDate
-                                //           : DateTime
-                                //               .now(),
-                                //       address1:
-                                //           address1 ??
-                                //               '',
-                                //       address2:
-                                //           address2 ??
-                                //               '',
-                                //       companyName:
-                                //           companyName ??
-                                //               '',
-                                //       createdBy: widget
-                                //           .userData
-                                //           .username,
-                                //       customerId:
-                                //           customerId ??
-                                //               '',
-                                //       customerName:
-                                //           customerName ??
-                                //               '',
-                                //       email:
-                                //           email ?? '',
-                                //       phone1: phone1 ??
-                                //           '',
-                                //       phone2: phone2 ??
-                                //           '',
-                                //       vatNo:
-                                //           vatNumber ??
-                                //               '',
-                                //       openingBalance:
-                                //           openingBalance ??
-                                //               '0'),
-                                // );
-                                Navigator.pop(context, true);
-                              }
-                            },
-                          )
+                              label: 'Save',
+                              iconPath: 'assets/icons/save.png',
+                              buttonFunction: () => onTapSaveButton())
                         ],
                       ),
                     ),
@@ -384,98 +305,7 @@ class _CustomerCreateEditPageState extends State<CustomerCreateEditPage> {
                                         OnPageButton(
                                           icon: Iconsax.archive,
                                           label: 'Save',
-                                          onPressed: () async {
-                                            if (formKey.currentState!
-                                                .validate()) {
-                                              setState(() {
-                                                loading = true;
-                                              });
-
-                                              await FbCustomerDbService(
-                                                      context: context)
-                                                  .addCustomerData([
-                                                CustomerData(
-                                                    docId: widget.edit &&
-                                                            widget.selectedRowData !=
-                                                                null
-                                                        ? widget
-                                                            .selectedRowData!
-                                                            .docId
-                                                        : getRandomString(20),
-                                                    createdDate: widget.edit &&
-                                                            widget.selectedRowData !=
-                                                                null
-                                                        ? widget
-                                                            .selectedRowData!
-                                                            .createdDate
-                                                        : DateTime.now(),
-                                                    address1: address1 ?? '',
-                                                    address2: address2 ?? '',
-                                                    companyName:
-                                                        companyName ?? '',
-                                                    createdBy: widget
-                                                        .userData.username,
-                                                    customerId:
-                                                        customerId ?? '',
-                                                    customerName:
-                                                        customerName ?? '',
-                                                    email: email ?? '',
-                                                    phone1: phone1 ?? '',
-                                                    phone2: phone2 ?? '',
-                                                    vatNo: vatNumber ?? '',
-                                                    openingBalance:
-                                                        openingBalance ?? '0')
-                                              ]);
-
-                                              // await CustomerDbService()
-                                              //     .addCustomerData(
-                                              //   CustomerData(
-                                              //       docId: widget.edit && widget.selectedRowData != null
-                                              //           ? widget
-                                              //               .selectedRowData!
-                                              //               .docId
-                                              //           : getRandomString(
-                                              //               20),
-                                              //       createdDate: widget.edit && widget.selectedRowData != null
-                                              //           ? widget
-                                              //               .selectedRowData!
-                                              //               .createdDate
-                                              //           : DateTime
-                                              //               .now(),
-                                              //       address1:
-                                              //           address1 ??
-                                              //               '',
-                                              //       address2:
-                                              //           address2 ??
-                                              //               '',
-                                              //       companyName:
-                                              //           companyName ??
-                                              //               '',
-                                              //       createdBy: widget
-                                              //           .userData
-                                              //           .username,
-                                              //       customerId:
-                                              //           customerId ??
-                                              //               '',
-                                              //       customerName:
-                                              //           customerName ??
-                                              //               '',
-                                              //       email:
-                                              //           email ?? '',
-                                              //       phone1: phone1 ??
-                                              //           '',
-                                              //       phone2: phone2 ??
-                                              //           '',
-                                              //       vatNo:
-                                              //           vatNumber ??
-                                              //               '',
-                                              //       openingBalance:
-                                              //           openingBalance ??
-                                              //               '0'),
-                                              // );
-                                              Navigator.pop(context, true);
-                                            }
-                                          },
+                                          onPressed: () => onTapSaveButton(),
                                         ),
                                       ],
                                     ),
@@ -492,5 +322,36 @@ class _CustomerCreateEditPageState extends State<CustomerCreateEditPage> {
         ),
       ),
     );
+  }
+
+  onTapSaveButton() async {
+    if (customerName != null && customerName!.isNotEmpty) {
+      setState(() {
+        loading = true;
+      });
+
+      await FbCustomerDbService(context: context).addCustomerData([
+        CustomerData(
+            docId: widget.edit && widget.selectedRowData != null
+                ? widget.selectedRowData!.docId
+                : getRandomString(20),
+            createdDate: widget.edit && widget.selectedRowData != null
+                ? widget.selectedRowData!.createdDate
+                : DateTime.now(),
+            address1: address1 ?? '',
+            address2: address2 ?? '',
+            companyName: companyName ?? '',
+            createdBy: widget.userData.username,
+            customerId: customerId ?? '',
+            customerName: customerName ?? '',
+            email: email ?? '',
+            phone1: phone1 ?? '',
+            phone2: phone2 ?? '',
+            vatNo: vatNumber ?? '',
+            openingBalance: openingBalance ?? '0')
+      ]);
+
+      Navigator.pop(context, true);
+    }
   }
 }

@@ -109,8 +109,7 @@ class _SettingStoreTabState extends State<SettingStoreTab> {
                         height: 5,
                       ),
                       Text(
-                        'Status : ${_firebaseBackendInfo == null ? 'Not Connected' : 'Connected'
-                        }',
+                        'Status : ${_firebaseBackendInfo == null ? 'Not Connected' : 'Connected'}',
                       ),
                       const SizedBox(
                         height: 10,
