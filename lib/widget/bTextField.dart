@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 class BTextField extends StatelessWidget {
   final String label;
+  
+  final double bradius;
   final String? initialValue;
   final Function(String input) onChanged;
   final String? Function(String?)? validator;
@@ -37,6 +39,7 @@ class BTextField extends StatelessWidget {
     this.obscureText = false,
     this.controller,
     this.noItemsBuilder,
+    this.bradius = 4,
   });
 
   @override
@@ -67,17 +70,37 @@ class BTextField extends StatelessWidget {
             initialValue: initialValue,
             maxLines: textFieldHeight,
             style: GoogleFonts.roboto(
-              height: 1.5,
+              height: 1.41,
               fontSize: getMediumFontSize + 2,
             ),
             validator: validator,
-            decoration: const InputDecoration(
+            decoration:  InputDecoration(
                 fillColor: Colors.white,
                 filled: true,
                 isDense: true,
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                border: OutlineInputBorder()),
+                    EdgeInsets.symmetric(vertical: 10, horizontal: 5, ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 0.3),
+                  
+                    borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(bradius),
+                        topRight: Radius.circular(bradius),
+                        bottomLeft: Radius.circular(4),
+                        topLeft: Radius.circular(4)
+                        ),
+                        ),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(width: 0.3),
+                  
+                    borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(bradius),
+                        topRight: Radius.circular(bradius),
+                        bottomLeft: Radius.circular(4),
+                        topLeft: Radius.circular(4)
+                        ),
+                        ),
+                        ),
             onChanged: onChanged,
           ),
         )

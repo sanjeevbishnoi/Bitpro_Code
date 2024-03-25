@@ -482,7 +482,7 @@ class _InventoryPageState extends State<InventoryPage> {
                             ),
                             SideMenuButton(
                               label: 'Update Quantity',
-                              iconPath: 'assets/icons/update.png',
+                              iconPath: 'assets/icons/updateqty.png',
                               buttonFunction: () async {
                                 showImportQuantityDialog();
                               },
@@ -966,26 +966,19 @@ class _InventoryPageState extends State<InventoryPage> {
               border: Border.all(width: 0.5, color: Colors.grey),
               color: const Color.fromARGB(255, 255, 255, 255),
               borderRadius: BorderRadius.circular(4)),
-          padding: const EdgeInsets.only(right: 10, bottom: 3),
+          padding: const EdgeInsets.only(right: 10, bottom: 5, top: 5, left: 5),
           child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                  padding: const EdgeInsets.only(top: 2),
-                  onPressed: () {},
-                  splashRadius: 1,
-                  icon: Icon(Icons.filter_alt_outlined,
-                      size: 18, color: Colors.grey[600]),
-                ),
+                
                 Flexible(
                     child: Container(
-                        width: 200,
                         height: 30,
                         decoration: BoxDecoration(
                             color: const Color.fromARGB(255, 255, 255, 255),
                             borderRadius: BorderRadius.circular(8)),
-                        padding: const EdgeInsets.only(right: 10, left: 10),
+                        padding: const EdgeInsets.only(right: 5, left: 5),
                         child: DropdownButton<String>(
                           isExpanded: true,
                           value: selectedStoreDocId,
@@ -993,7 +986,7 @@ class _InventoryPageState extends State<InventoryPage> {
                           hint: Text(
                             staticTextTranslate('Stores'),
                             style: TextStyle(
-                              fontSize: getMediumFontSize + 2,
+                              fontSize: getMediumFontSize + 1,
                             ),
                           ),
                           items: <String>['All'].map((String value) {
@@ -1013,7 +1006,7 @@ class _InventoryPageState extends State<InventoryPage> {
                                   child: Text(
                                     staticTextTranslate(value.storeName),
                                     style: TextStyle(
-                                      fontSize: getMediumFontSize + 2,
+                                      fontSize: getMediumFontSize + 1,
                                     ),
                                   ),
                                 );
