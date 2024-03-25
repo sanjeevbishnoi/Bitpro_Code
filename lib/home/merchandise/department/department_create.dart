@@ -6,6 +6,7 @@ import 'package:bitpro_hive/widget/onpage_button.dart';
 import 'package:bitpro_hive/widget/onpage_panel.dart';
 import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:bitpro_hive/shared/global_variables/color.dart';
 import 'package:bitpro_hive/model/department_data.dart';
@@ -41,12 +42,15 @@ class _DepartmentCreatePageState extends State<DepartmentCreatePage> {
 
   var formKey = GlobalKey<FormState>();
   bool loading = false;
-
+  Color cColor = Colors.red;
+  IconData cIcon = Icons.warning;
   @override
   void initState() {
     if (widget.edit && widget.selectedRowData != null) {
       departmentId = widget.selectedRowData!.departmentId;
       departmentName = widget.selectedRowData!.departmentName;
+      cColor = Colors.green;
+      cIcon = Icons.done;
     } else {
       departmentId = widget.newDepartmentId;
     }
@@ -82,6 +86,10 @@ class _DepartmentCreatePageState extends State<DepartmentCreatePage> {
                                   showDiscardChangesDialog(context);
                                 },
                               ),
+                              SideMenuButton(
+                                  label: 'Save',
+                                  iconPath: 'assets/icons/save.png',
+                                  buttonFunction: onTapSaveButton)
                             ],
                           ),
                         ),
@@ -102,7 +110,7 @@ class _DepartmentCreatePageState extends State<DepartmentCreatePage> {
                                           children: [
                                             BTextField(
                                               label: 'Department Id',
-                                              enabled: false,
+                                              textFieldReadOnly: true,
                                               initialValue: departmentId,
                                               validator: ((value) {
                                                 if (value!.isEmpty) {
@@ -132,19 +140,49 @@ class _DepartmentCreatePageState extends State<DepartmentCreatePage> {
                                             SizedBox(
                                               height: 5,
                                             ),
-                                            BTextField(
-                                              label: 'Department Name',
-                                              initialValue: departmentName,
-                                              validator: ((value) {
-                                                if (value!.isEmpty) {
-                                                  return staticTextTranslate(
-                                                      'Enter department name');
-                                                }
-                                                return null;
-                                              }),
-                                              onChanged: (val) => setState(() {
-                                                departmentName = val;
-                                              }),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  child: BTextField(
+                                                    fieldWidth: 205,
+                                                    label: 'Department Name',
+                                                    initialValue:
+                                                        departmentName,
+                                                    onChanged: (val) =>
+                                                        setState(() {
+                                                      if (val.isEmpty) {
+                                                        cColor = Colors.red;
+                                                        cIcon = Icons.warning;
+                                                      } else {
+                                                        cColor = Colors.green;
+                                                        cIcon = Icons.done;
+                                                      }
+                                                      departmentName = val;
+                                                    }),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  width: 35,
+                                                  height: 35,
+                                                  decoration: BoxDecoration(
+                                                      color: cColor,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .only(
+                                                        topRight:
+                                                            Radius.circular(4),
+                                                        bottomRight:
+                                                            Radius.circular(4),
+                                                      )),
+                                                  child: Icon(
+                                                    cIcon,
+                                                    color: Colors.white,
+                                                  ),
+                                                )
+                                              ],
                                             ),
                                           ],
                                         ),
@@ -162,57 +200,7 @@ class _DepartmentCreatePageState extends State<DepartmentCreatePage> {
                                             ),
                                             OnPageButton(
                                                 label: 'Save',
-                                                onPressed: () async {
-                                                  if (formKey.currentState!
-                                                      .validate()) {
-                                                    setState(() {
-                                                      loading = true;
-                                                    });
-
-                                                    await FbDepartmentDbService(
-                                                            context: context)
-                                                        .addUpdateDepartmentData([
-                                                      DepartmentData(
-                                                        docId: widget.edit &&
-                                                                widget.selectedRowData !=
-                                                                    null
-                                                            ? widget
-                                                                .selectedRowData!
-                                                                .docId
-                                                            : getRandomString(
-                                                                20),
-                                                        departmentName:
-                                                            departmentName!,
-                                                        departmentId:
-                                                            departmentId!,
-                                                        createdDate: widget
-                                                                    .edit &&
-                                                                widget.selectedRowData !=
-                                                                    null
-                                                            ? widget
-                                                                .selectedRowData!
-                                                                .createdDate
-                                                            : DateTime.now(),
-                                                        createdBy: widget
-                                                                    .edit &&
-                                                                widget.selectedRowData !=
-                                                                    null
-                                                            ? widget
-                                                                .selectedRowData!
-                                                                .createdBy
-                                                            : widget.userData
-                                                                .username,
-                                                      )
-                                                    ]);
-
-                                                    Navigator.pop(
-                                                        context, true);
-
-                                                    setState(() {
-                                                      loading = false;
-                                                    });
-                                                  }
-                                                },
+                                                onPressed: onTapSaveButton,
                                                 icon: Iconsax.archive),
                                           ],
                                         ),
@@ -231,5 +219,35 @@ class _DepartmentCreatePageState extends State<DepartmentCreatePage> {
         ),
       ),
     );
+  }
+
+  onTapSaveButton() async {
+    if (departmentName != null && departmentName!.isNotEmpty) {
+      setState(() {
+        loading = true;
+      });
+
+      await FbDepartmentDbService(context: context).addUpdateDepartmentData([
+        DepartmentData(
+          docId: widget.edit && widget.selectedRowData != null
+              ? widget.selectedRowData!.docId
+              : getRandomString(20),
+          departmentName: departmentName!,
+          departmentId: departmentId!,
+          createdDate: widget.edit && widget.selectedRowData != null
+              ? widget.selectedRowData!.createdDate
+              : DateTime.now(),
+          createdBy: widget.edit && widget.selectedRowData != null
+              ? widget.selectedRowData!.createdBy
+              : widget.userData.username,
+        )
+      ]);
+
+      Navigator.pop(context, true);
+
+      setState(() {
+        loading = false;
+      });
+    }
   }
 }

@@ -11,6 +11,7 @@ import 'package:bitpro_hive/services/hive/hive_settings/hive_store_db_service.da
 import 'package:bitpro_hive/widget/string_related/get_id_number.dart';
 import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:excel/excel.dart' hide Border;
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -1620,7 +1621,11 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                                           padding:
                                                               const EdgeInsets
                                                                   .only(
-                                                                 bottom: 10,top: 10, left: 16, right: 20,),
+                                                            bottom: 10,
+                                                            top: 10,
+                                                            left: 16,
+                                                            right: 20,
+                                                          ),
                                                           child: Form(
                                                             key: formKey,
                                                             child: Column(

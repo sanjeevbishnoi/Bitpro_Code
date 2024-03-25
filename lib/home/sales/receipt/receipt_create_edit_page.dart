@@ -991,7 +991,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                   height: MediaQuery.of(context)
                                                           .size
                                                           .height -
-                                                      87,
+                                                      50,
                                                   child: Padding(
                                                     padding:
                                                         const EdgeInsets.all(
@@ -1129,199 +1129,199 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                   Expanded(
                                                                     child:
                                                                         Container(
+                                                                      margin: const EdgeInsets
+                                                                          .all(
+                                                                          6),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                              border: Border.all(width: 0.3)),
                                                                       child:
-                                                                          Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            5.0),
+                                                                          SfDataGridTheme(
+                                                                        data: SfDataGridThemeData(
+                                                                            headerColor:
+                                                                                const Color(0xffF1F1F1),
+                                                                            sortIcon: const Icon(Icons.arrow_drop_down_rounded),
+                                                                            headerHoverColor: const Color(0xffdddfe8),
+                                                                            selectionColor: loginBgColor),
                                                                         child:
-                                                                            Container(
-                                                                          decoration:
-                                                                              BoxDecoration(border: Border.all(width: 0.2)),
-                                                                          child:
-                                                                              SfDataGridTheme(
-                                                                            data: SfDataGridThemeData(
-                                                                                headerColor: const Color(0xffF1F1F1),
-                                                                                headerHoverColor: const Color(0xffdddfe8),
-                                                                                selectionColor: loginBgColor),
-                                                                            child:
-                                                                                SfDataGrid(
-                                                                              isScrollbarAlwaysShown: true,
-                                                                              headerRowHeight: 27,
-                                                                              onQueryRowHeight: (details) {
-                                                                                // Set the row height as 70.0 to the column header row.
-                                                                                return details.rowIndex == 0 ? 27.0 : 27.0;
-                                                                              },
-                                                                              rowHeight: 27,
-                                                                              gridLinesVisibility: GridLinesVisibility.horizontal,
-                                                                              allowTriStateSorting: true,
-                                                                              selectionMode: SelectionMode.single,
-                                                                              navigationMode: GridNavigationMode.cell,
-                                                                              headerGridLinesVisibility: GridLinesVisibility.both,
-                                                                              allowEditing: !viewMode,
-                                                                              key: _key,
-                                                                              controller: dataGridController,
-                                                                              source: receiptDataSource!,
-                                                                              editingGestureType: EditingGestureType.tap,
-                                                                              columnWidthMode: ColumnWidthMode.lastColumnFill,
-                                                                              onSelectionChanging: (addedRows, removedRows) {
-                                                                                setState(() {});
-                                                                                return true;
-                                                                              },
-                                                                              onSelectionChanged: (addedRows, removedRows) {
-                                                                                setState(() {
-                                                                                  for (var v in addedRows.first.getCells()) {
-                                                                                    if (v.columnName == 'barcode') {
-                                                                                      for (var inv in allInventoryDataLst) {
-                                                                                        if (inv.barcode == v.value) {
-                                                                                          if (File(inv.productImg).existsSync()) {
-                                                                                            selectedProductImg = inv.productImg;
-                                                                                          } else {
-                                                                                            selectedProductImg = '';
-                                                                                          }
-                                                                                        }
+                                                                            SfDataGrid(
+                                                                          isScrollbarAlwaysShown:
+                                                                              true,
+                                                                          onQueryRowHeight:
+                                                                              (details) {
+                                                                            // Set the row height as 70.0 to the column header row.
+                                                                            return details.rowIndex == 0
+                                                                                ? 25.0
+                                                                                : 25.0;
+                                                                          },
+                                                                          rowHeight:
+                                                                              25,
+                                                                          headerRowHeight:
+                                                                              25,
+                                                                          headerGridLinesVisibility:
+                                                                              GridLinesVisibility.both,
+                                                                          allowSorting:
+                                                                              true,
+                                                                          allowTriStateSorting:
+                                                                              true,
+                                                                          controller:
+                                                                              dataGridController,
+                                                                          source:
+                                                                              receiptDataSource!,
+                                                                          editingGestureType:
+                                                                              EditingGestureType.tap,
+                                                                          selectionMode:
+                                                                              SelectionMode.single,
+                                                                          columnWidthMode:
+                                                                              ColumnWidthMode.lastColumnFill,
+                                                                          onSelectionChanging:
+                                                                              (addedRows, removedRows) {
+                                                                            setState(() {});
+                                                                            return true;
+                                                                          },
+                                                                          onSelectionChanged:
+                                                                              (addedRows, removedRows) {
+                                                                            setState(() {
+                                                                              for (var v in addedRows.first.getCells()) {
+                                                                                if (v.columnName == 'barcode') {
+                                                                                  for (var inv in allInventoryDataLst) {
+                                                                                    if (inv.barcode == v.value) {
+                                                                                      if (File(inv.productImg).existsSync()) {
+                                                                                        selectedProductImg = inv.productImg;
+                                                                                      } else {
+                                                                                        selectedProductImg = '';
                                                                                       }
                                                                                     }
                                                                                   }
-                                                                                });
-                                                                              },
-                                                                              columns: <GridColumn>[
-                                                                                GridColumn(
-                                                                                    columnName: 'serialNumberForStyleColor',
-                                                                                    visible: false,
-                                                                                    label: Container(
-                                                                                        padding: const EdgeInsets.all(0.0),
-                                                                                        alignment: Alignment.center,
-                                                                                        color: Colors.white,
-                                                                                        child: Text(
-                                                                                          'serialNumberForStyleColor',
-                                                                                          style: GoogleFonts.roboto(
-                                                                                            fontSize: getMediumFontSize + 1,
-                                                                                          ),
-                                                                                        ))),
-                                                                                GridColumn(
-                                                                                    allowEditing: false,
-                                                                                    columnName: 'barcode',
-                                                                                    label: Container(
-                                                                                        padding: const EdgeInsets.all(1.0),
-                                                                                        alignment: Alignment.center,
-                                                                                        color: const Color(0xffdddfe8),
-                                                                                        child: Text(
-                                                                                          staticTextTranslate('Barcode'),
-                                                                                          style: GoogleFonts.roboto(
-                                                                                            fontSize: getMediumFontSize + 1,
-                                                                                          ),
-                                                                                        ))),
-                                                                                GridColumn(
-                                                                                    allowEditing: false,
-                                                                                    columnName: 'itemCode',
-                                                                                    label: Container(
-                                                                                        padding: const EdgeInsets.all(1.0),
-                                                                                        alignment: Alignment.center,
-                                                                                        color: const Color(0xffdddfe8),
-                                                                                        child: Text(
-                                                                                          staticTextTranslate('Item Code'),
-                                                                                          style: GoogleFonts.roboto(
-                                                                                            fontSize: getMediumFontSize + 1,
-                                                                                          ),
-                                                                                        ))),
-                                                                                GridColumn(
-                                                                                    maximumWidth: 300,
-                                                                                    allowEditing: false,
-                                                                                    columnName: 'productName',
-                                                                                    label: Container(
-                                                                                        padding: const EdgeInsets.all(1.0),
-                                                                                        alignment: Alignment.center,
-                                                                                        color: const Color(0xffdddfe8),
-                                                                                        child: Text(
-                                                                                          staticTextTranslate('Product Name'),
-                                                                                          style: GoogleFonts.roboto(
-                                                                                            fontSize: getMediumFontSize + 1,
-                                                                                          ),
-                                                                                          overflow: TextOverflow.ellipsis,
-                                                                                        ))),
-                                                                                GridColumn(
-                                                                                    allowEditing: true,
-                                                                                    columnName: 'qty',
-                                                                                    label: Container(
-                                                                                        padding: const EdgeInsets.all(1.0),
-                                                                                        color: const Color(0xffdddfe8),
-                                                                                        alignment: Alignment.center,
-                                                                                        child: Text(
-                                                                                          staticTextTranslate('Qty'),
-                                                                                          style: GoogleFonts.roboto(
-                                                                                            fontSize: getMediumFontSize + 1,
-                                                                                          ),
-                                                                                        ))),
-                                                                                GridColumn(
-                                                                                    allowEditing: false,
-                                                                                    columnName: 'orgPrice',
-                                                                                    label: Container(
-                                                                                        padding: const EdgeInsets.all(1.0),
-                                                                                        color: const Color(0xffdddfe8),
-                                                                                        alignment: Alignment.center,
-                                                                                        child: Text(
-                                                                                          staticTextTranslate('Org. Price'),
-                                                                                          style: GoogleFonts.roboto(
-                                                                                            fontSize: getMediumFontSize + 1,
-                                                                                          ),
-                                                                                        ))),
-                                                                                GridColumn(
-                                                                                    width: 120,
-                                                                                    allowEditing: true,
-                                                                                    columnName: 'discount_percentage',
-                                                                                    label: Container(
-                                                                                        padding: const EdgeInsets.all(1.0),
-                                                                                        color: const Color(0xffdddfe8),
-                                                                                        alignment: Alignment.center,
-                                                                                        child: Text(
-                                                                                          staticTextTranslate('Discount %'),
-                                                                                          style: GoogleFonts.roboto(
-                                                                                            fontSize: getMediumFontSize + 1,
-                                                                                          ),
-                                                                                        ))),
-                                                                                GridColumn(
-                                                                                    allowEditing: true,
-                                                                                    columnName: 'discount',
-                                                                                    label: Container(
-                                                                                        padding: const EdgeInsets.all(1.0),
-                                                                                        color: const Color(0xffdddfe8),
-                                                                                        alignment: Alignment.center,
-                                                                                        child: Text(
-                                                                                          staticTextTranslate('Discount \$'),
-                                                                                          style: GoogleFonts.roboto(
-                                                                                            fontSize: getMediumFontSize + 1,
-                                                                                          ),
-                                                                                        ))),
-                                                                                GridColumn(
-                                                                                    allowEditing: true,
-                                                                                    columnName: 'priceWT',
-                                                                                    label: Container(
-                                                                                        padding: const EdgeInsets.all(1.0),
-                                                                                        color: const Color(0xffdddfe8),
-                                                                                        alignment: Alignment.center,
-                                                                                        child: Text(
-                                                                                          staticTextTranslate('Price W/T'),
-                                                                                          style: GoogleFonts.roboto(
-                                                                                            fontSize: getMediumFontSize + 1,
-                                                                                          ),
-                                                                                        ))),
-                                                                                GridColumn(
-                                                                                    allowEditing: false,
-                                                                                    columnName: 'total',
-                                                                                    label: Container(
-                                                                                        padding: const EdgeInsets.all(1.0),
-                                                                                        color: const Color(0xffdddfe8),
-                                                                                        alignment: Alignment.center,
-                                                                                        child: Text(
-                                                                                          staticTextTranslate('Total'),
-                                                                                          style: GoogleFonts.roboto(
-                                                                                            fontSize: getMediumFontSize + 1,
-                                                                                          ),
-                                                                                        ))),
-                                                                              ],
-                                                                            ),
-                                                                          ),
+                                                                                }
+                                                                              }
+                                                                            });
+                                                                          },
+                                                                          columns: <GridColumn>[
+                                                                            GridColumn(
+                                                                                columnName: 'serialNumberForStyleColor',
+                                                                                visible: false,
+                                                                                label: Container(
+                                                                                    padding: const EdgeInsets.all(0.0),
+                                                                                    alignment: Alignment.center,
+                                                                                    child: Text(
+                                                                                      'serialNumberForStyleColor',
+                                                                                      style: GoogleFonts.roboto(
+                                                                                        fontSize: getMediumFontSize + 1,
+                                                                                      ),
+                                                                                    ))),
+                                                                            GridColumn(
+                                                                                allowEditing: false,
+                                                                                columnName: 'barcode',
+                                                                                label: Container(
+                                                                                    padding: const EdgeInsets.all(1.0),
+                                                                                    alignment: Alignment.center,
+                                                                                    child: Text(
+                                                                                      staticTextTranslate('Barcode'),
+                                                                                      style: GoogleFonts.roboto(
+                                                                                        fontSize: getMediumFontSize + 1,
+                                                                                      ),
+                                                                                    ))),
+                                                                            GridColumn(
+                                                                                allowEditing: false,
+                                                                                columnName: 'itemCode',
+                                                                                label: Container(
+                                                                                    padding: const EdgeInsets.all(1.0),
+                                                                                    alignment: Alignment.center,
+                                                                                    child: Text(
+                                                                                      staticTextTranslate('Item Code'),
+                                                                                      style: GoogleFonts.roboto(
+                                                                                        fontSize: getMediumFontSize + 1,
+                                                                                      ),
+                                                                                    ))),
+                                                                            GridColumn(
+                                                                                maximumWidth: 300,
+                                                                                allowEditing: false,
+                                                                                columnName: 'productName',
+                                                                                label: Container(
+                                                                                    padding: const EdgeInsets.all(1.0),
+                                                                                    alignment: Alignment.center,
+                                                                                    child: Text(
+                                                                                      staticTextTranslate('Product Name'),
+                                                                                      style: GoogleFonts.roboto(
+                                                                                        fontSize: getMediumFontSize + 1,
+                                                                                      ),
+                                                                                      overflow: TextOverflow.ellipsis,
+                                                                                    ))),
+                                                                            GridColumn(
+                                                                                allowEditing: true,
+                                                                                columnName: 'qty',
+                                                                                label: Container(
+                                                                                    padding: const EdgeInsets.all(1.0),
+                                                                                    alignment: Alignment.center,
+                                                                                    child: Text(
+                                                                                      staticTextTranslate('Qty'),
+                                                                                      style: GoogleFonts.roboto(
+                                                                                        fontSize: getMediumFontSize + 1,
+                                                                                      ),
+                                                                                    ))),
+                                                                            GridColumn(
+                                                                                allowEditing: false,
+                                                                                columnName: 'orgPrice',
+                                                                                label: Container(
+                                                                                    padding: const EdgeInsets.all(1.0),
+                                                                                    alignment: Alignment.center,
+                                                                                    child: Text(
+                                                                                      staticTextTranslate('Org. Price'),
+                                                                                      style: GoogleFonts.roboto(
+                                                                                        fontSize: getMediumFontSize + 1,
+                                                                                      ),
+                                                                                    ))),
+                                                                            GridColumn(
+                                                                                width: 120,
+                                                                                allowEditing: true,
+                                                                                columnName: 'discount_percentage',
+                                                                                label: Container(
+                                                                                    padding: const EdgeInsets.all(1.0),
+                                                                                    alignment: Alignment.center,
+                                                                                    child: Text(
+                                                                                      staticTextTranslate('Discount %'),
+                                                                                      style: GoogleFonts.roboto(
+                                                                                        fontSize: getMediumFontSize + 1,
+                                                                                      ),
+                                                                                    ))),
+                                                                            GridColumn(
+                                                                                allowEditing: true,
+                                                                                columnName: 'discount',
+                                                                                label: Container(
+                                                                                    padding: const EdgeInsets.all(1.0),
+                                                                                    alignment: Alignment.center,
+                                                                                    child: Text(
+                                                                                      staticTextTranslate('Discount \$'),
+                                                                                      style: GoogleFonts.roboto(
+                                                                                        fontSize: getMediumFontSize + 1,
+                                                                                      ),
+                                                                                    ))),
+                                                                            GridColumn(
+                                                                                allowEditing: true,
+                                                                                columnName: 'priceWT',
+                                                                                label: Container(
+                                                                                    padding: const EdgeInsets.all(1.0),
+                                                                                    alignment: Alignment.center,
+                                                                                    child: Text(
+                                                                                      staticTextTranslate('Price W/T'),
+                                                                                      style: GoogleFonts.roboto(
+                                                                                        fontSize: getMediumFontSize + 1,
+                                                                                      ),
+                                                                                    ))),
+                                                                            GridColumn(
+                                                                                allowEditing: false,
+                                                                                columnName: 'total',
+                                                                                label: Container(
+                                                                                    padding: const EdgeInsets.all(1.0),
+                                                                                    alignment: Alignment.center,
+                                                                                    child: Text(
+                                                                                      staticTextTranslate('Total'),
+                                                                                      style: GoogleFonts.roboto(
+                                                                                        fontSize: getMediumFontSize + 1,
+                                                                                      ),
+                                                                                    ))),
+                                                                          ],
                                                                         ),
                                                                       ),
                                                                     ),
@@ -1335,7 +1335,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                   height: MediaQuery.of(context)
                                                           .size
                                                           .height -
-                                                      91,
+                                                      56,
                                                   child: Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -1516,7 +1516,8 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                     ),
                                                                     Text(
                                                                       staticTextTranslate(
-                                                                          'Name :'),
+                                                                              'Name') +
+                                                                          ' : ${selectedCustomerData != null ? selectedCustomerData!.customerName : ''}',
                                                                       style: GoogleFonts.roboto(
                                                                           fontSize: getMediumFontSize +
                                                                               1,
@@ -1528,7 +1529,8 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                     ),
                                                                     Text(
                                                                       staticTextTranslate(
-                                                                          'Phone : '),
+                                                                              'Phone') +
+                                                                          ' : ${selectedCustomerData != null ? selectedCustomerData!.phone1 : ''}',
                                                                       style: GoogleFonts.roboto(
                                                                           fontSize: getMediumFontSize +
                                                                               1,
@@ -1540,7 +1542,8 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                     ),
                                                                     Text(
                                                                       staticTextTranslate(
-                                                                          'Address : '),
+                                                                              'Address') +
+                                                                          ' : ${selectedCustomerData != null ? selectedCustomerData!.address1 : ''}',
                                                                       style: GoogleFonts.roboto(
                                                                           fontSize: getMediumFontSize +
                                                                               1,

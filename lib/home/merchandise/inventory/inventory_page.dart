@@ -398,7 +398,7 @@ class _InventoryPageState extends State<InventoryPage> {
                             ),
                             SideMenuButton(
                                 label: 'Print Tag',
-                                iconPath: 'assets/icons/date.png',
+                                iconPath: 'assets/icons/tag.png',
                                 buttonFunction: () async {
                                   if (dataGridController.selectedRow != null) {
                                     String productName = '';
@@ -456,7 +456,7 @@ class _InventoryPageState extends State<InventoryPage> {
                                 }),
                             SideMenuButton(
                               label: 'Export',
-                              iconPath: 'assets/icons/date.png',
+                              iconPath: 'assets/icons/export.png',
                               buttonFunction: () async {
                                 setState(() {
                                   loading = true;
@@ -474,7 +474,7 @@ class _InventoryPageState extends State<InventoryPage> {
                             ),
                             SideMenuButton(
                               label: 'Import Items',
-                              iconPath: 'assets/icons/date.png',
+                              iconPath: 'assets/icons/import.png',
                               buttonFunction: () async {
                                 showImportDialog();
                               },

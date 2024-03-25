@@ -1,5 +1,6 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:barcode/barcode.dart';
+import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/widget/filter_container.dart';
 import 'package:bitpro_hive/widget/filter_text_fileds/fiter_textfield.dart';
 
@@ -278,285 +279,145 @@ class _VoucherPageState extends State<VoucherPage> {
                             const SizedBox(
                               height: 0,
                             ),
-                            SizedBox(
-                              height: 40,
-                              width: 170,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(4))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/back.png',
-                                      width: 20,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(staticTextTranslate('Back'),
-                                        style: TextStyle(
-                                            fontSize: getMediumFontSize,
-                                            color: Colors.white)),
-                                  ],
-                                ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
+                            SideMenuButton(
+                              label: 'Back',
+                              iconPath: 'assets/icons/back.png',
+                              buttonFunction: () {
+                                Navigator.pop(context);
+                              },
                             ),
-                            SizedBox(
-                              height: 40,
-                              width: 170,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(4))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/plus.png',
-                                      width: 20,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(staticTextTranslate('Create'),
-                                        style: TextStyle(
-                                            fontSize: getMediumFontSize,
-                                            color: Colors.white)),
-                                  ],
-                                ),
-                                onPressed: () async {
-                                  String newVoucherId = await getIdNumber(
-                                      dbVoucherDataLst.length + 1);
-                                  bool? res = await Navigator.push(
+                            SideMenuButton(
+                              label: 'Create',
+                              iconPath: 'assets/icons/plus.png',
+                              buttonFunction: () async {
+                                String newVoucherId = await getIdNumber(
+                                    dbVoucherDataLst.length + 1);
+                                bool? res = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CreateEditVoucherPage(
+                                                newVoucherId: newVoucherId,
+                                                userData: widget.userData,
+                                                vendorDataLst: vendorDataLst)));
+
+                                if (res != null && res) {
+                                  setState(() {
+                                    loading = true;
+                                  });
+
+                                  fbFetchData();
+                                }
+                              },
+                            ),
+                            SideMenuButton(
+                              label: 'View',
+                              iconPath: 'assets/icons/view.png',
+                              buttonFunction: () async {
+                                if (dataGridController.selectedRow != null) {
+                                  var voucherNo = '';
+
+                                  for (var c in dataGridController.selectedRow!
+                                      .getCells()) {
+                                    if (c.columnName == 'voucher_no') {
+                                      voucherNo = c.value;
+                                    }
+                                  }
+
+                                  await Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               CreateEditVoucherPage(
-                                                  newVoucherId: newVoucherId,
+                                                  newVoucherId: voucherNo,
+                                                  selectedDbVoucherData:
+                                                      dbVoucherDataLst.firstWhere(
+                                                          (element) =>
+                                                              element
+                                                                  .voucherNo ==
+                                                              voucherNo),
+                                                  viewMode: true,
                                                   userData: widget.userData,
                                                   vendorDataLst:
                                                       vendorDataLst)));
-
-                                  if (res != null && res) {
-                                    setState(() {
-                                      loading = true;
-                                    });
-
-                                    fbFetchData();
-                                  }
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40,
-                              width: 170,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(4))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/view.png',
-                                      width: 20,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(staticTextTranslate('View'),
-                                        style: TextStyle(
-                                            fontSize: getMediumFontSize,
-                                            color: dataGridController
-                                                        .selectedRow !=
-                                                    null
-                                                ? Colors.white
-                                                : Colors.grey[500])),
-                                  ],
-                                ),
-                                onPressed: () async {
-                                  if (dataGridController.selectedRow != null) {
-                                    var voucherNo = '';
-
-                                    for (var c in dataGridController
-                                        .selectedRow!
-                                        .getCells()) {
-                                      if (c.columnName == 'voucher_no') {
-                                        voucherNo = c.value;
-                                      }
-                                    }
-
-                                    await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                CreateEditVoucherPage(
-                                                    newVoucherId: voucherNo,
-                                                    selectedDbVoucherData:
-                                                        dbVoucherDataLst.firstWhere(
-                                                            (element) =>
-                                                                element
-                                                                    .voucherNo ==
-                                                                voucherNo),
-                                                    viewMode: true,
-                                                    userData: widget.userData,
-                                                    vendorDataLst:
-                                                        vendorDataLst)));
-                                  }
-                                },
-                              ),
+                                }
+                              },
                             ),
                             const SizedBox(
                               height: 30,
                             ),
-                            SizedBox(
-                              height: 40,
-                              width: 170,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(4))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/refresh.png',
-                                      width: 20,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(staticTextTranslate('Refresh'),
-                                        style: TextStyle(
-                                            fontSize: getMediumFontSize,
-                                            color: Colors.white)),
-                                  ],
-                                ),
-                                onPressed: () async {
-                                  setState(() {
-                                    loading = true;
-                                  });
+                            SideMenuButton(
+                              label: 'Refresh',
+                              iconPath: 'assets/icons/refresh.png',
+                              buttonFunction: () async {
+                                setState(() {
+                                  loading = true;
+                                });
 
-                                  await fbFetchData();
-                                },
-                              ),
+                                await fbFetchData();
+                              },
                             ),
-                            SizedBox(
-                              height: 40,
-                              width: 170,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(4))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/date.png',
-                                      width: 20,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(staticTextTranslate('Date Range'),
-                                        style: TextStyle(
-                                            fontSize: getMediumFontSize,
-                                            color: Colors.white))
-                                  ],
-                                ),
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return Dialog(
-                                          child: SizedBox(
-                                            width: 400,
-                                            height: 380,
-                                            child: SfDateRangePicker(
-                                                onSelectionChanged:
-                                                    (DateRangePickerSelectionChangedArgs
-                                                        args) {
-                                                  if (args.value
-                                                      is PickerDateRange) {
-                                                    rangeStartDate =
-                                                        args.value.startDate;
-                                                    rangeEndDate =
-                                                        args.value.endDate;
-                                                    setState(() {});
-                                                  }
-                                                },
-                                                onCancel: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                onSubmit: (var p0) {
-                                                  filterAccordingSelectedDate();
-                                                  Navigator.pop(context);
-                                                },
-                                                cancelText: 'CANCEL',
-                                                confirmText: 'OK',
-                                                showTodayButton: false,
-                                                showActionButtons: true,
-                                                view: DateRangePickerView.month,
-                                                selectionMode:
-                                                    DateRangePickerSelectionMode
-                                                        .range),
-                                          ),
-                                        );
-                                      });
-                                },
-                              ),
+                            SideMenuButton(
+                              label: 'Date Range',
+                              iconPath: 'assets/icons/date.png',
+                              buttonFunction: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return Dialog(
+                                        child: SizedBox(
+                                          width: 400,
+                                          height: 380,
+                                          child: SfDateRangePicker(
+                                              onSelectionChanged:
+                                                  (DateRangePickerSelectionChangedArgs
+                                                      args) {
+                                                if (args.value
+                                                    is PickerDateRange) {
+                                                  rangeStartDate =
+                                                      args.value.startDate;
+                                                  rangeEndDate =
+                                                      args.value.endDate;
+                                                  setState(() {});
+                                                }
+                                              },
+                                              onCancel: () {
+                                                Navigator.pop(context);
+                                              },
+                                              onSubmit: (var p0) {
+                                                filterAccordingSelectedDate();
+                                                Navigator.pop(context);
+                                              },
+                                              cancelText: 'CANCEL',
+                                              confirmText: 'OK',
+                                              showTodayButton: false,
+                                              showActionButtons: true,
+                                              view: DateRangePickerView.month,
+                                              selectionMode:
+                                                  DateRangePickerSelectionMode
+                                                      .range),
+                                        ),
+                                      );
+                                    });
+                              },
                             ),
-                            SizedBox(
-                              height: 40,
-                              width: 170,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(4))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    const Icon(
-                                      size: 19,
-                                      Iconsax.export4,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(staticTextTranslate('Export'),
-                                        style: TextStyle(
-                                            fontSize: getMediumFontSize,
-                                            color: Colors.white)),
-                                  ],
-                                ),
-                                onPressed: () async {
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  final Workbook workbook = _key.currentState!
-                                      .exportToExcelWorkbook();
-                                  final List<int> bytes =
-                                      workbook.saveAsStream();
-                                  workbook.dispose();
-                                  await saveAndLaunchFile(
-                                      bytes, fileExtension: 'xlsx', context);
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                },
-                              ),
+                            SideMenuButton(
+                              label: 'Export',
+                              iconPath: 'assets/icons/export.png',
+                              buttonFunction: () async {
+                                setState(() {
+                                  loading = true;
+                                });
+                                final Workbook workbook =
+                                    _key.currentState!.exportToExcelWorkbook();
+                                final List<int> bytes = workbook.saveAsStream();
+                                workbook.dispose();
+                                await saveAndLaunchFile(
+                                    bytes, fileExtension: 'xlsx', context);
+                                setState(() {
+                                  loading = false;
+                                });
+                              },
                             ),
                           ],
                         ),
