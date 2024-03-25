@@ -545,6 +545,15 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                     height: 5,
                                   ),
                                   BTextField(
+                                    validator: (val) {
+                                      if (double.tryParse(val!) == null) {
+                                        return staticTextTranslate(
+                                            'Enter a number');
+                                      }
+                                      return null;
+                                    },
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
                                     textFieldReadOnly: false,
                                     label: 'Price W/T',
                                     controller: priceWtController,
@@ -553,8 +562,7 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                           
                                       marginController.text = calculateMargin();
                                     }),
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
+                                    
                                   ),
                                   SizedBox(
                                     height: 20,
@@ -772,7 +780,7 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
     double c = double.parse(cost!);
     double p = double.parse(priceController.text);
 
-    return (((p - c) / c) * 100).toString();
+    return (((p - c) / c) * 100).toStringAsFixed(2);
   }
 
   String calculatePriceWt() {

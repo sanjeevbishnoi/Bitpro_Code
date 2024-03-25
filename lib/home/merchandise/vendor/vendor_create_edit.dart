@@ -207,6 +207,7 @@ class _VendorCreateEditPageState extends State<VendorCreateEditPage> {
                                           height: 5,
                                         ),
                                         BTextField(
+                                          textFieldHeight: 3,
                                           label: 'Address 01',
                                           initialValue: address1,
                                           onChanged: (val) => setState(() {
@@ -252,7 +253,7 @@ class _VendorCreateEditPageState extends State<VendorCreateEditPage> {
                                               AutovalidateMode.onUserInteraction,
                                         ),
                                         const SizedBox(
-                                          height: 5,
+                                          height: 20,
                                         ),
                                         BTextField(
                                           label: 'VAT Number',

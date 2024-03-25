@@ -836,47 +836,23 @@ class _VoucherPageState extends State<VoucherPage> {
       ),
       Container(
         width: 230,
-        height: 30,
+        height: 32,
         decoration: BoxDecoration(
             border: Border.all(width: 0.5, color: Colors.grey),
             color: const Color.fromARGB(255, 255, 255, 255),
             borderRadius: BorderRadius.circular(4)),
-        padding: const EdgeInsets.only(right: 10, bottom: 3),
+        padding: const EdgeInsets.only(right: 5, bottom: 5, top: 5),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
-              padding: const EdgeInsets.only(top: 3),
-              onPressed: () {
-                voucherDataSource = VoucherDataSource(
-                    voucherData: selectedStoreDocId == 'All'
-                        ? dbVoucherDataLst
-                        : dbVoucherDataLst
-                            .where((e) =>
-                                e.selectedStoreDocId == selectedStoreDocId)
-                            .toList(),
-                    vendorDataLst: vendorDataLst,
-                    allStoreDataLst: allStoreDataLst);
-                setState(() {});
-              },
-              splashRadius: 1,
-              icon: Icon(
-                  vendorInvoiceFilterController.text.isEmpty
-                      ? CupertinoIcons.search
-                      : Icons.clear,
-                  size: 18,
-                  color: vendorInvoiceFilterController.text.isEmpty
-                      ? Colors.grey[600]
-                      : Colors.black),
-            ),
+            
             Flexible(
                 child: Container(
-                    width: 200,
                     height: 30,
                     decoration: BoxDecoration(
                         color: const Color.fromARGB(255, 255, 255, 255),
-                        borderRadius: BorderRadius.circular(8)),
+                        borderRadius: BorderRadius.circular(4)),
                     padding: const EdgeInsets.only(right: 10, left: 10),
                     child: DropdownButton<String>(
                       isExpanded: true,
@@ -885,7 +861,7 @@ class _VoucherPageState extends State<VoucherPage> {
                       hint: Text(
                         staticTextTranslate('Stores'),
                         style: TextStyle(
-                          fontSize: getMediumFontSize + 2,
+                          fontSize: getMediumFontSize + 1,
                         ),
                       ),
                       items: <String>['All'].map((String value) {
@@ -894,7 +870,7 @@ class _VoucherPageState extends State<VoucherPage> {
                               child: Text(
                                 staticTextTranslate(value),
                                 style: TextStyle(
-                                  fontSize: getMediumFontSize + 2,
+                                  fontSize: getMediumFontSize + 1,
                                 ),
                               ),
                             );
@@ -905,7 +881,7 @@ class _VoucherPageState extends State<VoucherPage> {
                               child: Text(
                                 staticTextTranslate(value.storeName),
                                 style: TextStyle(
-                                  fontSize: getMediumFontSize + 2,
+                                  fontSize: getMediumFontSize + 1,
                                 ),
                               ),
                             );
