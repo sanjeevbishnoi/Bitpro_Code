@@ -16,8 +16,10 @@ class BTextField extends StatelessWidget {
   final bool textFieldReadOnly;
   final TextEditingController? controller;
   final WidgetBuilder? noItemsBuilder;
-  final bool enabled;
+  // final bool enabled;
   final bool autoFoucs;
+
+  final bool obscureText;
   const BTextField({
     super.key,
     required this.label,
@@ -26,12 +28,13 @@ class BTextField extends StatelessWidget {
     this.validator,
     this.autovalidate = false,
     this.autoFoucs = false,
-    this.enabled = true,
+    // this.enabled = true,
     this.fieldWidth = 240,
     this.autovalidateMode = AutovalidateMode.disabled,
     this.textFieldHeight = 1,
     // this.boxHeigt = 35,
     this.textFieldReadOnly = false,
+    this.obscureText = false,
     this.controller,
     this.noItemsBuilder,
   });
@@ -56,9 +59,11 @@ class BTextField extends StatelessWidget {
           width: fieldWidth,
           child: TextFormField(
             autofocus: autoFoucs,
-            enabled: enabled,
+            obscureText: obscureText,
+            // enabled: enabled,
             controller: controller,
             readOnly: textFieldReadOnly,
+            autovalidateMode: autovalidateMode,
             initialValue: initialValue,
             maxLines: textFieldHeight,
             style: GoogleFonts.roboto(

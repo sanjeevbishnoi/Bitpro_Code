@@ -1,5 +1,6 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:barcode/barcode.dart';
+import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/widget/filter_container.dart';
 import 'package:bitpro_hive/widget/filter_text_fileds/fiter_textfield.dart';
 
@@ -8,7 +9,6 @@ import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -279,284 +279,145 @@ class _VoucherPageState extends State<VoucherPage> {
                             const SizedBox(
                               height: 0,
                             ),
-                            SizedBox(
-                              height: 40,
-                              width: 170,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(4))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/back.png',
-                                      width: 20,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(staticTextTranslate('Back'),
-                                        style: TextStyle(
-                                            fontSize: getMediumFontSize,
-                                            color: Colors.white)),
-                                  ],
-                                ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
+                            SideMenuButton(
+                              label: 'Back',
+                              iconPath: 'assets/icons/back.png',
+                              buttonFunction: () {
+                                Navigator.pop(context);
+                              },
                             ),
-                            SizedBox(
-                              height: 40,
-                              width: 170,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(4))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/plus.png',
-                                      width: 20,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(staticTextTranslate('Create'),
-                                        style: TextStyle(
-                                            fontSize: getMediumFontSize,
-                                            color: Colors.white)),
-                                  ],
-                                ),
-                                onPressed: () async {
-                                  String newVoucherId = await getIdNumber(
-                                      dbVoucherDataLst.length + 1);
-                                  bool? res = await Navigator.push(
+                            SideMenuButton(
+                              label: 'Create',
+                              iconPath: 'assets/icons/plus.png',
+                              buttonFunction: () async {
+                                String newVoucherId = await getIdNumber(
+                                    dbVoucherDataLst.length + 1);
+                                bool? res = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CreateEditVoucherPage(
+                                                newVoucherId: newVoucherId,
+                                                userData: widget.userData,
+                                                vendorDataLst: vendorDataLst)));
+
+                                if (res != null && res) {
+                                  setState(() {
+                                    loading = true;
+                                  });
+
+                                  fbFetchData();
+                                }
+                              },
+                            ),
+                            SideMenuButton(
+                              label: 'View',
+                              iconPath: 'assets/icons/view.png',
+                              buttonFunction: () async {
+                                if (dataGridController.selectedRow != null) {
+                                  var voucherNo = '';
+
+                                  for (var c in dataGridController.selectedRow!
+                                      .getCells()) {
+                                    if (c.columnName == 'voucher_no') {
+                                      voucherNo = c.value;
+                                    }
+                                  }
+
+                                  await Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               CreateEditVoucherPage(
-                                                  newVoucherId: newVoucherId,
+                                                  newVoucherId: voucherNo,
+                                                  selectedDbVoucherData:
+                                                      dbVoucherDataLst.firstWhere(
+                                                          (element) =>
+                                                              element
+                                                                  .voucherNo ==
+                                                              voucherNo),
+                                                  viewMode: true,
                                                   userData: widget.userData,
                                                   vendorDataLst:
                                                       vendorDataLst)));
-
-                                  if (res != null && res) {
-                                    setState(() {
-                                      loading = true;
-                                    });
-
-                                    fbFetchData();
-                                  }
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40,
-                              width: 170,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(4))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/view.png',
-                                      width: 20,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(staticTextTranslate('View'),
-                                        style: TextStyle(
-                                            fontSize: getMediumFontSize,
-                                            color: dataGridController
-                                                        .selectedRow !=
-                                                    null
-                                                ? Colors.white
-                                                : Colors.grey[500])),
-                                  ],
-                                ),
-                                onPressed: () async {
-                                  if (dataGridController.selectedRow != null) {
-                                    var voucherNo = '';
-
-                                    for (var c in dataGridController
-                                        .selectedRow!
-                                        .getCells()) {
-                                      if (c.columnName == 'voucher_no') {
-                                        voucherNo = c.value;
-                                      }
-                                    }
-
-                                    await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                CreateEditVoucherPage(
-                                                    newVoucherId: voucherNo,
-                                                    selectedDbVoucherData:
-                                                        dbVoucherDataLst.firstWhere(
-                                                            (element) =>
-                                                                element
-                                                                    .voucherNo ==
-                                                                voucherNo),
-                                                    viewMode: true,
-                                                    userData: widget.userData,
-                                                    vendorDataLst:
-                                                        vendorDataLst)));
-                                  }
-                                },
-                              ),
+                                }
+                              },
                             ),
                             const SizedBox(
                               height: 30,
                             ),
-                            SizedBox(
-                              height: 40,
-                              width: 170,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(4))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/refresh.png',
-                                      width: 20,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(staticTextTranslate('Refresh'),
-                                        style: TextStyle(
-                                            fontSize: getMediumFontSize,
-                                            color: Colors.white)),
-                                  ],
-                                ),
-                                onPressed: () async {
-                                  setState(() {
-                                    loading = true;
-                                  });
+                            SideMenuButton(
+                              label: 'Refresh',
+                              iconPath: 'assets/icons/refresh.png',
+                              buttonFunction: () async {
+                                setState(() {
+                                  loading = true;
+                                });
 
-                                  await fbFetchData();
-                                },
-                              ),
+                                await fbFetchData();
+                              },
                             ),
-                            SizedBox(
-                              height: 40,
-                              width: 170,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(4))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/date.png',
-                                      width: 20,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(staticTextTranslate('Date Range'),
-                                        style: TextStyle(
-                                            fontSize: getMediumFontSize,
-                                            color: Colors.white))
-                                  ],
-                                ),
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return Dialog(
-                                          child: SizedBox(
-                                            width: 400,
-                                            height: 380,
-                                            child: SfDateRangePicker(
-                                                onSelectionChanged:
-                                                    (DateRangePickerSelectionChangedArgs
-                                                        args) {
-                                                  if (args.value
-                                                      is PickerDateRange) {
-                                                    rangeStartDate =
-                                                        args.value.startDate;
-                                                    rangeEndDate =
-                                                        args.value.endDate;
-                                                    setState(() {});
-                                                  }
-                                                },
-                                                onCancel: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                onSubmit: (var p0) {
-                                                  filterAccordingSelectedDate();
-                                                  Navigator.pop(context);
-                                                },
-                                                cancelText: 'CANCEL',
-                                                confirmText: 'OK',
-                                                showTodayButton: false,
-                                                showActionButtons: true,
-                                                view: DateRangePickerView.month,
-                                                selectionMode:
-                                                    DateRangePickerSelectionMode
-                                                        .range),
-                                          ),
-                                        );
-                                      });
-                                },
-                              ),
+                            SideMenuButton(
+                              label: 'Date Range',
+                              iconPath: 'assets/icons/date.png',
+                              buttonFunction: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return Dialog(
+                                        child: SizedBox(
+                                          width: 400,
+                                          height: 380,
+                                          child: SfDateRangePicker(
+                                              onSelectionChanged:
+                                                  (DateRangePickerSelectionChangedArgs
+                                                      args) {
+                                                if (args.value
+                                                    is PickerDateRange) {
+                                                  rangeStartDate =
+                                                      args.value.startDate;
+                                                  rangeEndDate =
+                                                      args.value.endDate;
+                                                  setState(() {});
+                                                }
+                                              },
+                                              onCancel: () {
+                                                Navigator.pop(context);
+                                              },
+                                              onSubmit: (var p0) {
+                                                filterAccordingSelectedDate();
+                                                Navigator.pop(context);
+                                              },
+                                              cancelText: 'CANCEL',
+                                              confirmText: 'OK',
+                                              showTodayButton: false,
+                                              showActionButtons: true,
+                                              view: DateRangePickerView.month,
+                                              selectionMode:
+                                                  DateRangePickerSelectionMode
+                                                      .range),
+                                        ),
+                                      );
+                                    });
+                              },
                             ),
-                            SizedBox(
-                              height: 40,
-                              width: 170,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(4))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/export.png',
-                                      width: 20,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(staticTextTranslate('Export'),
-                                        style: TextStyle(
-                                            fontSize: getMediumFontSize,
-                                            color: Colors.white)),
-                                  ],
-                                ),
-                                onPressed: () async {
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  final Workbook workbook = _key.currentState!
-                                      .exportToExcelWorkbook();
-                                  final List<int> bytes =
-                                      workbook.saveAsStream();
-                                  workbook.dispose();
-                                  await saveAndLaunchFile(
-                                      bytes, fileExtension: 'xlsx', context);
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                },
-                              ),
+                            SideMenuButton(
+                              label: 'Export',
+                              iconPath: 'assets/icons/export.png',
+                              buttonFunction: () async {
+                                setState(() {
+                                  loading = true;
+                                });
+                                final Workbook workbook =
+                                    _key.currentState!.exportToExcelWorkbook();
+                                final List<int> bytes = workbook.saveAsStream();
+                                workbook.dispose();
+                                await saveAndLaunchFile(
+                                    bytes, fileExtension: 'xlsx', context);
+                                setState(() {
+                                  loading = false;
+                                });
+                              },
                             ),
                           ],
                         ),
@@ -645,17 +506,12 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                        staticTextTranslate(
-                                                            'Voucher #'),
-                                                        style: GoogleFonts.roboto(
+                                                          staticTextTranslate(
+                                                              'Voucher #'),
+                                                          style: TextStyle(
                                                             fontSize:
-                                                                getMediumFontSize +
-                                                                    1,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                      ))),
+                                                                getMediumFontSize,
+                                                          )))),
                                               GridColumn(
                                                   width: 100,
                                                   columnName: 'type',
@@ -666,17 +522,12 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                        staticTextTranslate(
-                                                            'Type'),
-                                                        style: GoogleFonts.roboto(
+                                                          staticTextTranslate(
+                                                              'Type'),
+                                                          style: TextStyle(
                                                             fontSize:
-                                                                getMediumFontSize +
-                                                                    1,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                      ))),
+                                                                getMediumFontSize,
+                                                          )))),
                                               GridColumn(
                                                   width: 300,
                                                   columnName: 'vendor',
@@ -689,14 +540,10 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       child: Text(
                                                         staticTextTranslate(
                                                             'Vendor'),
-                                                        style: GoogleFonts.roboto(
-                                                            fontSize:
-                                                                getMediumFontSize +
-                                                                    1,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                        ),
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                       ))),
@@ -710,17 +557,12 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                        staticTextTranslate(
-                                                            'Qty Received'),
-                                                        style: GoogleFonts.roboto(
+                                                          staticTextTranslate(
+                                                              'Qty Received'),
+                                                          style: TextStyle(
                                                             fontSize:
-                                                                getMediumFontSize +
-                                                                    1,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                      ))),
+                                                                getMediumFontSize,
+                                                          )))),
                                               GridColumn(
                                                   width: 150,
                                                   columnName: 'voucher_total',
@@ -731,17 +573,12 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                        staticTextTranslate(
-                                                            'Voucher Total'),
-                                                        style: GoogleFonts.roboto(
+                                                          staticTextTranslate(
+                                                              'Voucher Total'),
+                                                          style: TextStyle(
                                                             fontSize:
-                                                                getMediumFontSize +
-                                                                    1,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                      ))),
+                                                                getMediumFontSize,
+                                                          )))),
                                               GridColumn(
                                                   width: 150,
                                                   columnName: 'vendor_inv',
@@ -752,17 +589,12 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                        staticTextTranslate(
-                                                            'Vendor Inv#'),
-                                                        style: GoogleFonts.roboto(
+                                                          staticTextTranslate(
+                                                              'Vendor Inv#'),
+                                                          style: TextStyle(
                                                             fontSize:
-                                                                getMediumFontSize +
-                                                                    1,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                      ))),
+                                                                getMediumFontSize,
+                                                          )))),
                                               GridColumn(
                                                   width: 150,
                                                   columnName: 'store',
@@ -773,17 +605,12 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                        staticTextTranslate(
-                                                            'Store'),
-                                                        style: GoogleFonts.roboto(
+                                                          staticTextTranslate(
+                                                              'Store'),
+                                                          style: TextStyle(
                                                             fontSize:
-                                                                getMediumFontSize +
-                                                                    1,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                      ))),
+                                                                getMediumFontSize,
+                                                          )))),
                                               GridColumn(
                                                   width: 190,
                                                   columnName: 'created_date',
@@ -794,17 +621,12 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                        staticTextTranslate(
-                                                            'Created Date'),
-                                                        style: GoogleFonts.roboto(
+                                                          staticTextTranslate(
+                                                              'Created Date'),
+                                                          style: TextStyle(
                                                             fontSize:
-                                                                getMediumFontSize +
-                                                                    1,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                      ))),
+                                                                getMediumFontSize,
+                                                          )))),
                                               GridColumn(
                                                   width: 150,
                                                   columnName: 'created_by',
@@ -815,17 +637,12 @@ class _VoucherPageState extends State<VoucherPage> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                        staticTextTranslate(
-                                                            'Created By'),
-                                                        style: GoogleFonts.roboto(
+                                                          staticTextTranslate(
+                                                              'Created By'),
+                                                          style: TextStyle(
                                                             fontSize:
-                                                                getMediumFontSize +
-                                                                    1,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                      ))),
+                                                                getMediumFontSize,
+                                                          )))),
                                             ],
                                             gridLinesVisibility:
                                                 GridLinesVisibility.both,
@@ -1170,7 +987,7 @@ class VoucherDataSource extends DataGridSource {
         -1) isReturnVoucher = true;
     return DataGridRowAdapter(
         color: row.getCells()[0].value.isEven
-            ? const Color(0xffF1F1F1)
+            ? const Color.fromARGB(255, 246, 247, 255)
             : Colors.white,
         cells: row.getCells().map<Widget>((e) {
           return Container(
@@ -1178,8 +995,8 @@ class VoucherDataSource extends DataGridSource {
             padding: const EdgeInsets.all(1.0),
             child: Text(
               e.value.toString(),
-              style: GoogleFonts.roboto(
-                  fontSize: getMediumFontSize + 1,
+              style: TextStyle(
+                  fontSize: getMediumFontSize,
                   color: isReturnVoucher ? Colors.red[700] : Colors.black,
                   fontWeight: FontWeight.w400),
             ),
