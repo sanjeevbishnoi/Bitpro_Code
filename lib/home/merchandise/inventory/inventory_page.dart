@@ -573,13 +573,14 @@ class _InventoryPageState extends State<InventoryPage> {
                                                             1.0),
                                                     alignment: Alignment.center,
                                                     child: Text(
-                                                        staticTextTranslate(
-                                                            'Barcode'),
-                                                        style: GoogleFonts.roboto(
+                                                      staticTextTranslate(
+                                                          'Barcode'),
+                                                      style: GoogleFonts.roboto(
                                                         fontSize:
                                                             getMediumFontSize +
                                                                 1,
-                                                      ),))),
+                                                      ),
+                                                    ))),
                                             GridColumn(
                                                 width: 170,
                                                 columnName: 'itemCode',
@@ -589,13 +590,14 @@ class _InventoryPageState extends State<InventoryPage> {
                                                             1.0),
                                                     alignment: Alignment.center,
                                                     child: Text(
-                                                        staticTextTranslate(
-                                                            'Item Code'),
-                                                        style: GoogleFonts.roboto(
+                                                      staticTextTranslate(
+                                                          'Item Code'),
+                                                      style: GoogleFonts.roboto(
                                                         fontSize:
                                                             getMediumFontSize +
                                                                 1,
-                                                      ),))),
+                                                      ),
+                                                    ))),
                                             GridColumn(
                                                 width: 250,
                                                 columnName: 'productName',
@@ -624,13 +626,14 @@ class _InventoryPageState extends State<InventoryPage> {
                                                             1.0),
                                                     alignment: Alignment.center,
                                                     child: Text(
-                                                        staticTextTranslate(
-                                                            'Store OH'),
-                                                        style: GoogleFonts.roboto(
+                                                      staticTextTranslate(
+                                                          'Store OH'),
+                                                      style: GoogleFonts.roboto(
                                                         fontSize:
                                                             getMediumFontSize +
                                                                 1,
-                                                      ),))),
+                                                      ),
+                                                    ))),
                                             GridColumn(
                                                 width: 150,
                                                 columnName: 'companyOhQty',
@@ -640,13 +643,14 @@ class _InventoryPageState extends State<InventoryPage> {
                                                             1.0),
                                                     alignment: Alignment.center,
                                                     child: Text(
-                                                        staticTextTranslate(
-                                                            'Company OH'),
-                                                        style: GoogleFonts.roboto(
+                                                      staticTextTranslate(
+                                                          'Company OH'),
+                                                      style: GoogleFonts.roboto(
                                                         fontSize:
                                                             getMediumFontSize +
                                                                 1,
-                                                      ),))),
+                                                      ),
+                                                    ))),
                                             GridColumn(
                                                 width: 120,
                                                 columnName: 'cost',
@@ -656,13 +660,14 @@ class _InventoryPageState extends State<InventoryPage> {
                                                             1.0),
                                                     alignment: Alignment.center,
                                                     child: Text(
-                                                        staticTextTranslate(
-                                                            'Cost'),
-                                                        style: GoogleFonts.roboto(
+                                                      staticTextTranslate(
+                                                          'Cost'),
+                                                      style: GoogleFonts.roboto(
                                                         fontSize:
                                                             getMediumFontSize +
                                                                 1,
-                                                      ),))),
+                                                      ),
+                                                    ))),
                                             GridColumn(
                                                 width: 120,
                                                 columnName: 'price',
@@ -672,13 +677,14 @@ class _InventoryPageState extends State<InventoryPage> {
                                                             1.0),
                                                     alignment: Alignment.center,
                                                     child: Text(
-                                                        staticTextTranslate(
-                                                            'Price'),
-                                                        style: GoogleFonts.roboto(
+                                                      staticTextTranslate(
+                                                          'Price'),
+                                                      style: GoogleFonts.roboto(
                                                         fontSize:
                                                             getMediumFontSize +
                                                                 1,
-                                                      ),))),
+                                                      ),
+                                                    ))),
                                             GridColumn(
                                                 width: 140,
                                                 columnName: 'priceWT',
@@ -688,13 +694,14 @@ class _InventoryPageState extends State<InventoryPage> {
                                                             1.0),
                                                     alignment: Alignment.center,
                                                     child: Text(
-                                                        staticTextTranslate(
-                                                            'Price W/T'),
-                                                       style: GoogleFonts.roboto(
+                                                      staticTextTranslate(
+                                                          'Price W/T'),
+                                                      style: GoogleFonts.roboto(
                                                         fontSize:
                                                             getMediumFontSize +
                                                                 1,
-                                                      ),))),
+                                                      ),
+                                                    ))),
                                             GridColumn(
                                                 width: 160,
                                                 columnName: 'extCost',
@@ -704,13 +711,14 @@ class _InventoryPageState extends State<InventoryPage> {
                                                             1.0),
                                                     alignment: Alignment.center,
                                                     child: Text(
-                                                        staticTextTranslate(
-                                                            'Ext Cost'),
-                                                        style: GoogleFonts.roboto(
+                                                      staticTextTranslate(
+                                                          'Ext Cost'),
+                                                      style: GoogleFonts.roboto(
                                                         fontSize:
                                                             getMediumFontSize +
                                                                 1,
-                                                      ),))),
+                                                      ),
+                                                    ))),
                                             GridColumn(
                                                 width: 160,
                                                 columnName: 'extPriceWt',
@@ -720,13 +728,14 @@ class _InventoryPageState extends State<InventoryPage> {
                                                             1.0),
                                                     alignment: Alignment.center,
                                                     child: Text(
-                                                        staticTextTranslate(
-                                                            'Ext Price W/T'),
-                                                        style: GoogleFonts.roboto(
+                                                      staticTextTranslate(
+                                                          'Ext Price W/T'),
+                                                      style: GoogleFonts.roboto(
                                                         fontSize:
                                                             getMediumFontSize +
                                                                 1,
-                                                      ),))),
+                                                      ),
+                                                    ))),
                                           ],
                                         ),
                                       ),
@@ -1047,232 +1056,223 @@ class _InventoryPageState extends State<InventoryPage> {
               return Dialog(
                 backgroundColor: homeBgColor,
                 child: SizedBox(
-                    height: 360,
-                    width: 500,
+                    height: 405,
+                    width: 550,
                     child: dialogLoading
                         ? showLoading()
                         : Column(children: [
+                            Container(
+                              // height: 55,
+                              width: double.maxFinite,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 18, vertical: 10),
+                              decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(4),
+                                      topRight: Radius.circular(4)),
+                                  gradient: LinearGradient(
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color.fromARGB(255, 66, 66, 66),
+                                        Color.fromARGB(255, 0, 0, 0),
+                                      ],
+                                      begin: Alignment.topCenter)),
+                              child: Text(
+                                staticTextTranslate('Update Quantity'),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: getMediumFontSize + 5,
+                                ),
+                              ),
+                            ),
                             Expanded(
-                              child: SizedBox(
-                                width: 500,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 15.0, horizontal: 15),
-                                      child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 15.0, horizontal: 15),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          staticTextTranslate(
+                                              'To update inventory Quantity manually you need to upload excel file with barcode and Quantity as sample file.'),
+                                          style: TextStyle(
+                                            fontSize: getMediumFontSize - 1,
+                                          )),
+                                      Row(
+                                        children: [
+                                          Text(
+                                              staticTextTranslate(
+                                                  'Download Sample file here.'),
+                                              style: TextStyle(
+                                                fontSize: getMediumFontSize - 1,
+                                              )),
+                                          TextButton(
+                                            onPressed: () async {
+                                              setState(() {
+                                                dialogLoading = true;
+                                              });
+                                              setState2(() {});
+                                              // Create a new Excel document.
+                                              final Workbook workbook =
+                                                  Workbook();
+
+                                              final Worksheet sheet =
+                                                  workbook.worksheets[0];
+
+                                              sheet
+                                                  .getRangeByName('A1')
+                                                  .setText('barcode');
+                                              sheet
+                                                  .getRangeByName('B1')
+                                                  .setText('quantity');
+
+                                              final List<int> bytes =
+                                                  workbook.saveAsStream();
+
+                                              workbook.dispose();
+                                              await saveAndLaunchFile(
+                                                  bytes,
+                                                  fileExtension: 'xlsx',
+                                                  context);
+                                              setState(() {
+                                                dialogLoading = false;
+                                              });
+                                              setState2(() {});
+                                            },
+                                            child: Text(
                                                 staticTextTranslate(
-                                                    'Update Quantity'),
+                                                    'Download Now.'),
                                                 style: TextStyle(
-                                                  fontSize:
-                                                      getMediumFontSize + 5,
+                                                  fontSize: getMediumFontSize,
+                                                  decoration:
+                                                      TextDecoration.underline,
                                                 )),
-                                            const SizedBox(
-                                              height: 15,
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(staticTextTranslate('File'),
+                                              style: TextStyle(
+                                                fontSize: getMediumFontSize,
+                                              )),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(3),
+                                                  border: Border.all(
+                                                      color: Colors.grey)),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 5),
+                                              child: Text(
+                                                  importItem != null
+                                                      ? importItem!.path
+                                                      : staticTextTranslate(
+                                                          'No path found'),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: getMediumFontSize,
+                                                  )),
                                             ),
-                                            Text(
-                                                staticTextTranslate(
-                                                    'To update inventory Quantity manually you need to upload excel file with barcode and Quantity as sample file.'),
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      getMediumFontSize - 1,
-                                                )),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                    staticTextTranslate(
-                                                        'Download Sample file here.'),
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          getMediumFontSize - 1,
-                                                    )),
-                                                TextButton(
-                                                  onPressed: () async {
-                                                    setState(() {
-                                                      dialogLoading = true;
-                                                    });
-                                                    setState2(() {});
-                                                    // Create a new Excel document.
-                                                    final Workbook workbook =
-                                                        Workbook();
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              setState(() {
+                                                dialogLoading = true;
+                                              });
+                                              setState2(() {});
+                                              FilePickerResult? result =
+                                                  await FilePicker
+                                                      .platform
+                                                      .pickFiles(
+                                                          allowMultiple: false,
+                                                          dialogTitle:
+                                                              'Import Items',
+                                                          allowedExtensions: [
+                                                            'xlsx'
+                                                          ],
+                                                          type:
+                                                              FileType.custom);
+                                              if (result != null &&
+                                                  result.paths.isNotEmpty) {
+                                                importItem =
+                                                    File(result.paths.first!);
+                                                var bytes = File(result
+                                                        .files.first.path!)
+                                                    .readAsBytesSync();
+                                                var excel =
+                                                    Excel.decodeBytes(bytes);
 
-                                                    final Worksheet sheet =
-                                                        workbook.worksheets[0];
-
-                                                    sheet
-                                                        .getRangeByName('A1')
-                                                        .setText('barcode');
-                                                    sheet
-                                                        .getRangeByName('B1')
-                                                        .setText('quantity');
-
-                                                    final List<int> bytes =
-                                                        workbook.saveAsStream();
-
-                                                    workbook.dispose();
-                                                    await saveAndLaunchFile(
-                                                        bytes,
-                                                        fileExtension: 'xlsx',
-                                                        context);
-                                                    setState(() {
-                                                      dialogLoading = false;
-                                                    });
-                                                    setState2(() {});
-                                                  },
-                                                  child: Text(
-                                                      staticTextTranslate(
-                                                          'Download Now.'),
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            getMediumFontSize,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .underline,
-                                                      )),
-                                                )
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                    staticTextTranslate('File'),
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          getMediumFontSize,
-                                                    )),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Expanded(
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(3),
-                                                        border: Border.all(
-                                                            color:
-                                                                Colors.grey)),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
+                                                // uploadRes =
+                                                uploadRes =
+                                                    inventoryUpdateQuantityFromExcel(
+                                                        excel,
+                                                        inventoryDataLst);
+                                                // print(uploadRes);
+                                              }
+                                              setState(() {
+                                                dialogLoading = false;
+                                              });
+                                              setState2(() {});
+                                            },
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            3),
+                                                    border: Border.all(
+                                                        color: Colors.grey)),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
                                                         horizontal: 10,
                                                         vertical: 5),
-                                                    child: Text(
-                                                        importItem != null
-                                                            ? importItem!.path
-                                                            : staticTextTranslate(
-                                                                'No path found'),
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              getMediumFontSize,
-                                                        )),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () async {
-                                                    setState(() {
-                                                      dialogLoading = true;
-                                                    });
-                                                    setState2(() {});
-                                                    FilePickerResult? result =
-                                                        await FilePicker
-                                                            .platform
-                                                            .pickFiles(
-                                                                allowMultiple:
-                                                                    false,
-                                                                dialogTitle:
-                                                                    'Import Items',
-                                                                allowedExtensions: [
-                                                                  'xlsx'
-                                                                ],
-                                                                type: FileType
-                                                                    .custom);
-                                                    if (result != null &&
-                                                        result
-                                                            .paths.isNotEmpty) {
-                                                      importItem = File(
-                                                          result.paths.first!);
-                                                      var bytes = File(result
-                                                              .files
-                                                              .first
-                                                              .path!)
-                                                          .readAsBytesSync();
-                                                      var excel =
-                                                          Excel.decodeBytes(
-                                                              bytes);
-
-                                                      // uploadRes =
-                                                      uploadRes =
-                                                          inventoryUpdateQuantityFromExcel(
-                                                              excel,
-                                                              inventoryDataLst);
-                                                      // print(uploadRes);
-                                                    }
-                                                    setState(() {
-                                                      dialogLoading = false;
-                                                    });
-                                                    setState2(() {});
-                                                  },
-                                                  child: Container(
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(3),
-                                                          border: Border.all(
-                                                              color:
-                                                                  Colors.grey)),
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 10,
-                                                          vertical: 5),
-                                                      child: const Icon(
-                                                          Iconsax.folder_open,
-                                                          size: 19)),
-                                                )
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 25,
-                                            ),
-                                            Text(
-                                                uploadRes.isEmpty
-                                                    ? staticTextTranslate(
-                                                        'Items Found : 0')
-                                                    : '${staticTextTranslate('Items Found')} : ${uploadRes['itemsFound']}',
-                                                style: TextStyle(
-                                                  fontSize: getMediumFontSize,
-                                                )),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                                uploadRes.isEmpty
-                                                    ? staticTextTranslate(
-                                                        'Items Not Found : 0')
-                                                    : '${staticTextTranslate('Items Not Found')} : ${uploadRes['itemsNotFound']}',
-                                                style: TextStyle(
-                                                  fontSize: getMediumFontSize,
-                                                )),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                          ]),
-                                    ),
-                                  ),
-                                ),
+                                                child: const Icon(
+                                                    Iconsax.folder_open,
+                                                    size: 19)),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 25,
+                                      ),
+                                      Text(
+                                          uploadRes.isEmpty
+                                              ? staticTextTranslate(
+                                                  'Items Found : 0')
+                                              : '${staticTextTranslate('Items Found')} : ${uploadRes['itemsFound']}',
+                                          style: TextStyle(
+                                            fontSize: getMediumFontSize,
+                                          )),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                          uploadRes.isEmpty
+                                              ? staticTextTranslate(
+                                                  'Items Not Found : 0')
+                                              : '${staticTextTranslate('Items Not Found')} : ${uploadRes['itemsNotFound']}',
+                                          style: TextStyle(
+                                              fontSize: getMediumFontSize,
+                                              color: Colors.red)),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                    ]),
                               ),
                             ),
                             Align(
@@ -1324,7 +1324,17 @@ class _InventoryPageState extends State<InventoryPage> {
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    SizedBox(
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          gradient: const LinearGradient(
+                                              end: Alignment.bottomCenter,
+                                              colors: [
+                                                Color(0xff092F53),
+                                                Color(0xff284F70),
+                                              ],
+                                              begin: Alignment.topCenter)),
                                       height: 42,
                                       width: 173,
                                       child: ElevatedButton(
@@ -1334,13 +1344,16 @@ class _InventoryPageState extends State<InventoryPage> {
                                                       uploadRes['itemsFound'] ==
                                                           0
                                                   ? Colors.grey
-                                                  : darkBlueColor,
+                                                  : Colors.transparent,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           4))),
                                           onPressed: () async {
-                                            if (uploadRes.isNotEmpty) {
+                                            if (uploadRes.isNotEmpty &&
+                                                uploadRes['itemsFound'] != 0 &&
+                                                uploadRes['itemsNotFound'] ==
+                                                    0) {
                                               setState(() {
                                                 dialogLoading = true;
                                               });
@@ -1381,13 +1394,13 @@ class _InventoryPageState extends State<InventoryPage> {
                                                       ]);
                                                 }
                                               }
-                                            }
 
-                                            await hiveFetchData();
-                                            loading = false;
-                                            setState(() {});
-                                            setState2(() {});
-                                            Navigator.pop(context);
+                                              await hiveFetchData();
+                                              loading = false;
+                                              setState(() {});
+                                              setState2(() {});
+                                              Navigator.pop(context);
+                                            }
                                           },
                                           child: Row(
                                             mainAxisAlignment:
@@ -1398,15 +1411,7 @@ class _InventoryPageState extends State<InventoryPage> {
                                                 width: 10,
                                               ),
                                               Text(
-                                                  uploadRes['itemsNotFound'] ==
-                                                              null ||
-                                                          uploadRes[
-                                                                  'itemsNotFound'] ==
-                                                              0
-                                                      ? staticTextTranslate(
-                                                          'Update')
-                                                      : staticTextTranslate(
-                                                          'Skip & Update'),
+                                                  staticTextTranslate('Update'),
                                                   style: TextStyle(
                                                     fontSize: getMediumFontSize,
                                                   )),
@@ -1438,248 +1443,240 @@ class _InventoryPageState extends State<InventoryPage> {
                     child: dialogLoading
                         ? showLoading()
                         : Column(children: [
+                            Container(
+                              // height: 55,
+                              width: double.maxFinite,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 18, vertical: 10),
+                              decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(4),
+                                      topRight: Radius.circular(4)),
+                                  gradient: LinearGradient(
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color.fromARGB(255, 66, 66, 66),
+                                        Color.fromARGB(255, 0, 0, 0),
+                                      ],
+                                      begin: Alignment.topCenter)),
+                              child: Text(
+                                staticTextTranslate('Product Image'),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: getMediumFontSize + 5,
+                                ),
+                              ),
+                            ),
                             Expanded(
-                              child: SizedBox(
-                                width: 500,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0, horizontal: 10),
-                                      child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 10),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                              staticTextTranslate(
+                                                  'Download Sample file here.'),
+                                              style: TextStyle(
+                                                fontSize: getMediumFontSize - 1,
+                                              )),
+                                          TextButton(
+                                            onPressed: () async {
+                                              setState(() {
+                                                dialogLoading = true;
+                                              });
+                                              setState2(() {});
+                                              // Create a new Excel document.
+                                              final Workbook workbook =
+                                                  Workbook();
+
+                                              final Worksheet sheet =
+                                                  workbook.worksheets[0];
+
+                                              sheet
+                                                  .getRangeByName('A1')
+                                                  .setText('productname');
+                                              sheet
+                                                  .getRangeByName('B1')
+                                                  .setText('cost');
+                                              sheet
+                                                  .getRangeByName('C1')
+                                                  .setText('price');
+                                              sheet
+                                                  .getRangeByName('D1')
+                                                  .setText('pricewt');
+                                              sheet
+                                                  .getRangeByName('E1')
+                                                  .setText('margin');
+                                              sheet
+                                                  .getRangeByName('F1')
+                                                  .setText('description');
+                                              sheet
+                                                  .getRangeByName('G1')
+                                                  .setText('productimgurl');
+                                              sheet
+                                                  .getRangeByName('H1')
+                                                  .setText('vendorid');
+                                              sheet
+                                                  .getRangeByName('I1')
+                                                  .setText('departmentid');
+
+                                              final List<int> bytes =
+                                                  workbook.saveAsStream();
+
+                                              workbook.dispose();
+                                              await saveAndLaunchFile(
+                                                  bytes,
+                                                  fileExtension: 'xlsx',
+                                                  context);
+                                              setState(() {
+                                                dialogLoading = false;
+                                              });
+                                              setState2(() {});
+                                            },
+                                            child: Text(
                                                 staticTextTranslate(
-                                                    'Product Import'),
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      getMediumFontSize + 5,
-                                                )),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                    staticTextTranslate(
-                                                        'Download Sample file here.'),
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          getMediumFontSize - 1,
-                                                    )),
-                                                TextButton(
-                                                  onPressed: () async {
-                                                    setState(() {
-                                                      dialogLoading = true;
-                                                    });
-                                                    setState2(() {});
-                                                    // Create a new Excel document.
-                                                    final Workbook workbook =
-                                                        Workbook();
-
-                                                    final Worksheet sheet =
-                                                        workbook.worksheets[0];
-
-                                                    sheet
-                                                        .getRangeByName('A1')
-                                                        .setText('productname');
-                                                    sheet
-                                                        .getRangeByName('B1')
-                                                        .setText('cost');
-                                                    sheet
-                                                        .getRangeByName('C1')
-                                                        .setText('price');
-                                                    sheet
-                                                        .getRangeByName('D1')
-                                                        .setText('pricewt');
-                                                    sheet
-                                                        .getRangeByName('E1')
-                                                        .setText('margin');
-                                                    sheet
-                                                        .getRangeByName('F1')
-                                                        .setText('description');
-                                                    sheet
-                                                        .getRangeByName('G1')
-                                                        .setText(
-                                                            'productimgurl');
-                                                    sheet
-                                                        .getRangeByName('H1')
-                                                        .setText('vendorid');
-                                                    sheet
-                                                        .getRangeByName('I1')
-                                                        .setText(
-                                                            'departmentid');
-
-                                                    final List<int> bytes =
-                                                        workbook.saveAsStream();
-
-                                                    workbook.dispose();
-                                                    await saveAndLaunchFile(
-                                                        bytes,
-                                                        fileExtension: 'xlsx',
-                                                        context);
-                                                    setState(() {
-                                                      dialogLoading = false;
-                                                    });
-                                                    setState2(() {});
-                                                  },
-                                                  child: Text(
-                                                      staticTextTranslate(
-                                                          'Download Now.'),
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            getMediumFontSize,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .underline,
-                                                      )),
-                                                )
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                    staticTextTranslate('File'),
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          getMediumFontSize,
-                                                    )),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Expanded(
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(3),
-                                                        border: Border.all(
-                                                            color:
-                                                                Colors.grey)),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 5),
-                                                    child: Text(
-                                                        importItem != null
-                                                            ? importItem!.path
-                                                            : staticTextTranslate(
-                                                                'No path found'),
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              getMediumFontSize,
-                                                        )),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () async {
-                                                    setState(() {
-                                                      dialogLoading = true;
-                                                    });
-                                                    setState2(() {});
-                                                    FilePickerResult? result =
-                                                        await FilePicker
-                                                            .platform
-                                                            .pickFiles(
-                                                                allowMultiple:
-                                                                    false,
-                                                                dialogTitle:
-                                                                    'Import Items',
-                                                                allowedExtensions: [
-                                                                  'xlsx'
-                                                                ],
-                                                                type: FileType
-                                                                    .custom);
-                                                    if (result != null &&
-                                                        result
-                                                            .paths.isNotEmpty) {
-                                                      importItem = File(
-                                                          result.paths.first!);
-                                                      var bytes = File(result
-                                                              .files
-                                                              .first
-                                                              .path!)
-                                                          .readAsBytesSync();
-                                                      var excel =
-                                                          Excel.decodeBytes(
-                                                              bytes);
-
-                                                      uploadRes =
-                                                          inventoryDataFromExcel(
-                                                              excel,
-                                                              widget.userData
-                                                                  .createdBy,
-                                                              inventoryDataLst,
-                                                              allVendorDataLst,
-                                                              allDepartmentDataLst);
-                                                      print(uploadRes);
-                                                    }
-                                                    setState(() {
-                                                      dialogLoading = false;
-                                                    });
-                                                    setState2(() {});
-                                                  },
-                                                  child: Container(
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(3),
-                                                          border: Border.all(
-                                                              color:
-                                                                  Colors.grey)),
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 10,
-                                                          vertical: 5),
-                                                      child: const Icon(
-                                                          Iconsax.folder_open,
-                                                          size: 19)),
-                                                )
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 25,
-                                            ),
-                                            Text(
-                                                uploadRes.isEmpty
-                                                    ? staticTextTranslate(
-                                                        'Items Found : 0')
-                                                    : '${staticTextTranslate('Items Found')} : ${uploadRes['inventoryDataLst'].length}',
+                                                    'Download Now.'),
                                                 style: TextStyle(
                                                   fontSize: getMediumFontSize,
+                                                  decoration:
+                                                      TextDecoration.underline,
                                                 )),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  uploadRes.isNotEmpty
-                                                      ? '${uploadRes['wrongVendorIdOrDepartmentId']} Wrong Vendor Id or Department Id Found.'
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(staticTextTranslate('File'),
+                                              style: TextStyle(
+                                                fontSize: getMediumFontSize,
+                                              )),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(3),
+                                                  border: Border.all(
+                                                      color: Colors.grey)),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 5),
+                                              child: Text(
+                                                  importItem != null
+                                                      ? importItem!.path
                                                       : staticTextTranslate(
-                                                          '0 Wrong Vendor Id or Department Id Found.'),
+                                                          'No path found'),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: TextStyle(
-                                                      fontSize:
-                                                          getMediumFontSize - 1,
-                                                      color: Colors.red[700]),
-                                                ),
-                                              ],
+                                                    fontSize: getMediumFontSize,
+                                                  )),
                                             ),
-                                          ]),
-                                    ),
-                                  ),
-                                ),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              setState(() {
+                                                dialogLoading = true;
+                                              });
+                                              setState2(() {});
+                                              FilePickerResult? result =
+                                                  await FilePicker
+                                                      .platform
+                                                      .pickFiles(
+                                                          allowMultiple: false,
+                                                          dialogTitle:
+                                                              'Import Items',
+                                                          allowedExtensions: [
+                                                            'xlsx'
+                                                          ],
+                                                          type:
+                                                              FileType.custom);
+                                              if (result != null &&
+                                                  result.paths.isNotEmpty) {
+                                                importItem =
+                                                    File(result.paths.first!);
+                                                var bytes = File(result
+                                                        .files.first.path!)
+                                                    .readAsBytesSync();
+                                                var excel =
+                                                    Excel.decodeBytes(bytes);
+
+                                                uploadRes =
+                                                    inventoryDataFromExcel(
+                                                        excel,
+                                                        widget
+                                                            .userData.createdBy,
+                                                        inventoryDataLst,
+                                                        allVendorDataLst,
+                                                        allDepartmentDataLst);
+                                                print(uploadRes);
+                                              }
+                                              setState(() {
+                                                dialogLoading = false;
+                                              });
+                                              setState2(() {});
+                                            },
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            3),
+                                                    border: Border.all(
+                                                        color: Colors.grey)),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 5),
+                                                child: const Icon(
+                                                    Iconsax.folder_open,
+                                                    size: 19)),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 25,
+                                      ),
+                                      Text(
+                                          uploadRes.isEmpty
+                                              ? staticTextTranslate(
+                                                  'Items Found : 0')
+                                              : '${staticTextTranslate('Items Found')} : ${uploadRes['inventoryDataLst'].length}',
+                                          style: TextStyle(
+                                            fontSize: getMediumFontSize,
+                                          )),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            uploadRes.isNotEmpty
+                                                ? '${uploadRes['wrongVendorIdOrDepartmentId']} Wrong Vendor Id or Department Id Found.'
+                                                : staticTextTranslate(
+                                                    '0 Wrong Vendor Id or Department Id Found.'),
+                                            style: TextStyle(
+                                                fontSize: getMediumFontSize - 1,
+                                                color: Colors.red[700]),
+                                          ),
+                                        ],
+                                      ),
+                                    ]),
                               ),
                             ),
                             Align(
@@ -1731,7 +1728,17 @@ class _InventoryPageState extends State<InventoryPage> {
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    SizedBox(
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          gradient: const LinearGradient(
+                                              end: Alignment.bottomCenter,
+                                              colors: [
+                                                Color(0xff092F53),
+                                                Color(0xff284F70),
+                                              ],
+                                              begin: Alignment.topCenter)),
                                       height: 42,
                                       width: 173,
                                       child: ElevatedButton(
@@ -1742,7 +1749,7 @@ class _InventoryPageState extends State<InventoryPage> {
                                                               .length ==
                                                           0
                                                   ? Colors.grey
-                                                  : darkBlueColor,
+                                                  : Colors.transparent,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -1902,7 +1909,7 @@ class EmployeeDataSource extends DataGridSource {
               e.value.toString(),
               style: GoogleFonts.roboto(
                   fontSize: getMediumFontSize + 1,
-                  color:  Colors.black,
+                  color: Colors.black,
                   fontWeight: FontWeight.w400),
             ),
           );

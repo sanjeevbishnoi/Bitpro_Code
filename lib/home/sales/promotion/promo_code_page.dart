@@ -508,515 +508,465 @@ class _PromoCodePageState extends State<PromoCodePage> {
               return Dialog(
                 backgroundColor: homeBgColor,
                 child: SizedBox(
-                    height: 350,
+                    height: 405,
                     width: 550,
                     child: dialogLoading
                         ? showLoading()
                         : Column(children: [
+                            Container(
+                              // height: 55,
+                              width: double.maxFinite,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 18, vertical: 10),
+                              decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(4),
+                                      topRight: Radius.circular(4)),
+                                  gradient: LinearGradient(
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color.fromARGB(255, 66, 66, 66),
+                                        Color.fromARGB(255, 0, 0, 0),
+                                      ],
+                                      begin: Alignment.topCenter)),
+                              child: Text(
+                                staticTextTranslate('Product Import'),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: getMediumFontSize + 5,
+                                ),
+                              ),
+                            ),
                             Expanded(
-                              child: SizedBox(
-                                width: 550,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0, horizontal: 15),
-                                      child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 15),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                              staticTextTranslate(
+                                                  'Download Sample file here.'),
+                                              style: TextStyle(
+                                                fontSize: getMediumFontSize - 1,
+                                              )),
+                                          TextButton(
+                                            onPressed: () async {
+                                              setState(() {
+                                                dialogLoading = true;
+                                              });
+                                              setState2(() {});
+                                              final Workbook workbook =
+                                                  Workbook();
+
+                                              final Worksheet sheet =
+                                                  workbook.worksheets[0];
+
+                                              sheet
+                                                  .getRangeByName('A1')
+                                                  .setText('barcode');
+                                              sheet
+                                                  .getRangeByName('B1')
+                                                  .setText('percentage');
+
+                                              final List<int> bytes =
+                                                  workbook.saveAsStream();
+
+                                              workbook.dispose();
+                                              await saveAndLaunchFile(
+                                                  bytes,
+                                                  fileExtension: 'xlsx',
+                                                  context);
+                                              setState(() {
+                                                dialogLoading = false;
+                                              });
+                                              setState2(() {});
+                                            },
+                                            child: Text(
                                                 staticTextTranslate(
-                                                    'Product Import'),
+                                                    'Download Now.'),
                                                 style: TextStyle(
-                                                  fontSize:
-                                                      getMediumFontSize + 5,
+                                                  fontSize: getMediumFontSize,
+                                                  decoration:
+                                                      TextDecoration.underline,
                                                 )),
-                                            const SizedBox(
-                                              height: 0,
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(staticTextTranslate('File'),
+                                              style: TextStyle(
+                                                fontSize: getMediumFontSize,
+                                              )),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(3),
+                                                  border: Border.all(
+                                                      color: Colors.grey)),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 5),
+                                              child: Text(
+                                                  importItem != null
+                                                      ? importItem!.path
+                                                      : staticTextTranslate(
+                                                          'No path found'),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: getMediumFontSize,
+                                                  )),
                                             ),
-                                            Row(
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              setState(() {
+                                                dialogLoading = true;
+                                              });
+                                              setState2(() {});
+
+                                              FilePickerResult? result =
+                                                  await FilePicker
+                                                      .platform
+                                                      .pickFiles(
+                                                          allowMultiple: false,
+                                                          dialogTitle:
+                                                              'Import Items',
+                                                          allowedExtensions: [
+                                                            'xlsx'
+                                                          ],
+                                                          type:
+                                                              FileType.custom);
+                                              if (result != null &&
+                                                  result.paths.isNotEmpty) {
+                                                importItem =
+                                                    File(result.paths.first!);
+                                                Uint8List bytes = await File(
+                                                        result
+                                                            .files.first.path!)
+                                                    .readAsBytes();
+
+                                                Excel excel = await compute(
+                                                    parseExcelFile, bytes);
+
+                                                uploadRes =
+                                                    excelPromoDataImport(excel);
+                                              }
+                                              setState(() {
+                                                dialogLoading = false;
+                                              });
+                                              setState2(() {});
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(3),
+                                                  border: Border.all(
+                                                      color: Colors.grey)),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 5),
+                                              child: const Icon(
+                                                Iconsax.folder_open,
+                                                size: 19,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 25,
+                                      ),
+                                      Text(
+                                          uploadRes.isEmpty
+                                              ? staticTextTranslate(
+                                                  'Items Found : 0')
+                                              : '${staticTextTranslate("Items Found")} : ${uploadRes['localPromotionDataLst'].length}',
+                                          style: TextStyle(
+                                            fontSize: getMediumFontSize,
+                                          )),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 200,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                     staticTextTranslate(
-                                                        'Download Sample file here.'),
+                                                        'Start Date/Time'),
                                                     style: TextStyle(
                                                       fontSize:
                                                           getMediumFontSize - 1,
                                                     )),
-                                                TextButton(
-                                                  onPressed: () async {
-                                                    setState(() {
-                                                      dialogLoading = true;
-                                                    });
-                                                    setState2(() {});
-                                                    final Workbook workbook =
-                                                        Workbook();
-
-                                                    final Worksheet sheet =
-                                                        workbook.worksheets[0];
-
-                                                    sheet
-                                                        .getRangeByName('A1')
-                                                        .setText('barcode');
-                                                    sheet
-                                                        .getRangeByName('B1')
-                                                        .setText('percentage');
-
-                                                    final List<int> bytes =
-                                                        workbook.saveAsStream();
-
-                                                    workbook.dispose();
-                                                    await saveAndLaunchFile(
-                                                        bytes,
-                                                        fileExtension: 'xlsx',
-                                                        context);
-                                                    setState(() {
-                                                      dialogLoading = false;
-                                                    });
-                                                    setState2(() {});
-                                                  },
-                                                  child: Text(
-                                                      staticTextTranslate(
-                                                          'Download Now.'),
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            getMediumFontSize,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .underline,
-                                                      )),
-                                                )
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                    staticTextTranslate('File'),
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          getMediumFontSize,
-                                                    )),
                                                 const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Expanded(
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(3),
-                                                        border: Border.all(
-                                                            color:
-                                                                Colors.grey)),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 5),
-                                                    child: Text(
-                                                        importItem != null
-                                                            ? importItem!.path
-                                                            : staticTextTranslate(
-                                                                'No path found'),
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              getMediumFontSize,
-                                                        )),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
+                                                  height: 5,
                                                 ),
                                                 GestureDetector(
                                                   onTap: () async {
-                                                    setState(() {
-                                                      dialogLoading = true;
-                                                    });
-                                                    setState2(() {});
+                                                    DateTime? dateTime =
+                                                        await showDatePicker(
+                                                      context: context,
+                                                      initialDate:
+                                                          DateTime.now(),
+                                                      firstDate: DateTime.now(),
+                                                      lastDate: DateTime(2050),
+                                                    );
+                                                    if (dateTime != null) {
+                                                      TimeOfDay? timeOfDay =
+                                                          await showTimePicker(
+                                                        context: context,
+                                                        initialTime:
+                                                            TimeOfDay.now(),
+                                                        cancelText:
+                                                            staticTextTranslate(
+                                                                'CANCEL'),
+                                                        confirmText:
+                                                            staticTextTranslate(
+                                                                'OK'),
+                                                        helpText:
+                                                            staticTextTranslate(
+                                                                'SELECT TIME'),
+                                                        errorInvalidText:
+                                                            staticTextTranslate(
+                                                                'Invalid format.'),
+                                                      );
+                                                      if (timeOfDay != null) {
+                                                        startDate = DateTime(
+                                                          dateTime.year,
+                                                          dateTime.month,
+                                                          dateTime.day,
+                                                          timeOfDay.hour,
+                                                          timeOfDay.minute,
+                                                        );
 
-                                                    FilePickerResult? result =
-                                                        await FilePicker
-                                                            .platform
-                                                            .pickFiles(
-                                                                allowMultiple:
-                                                                    false,
-                                                                dialogTitle:
-                                                                    'Import Items',
-                                                                allowedExtensions: [
-                                                                  'xlsx'
-                                                                ],
-                                                                type: FileType
-                                                                    .custom);
-                                                    if (result != null &&
-                                                        result
-                                                            .paths.isNotEmpty) {
-                                                      importItem = File(
-                                                          result.paths.first!);
-                                                      Uint8List bytes =
-                                                          await File(result
-                                                                  .files
-                                                                  .first
-                                                                  .path!)
-                                                              .readAsBytes();
-
-                                                      Excel excel =
-                                                          await compute(
-                                                              parseExcelFile,
-                                                              bytes);
-
-                                                      uploadRes =
-                                                          excelPromoDataImport(
-                                                              excel);
+                                                        showStartDateError =
+                                                            false;
+                                                        setState(() {});
+                                                        setState2(() {});
+                                                      }
                                                     }
-                                                    setState(() {
-                                                      dialogLoading = false;
-                                                    });
-                                                    setState2(() {});
                                                   },
                                                   child: Container(
+                                                    width: 280,
+                                                    height: 35,
                                                     decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            color: Colors.grey),
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(3),
-                                                        border: Border.all(
-                                                            color:
-                                                                Colors.grey)),
+                                                                .circular(4)),
                                                     padding: const EdgeInsets
                                                         .symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 5),
-                                                    child: const Icon(
-                                                      Iconsax.folder_open,
-                                                      size: 19,
+                                                        horizontal: 15,
+                                                        vertical: 7),
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          startDate == null
+                                                              ? staticTextTranslate(
+                                                                  'Select Date')
+                                                              : DateFormat(
+                                                                      'dd / MM / yyyy  h:mm a')
+                                                                  .format(startDate ??
+                                                                      DateTime
+                                                                          .now()),
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  getMediumFontSize,
+                                                              color: startDate ==
+                                                                      null
+                                                                  ? Colors.grey
+                                                                  : Colors
+                                                                      .black),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                )
+                                                ),
+                                                if (showStartDateError)
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 8, left: 15.0),
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Select a start date/time'),
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            getMediumFontSize,
+                                                        color: Colors.red[700],
+                                                      ),
+                                                    ),
+                                                  ),
                                               ],
                                             ),
-                                            const SizedBox(
-                                              height: 25,
-                                            ),
-                                            Text(
-                                                uploadRes.isEmpty
-                                                    ? staticTextTranslate(
-                                                        'Items Found : 0')
-                                                    : '${staticTextTranslate("Items Found")} : ${uploadRes['localPromotionDataLst'].length}',
-                                                style: TextStyle(
-                                                  fontSize: getMediumFontSize,
-                                                )),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          SizedBox(
+                                            width: 200,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                SizedBox(
-                                                  width: 200,
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                          staticTextTranslate(
-                                                              'Start Date/Time'),
-                                                          style: TextStyle(
-                                                            fontSize:
-                                                                getMediumFontSize -
-                                                                    1,
-                                                          )),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () async {
-                                                          DateTime? dateTime =
-                                                              await showDatePicker(
-                                                            context: context,
-                                                            initialDate:
-                                                                DateTime.now(),
-                                                            firstDate:
-                                                                DateTime.now(),
-                                                            lastDate:
-                                                                DateTime(2050),
-                                                          );
-                                                          if (dateTime !=
-                                                              null) {
-                                                            TimeOfDay?
-                                                                timeOfDay =
-                                                                await showTimePicker(
-                                                              context: context,
-                                                              initialTime:
-                                                                  TimeOfDay
-                                                                      .now(),
-                                                              cancelText:
-                                                                  staticTextTranslate(
-                                                                      'CANCEL'),
-                                                              confirmText:
-                                                                  staticTextTranslate(
-                                                                      'OK'),
-                                                              helpText:
-                                                                  staticTextTranslate(
-                                                                      'SELECT TIME'),
-                                                              errorInvalidText:
-                                                                  staticTextTranslate(
-                                                                      'Invalid format.'),
-                                                            );
-                                                            if (timeOfDay !=
-                                                                null) {
-                                                              startDate =
-                                                                  DateTime(
-                                                                dateTime.year,
-                                                                dateTime.month,
-                                                                dateTime.day,
-                                                                timeOfDay.hour,
-                                                                timeOfDay
-                                                                    .minute,
-                                                              );
-
-                                                              showStartDateError =
-                                                                  false;
-                                                              setState(() {});
-                                                              setState2(() {});
-                                                            }
-                                                          }
-                                                        },
-                                                        child: Container(
-                                                          width: 280,
-                                                          height: 35,
-                                                          decoration: BoxDecoration(
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .grey),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          4)),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  horizontal:
-                                                                      15,
-                                                                  vertical: 7),
-                                                          child: Row(
-                                                            children: [
-                                                              Text(
-                                                                startDate ==
-                                                                        null
-                                                                    ? staticTextTranslate(
-                                                                        'Select Date')
-                                                                    : DateFormat(
-                                                                            'dd / MM / yyyy  h:mm a')
-                                                                        .format(startDate ??
-                                                                            DateTime.now()),
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        getMediumFontSize,
-                                                                    color: startDate ==
-                                                                            null
-                                                                        ? Colors
-                                                                            .grey
-                                                                        : Colors
-                                                                            .black),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      if (showStartDateError)
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  top: 8,
-                                                                  left: 15.0),
-                                                          child: Text(
-                                                            staticTextTranslate(
-                                                                'Select a start date/time'),
-                                                            style: TextStyle(
-                                                              fontSize:
-                                                                  getMediumFontSize,
-                                                              color: Colors
-                                                                  .red[700],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                    ],
-                                                  ),
-                                                ),
+                                                Text(
+                                                    staticTextTranslate(
+                                                        'End Date/Time'),
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          getMediumFontSize - 1,
+                                                    )),
                                                 const SizedBox(
-                                                  width: 10,
+                                                  height: 5,
                                                 ),
-                                                SizedBox(
-                                                  width: 200,
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
+                                                GestureDetector(
+                                                  onTap: () async {
+                                                    DateTime? dateTime =
+                                                        await showDatePicker(
+                                                      context: context,
+                                                      initialDate: startDate ??
+                                                          DateTime.now(),
+                                                      firstDate: startDate ??
+                                                          DateTime.now(),
+                                                      lastDate: DateTime(2050),
+                                                      cancelText:
                                                           staticTextTranslate(
-                                                              'End Date/Time'),
-                                                          style: TextStyle(
-                                                            fontSize:
-                                                                getMediumFontSize -
-                                                                    1,
-                                                          )),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () async {
-                                                          DateTime? dateTime =
-                                                              await showDatePicker(
-                                                            context: context,
-                                                            initialDate:
-                                                                startDate ??
-                                                                    DateTime
-                                                                        .now(),
-                                                            firstDate:
-                                                                startDate ??
-                                                                    DateTime
-                                                                        .now(),
-                                                            lastDate:
-                                                                DateTime(2050),
-                                                            cancelText:
-                                                                staticTextTranslate(
-                                                                    'CANCEL'),
-                                                            confirmText:
-                                                                staticTextTranslate(
-                                                                    'OK'),
-                                                            helpText:
-                                                                staticTextTranslate(
-                                                                    'SELECT DATE'),
-                                                            errorFormatText:
-                                                                staticTextTranslate(
-                                                                    'Invalid format.'),
-                                                            errorInvalidText:
-                                                                staticTextTranslate(
-                                                                    'Invalid format.'),
-                                                            fieldLabelText:
-                                                                staticTextTranslate(
-                                                                    'Enter Date'),
-                                                            fieldHintText:
-                                                                staticTextTranslate(
-                                                                    'Enter Date'),
-                                                          );
-                                                          if (dateTime !=
-                                                              null) {
-                                                            TimeOfDay?
-                                                                timeOfDay =
-                                                                await showTimePicker(
-                                                              context: context,
-                                                              initialTime:
-                                                                  TimeOfDay
-                                                                      .now(),
-                                                              cancelText:
-                                                                  staticTextTranslate(
-                                                                      'CANCEL'),
-                                                              confirmText:
-                                                                  staticTextTranslate(
-                                                                      'OK'),
-                                                              helpText:
-                                                                  staticTextTranslate(
-                                                                      'SELECT TIME'),
-                                                              errorInvalidText:
-                                                                  staticTextTranslate(
-                                                                      'Invalid format.'),
-                                                            );
-
-                                                            if (timeOfDay !=
-                                                                null) {
-                                                              endDate =
-                                                                  DateTime(
-                                                                dateTime.year,
-                                                                dateTime.month,
-                                                                dateTime.day,
-                                                                timeOfDay.hour,
-                                                                timeOfDay
-                                                                    .minute,
-                                                              );
-                                                              showEndDateError =
-                                                                  false;
-                                                              setState(() {});
-                                                              setState2(() {});
-                                                            }
-                                                          }
-                                                        },
-                                                        child: Container(
-                                                          width: 280,
-                                                          height: 35,
-                                                          decoration: BoxDecoration(
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .grey),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          4)),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  horizontal:
-                                                                      15,
-                                                                  vertical: 7),
-                                                          child: Row(
-                                                            children: [
-                                                              Text(
-                                                                endDate == null
-                                                                    ? staticTextTranslate(
-                                                                        'Select Date')
-                                                                    : DateFormat(
-                                                                            'dd / MM / yyyy  h:mm a')
-                                                                        .format(
-                                                                            endDate!),
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        getMediumFontSize,
-                                                                    color: endDate ==
-                                                                            null
-                                                                        ? Colors
-                                                                            .grey
-                                                                        : Colors
-                                                                            .black),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      if (showEndDateError)
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  top: 8,
-                                                                  left: 15.0),
-                                                          child: Text(
+                                                              'CANCEL'),
+                                                      confirmText:
+                                                          staticTextTranslate(
+                                                              'OK'),
+                                                      helpText:
+                                                          staticTextTranslate(
+                                                              'SELECT DATE'),
+                                                      errorFormatText:
+                                                          staticTextTranslate(
+                                                              'Invalid format.'),
+                                                      errorInvalidText:
+                                                          staticTextTranslate(
+                                                              'Invalid format.'),
+                                                      fieldLabelText:
+                                                          staticTextTranslate(
+                                                              'Enter Date'),
+                                                      fieldHintText:
+                                                          staticTextTranslate(
+                                                              'Enter Date'),
+                                                    );
+                                                    if (dateTime != null) {
+                                                      TimeOfDay? timeOfDay =
+                                                          await showTimePicker(
+                                                        context: context,
+                                                        initialTime:
+                                                            TimeOfDay.now(),
+                                                        cancelText:
                                                             staticTextTranslate(
-                                                                'Select a end date/time'),
-                                                            style: TextStyle(
+                                                                'CANCEL'),
+                                                        confirmText:
+                                                            staticTextTranslate(
+                                                                'OK'),
+                                                        helpText:
+                                                            staticTextTranslate(
+                                                                'SELECT TIME'),
+                                                        errorInvalidText:
+                                                            staticTextTranslate(
+                                                                'Invalid format.'),
+                                                      );
+
+                                                      if (timeOfDay != null) {
+                                                        endDate = DateTime(
+                                                          dateTime.year,
+                                                          dateTime.month,
+                                                          dateTime.day,
+                                                          timeOfDay.hour,
+                                                          timeOfDay.minute,
+                                                        );
+                                                        showEndDateError =
+                                                            false;
+                                                        setState(() {});
+                                                        setState2(() {});
+                                                      }
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    width: 280,
+                                                    height: 35,
+                                                    decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            color: Colors.grey),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(4)),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 15,
+                                                        vertical: 7),
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          endDate == null
+                                                              ? staticTextTranslate(
+                                                                  'Select Date')
+                                                              : DateFormat(
+                                                                      'dd / MM / yyyy  h:mm a')
+                                                                  .format(
+                                                                      endDate!),
+                                                          style: TextStyle(
                                                               fontSize:
                                                                   getMediumFontSize,
-                                                              color: Colors
-                                                                  .red[700],
-                                                            ),
-                                                          ),
+                                                              color: endDate ==
+                                                                      null
+                                                                  ? Colors.grey
+                                                                  : Colors
+                                                                      .black),
                                                         ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
+                                                if (showEndDateError)
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 8, left: 15.0),
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Select a end date/time'),
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            getMediumFontSize,
+                                                        color: Colors.red[700],
+                                                      ),
+                                                    ),
+                                                  ),
                                               ],
-                                            )
-                                          ]),
-                                    ),
-                                  ),
-                                ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ]),
                               ),
                             ),
                             Align(
@@ -1068,12 +1018,23 @@ class _PromoCodePageState extends State<PromoCodePage> {
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    SizedBox(
-                                      height: 45,
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          gradient: const LinearGradient(
+                                              end: Alignment.bottomCenter,
+                                              colors: [
+                                                Color(0xff092F53),
+                                                Color(0xff284F70),
+                                              ],
+                                              begin: Alignment.topCenter)),
+                                      height: 42,
                                       width: 173,
                                       child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                              backgroundColor: darkBlueColor,
+                                              backgroundColor:
+                                                  Colors.transparent,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
