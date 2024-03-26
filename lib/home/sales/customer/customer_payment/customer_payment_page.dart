@@ -846,6 +846,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
 
     bool showloading = false;
     var formKey = GlobalKey<FormState>();
+
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -853,32 +854,51 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
               return Dialog(
                 backgroundColor: homeBgColor,
                 child: SizedBox(
-                    height: 385,
+                    height: 405,
                     width: 550,
                     child: showloading
                         ? showLoading()
                         : Column(
                             children: [
                               Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Card(
-                                    child: Container(
-                                      width: 530,
-                                      padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      // height: 55,
+                                      width: double.maxFinite,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 18, vertical: 10),
+                                      decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(4),
+                                              topRight: Radius.circular(4)),
+                                          gradient: LinearGradient(
+                                              end: Alignment.bottomCenter,
+                                              colors: [
+                                                Color.fromARGB(255, 66, 66, 66),
+                                                Color.fromARGB(255, 0, 0, 0),
+                                              ],
+                                              begin: Alignment.topCenter)),
+                                      child: Text(
+                                        staticTextTranslate('Customer Payment'),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: getMediumFontSize + 5,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 18,
+                                      ),
                                       child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                    staticTextTranslate(
-                                                        'Customer Payment'),
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          getMediumFontSize + 4,
-                                                    )),
                                                 const SizedBox(
                                                   height: 15,
                                                 ),
@@ -1135,7 +1155,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               const SizedBox(
-                                                height: 33,
+                                                height: 15,
                                               ),
                                               Text(
                                                   staticTextTranslate(
@@ -1190,7 +1210,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                         ],
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
                               ),
                               Align(
@@ -1244,12 +1264,23 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                       const SizedBox(
                                         width: 10,
                                       ),
-                                      SizedBox(
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                            gradient: const LinearGradient(
+                                                end: Alignment.bottomCenter,
+                                                colors: [
+                                                  Color(0xff092F53),
+                                                  Color(0xff284F70),
+                                                ],
+                                                begin: Alignment.topCenter)),
                                         height: 42,
                                         width: 173,
                                         child: ElevatedButton(
                                             style: ElevatedButton.styleFrom(
-                                                backgroundColor: darkBlueColor,
+                                                backgroundColor:
+                                                    Colors.transparent,
                                                 shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
