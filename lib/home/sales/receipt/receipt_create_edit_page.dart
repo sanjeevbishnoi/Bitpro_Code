@@ -800,111 +800,135 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                       return StatefulBuilder(
                                                           builder: (context,
                                                               setState2) {
-                                                        return AlertDialog(
-                                                          title: Text(
-                                                              staticTextTranslate(
-                                                                  'Reference no'),
-                                                              style: TextStyle(
-                                                                fontSize:
-                                                                    getMediumFontSize +
-                                                                        5,
-                                                              )),
-                                                          content: Row(
-                                                            children: [
-                                                              SizedBox(
-                                                                width: 250,
-                                                                child:
-                                                                    TextFormField(
-                                                                        autofocus:
-                                                                            true,
-                                                                        initialValue:
-                                                                            referenceNo,
-                                                                        enabled:
-                                                                            !viewMode,
-                                                                        style: const TextStyle(
-                                                                            fontSize:
-                                                                                16),
-                                                                        decoration: const InputDecoration(
-                                                                            isDense:
-                                                                                true,
-                                                                            contentPadding:
-                                                                                EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                                                                            border: OutlineInputBorder()),
-                                                                        onChanged: (val) {
-                                                                          if (val
-                                                                              .isNotEmpty) {
-                                                                            setState(() {
-                                                                              ref = val;
-                                                                            });
-                                                                            setState2(() {});
-                                                                          }
-                                                                        }),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          actionsAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          actions: [
-                                                            if (!viewMode)
-                                                              SizedBox(
-                                                                height: 45,
-                                                                width: 130,
-                                                                child:
-                                                                    ElevatedButton(
-                                                                        style: ElevatedButton.styleFrom(
-                                                                            backgroundColor:
-                                                                                darkBlueColor,
-                                                                            shape: RoundedRectangleBorder(
-                                                                                borderRadius: BorderRadius.circular(
-                                                                                    4))),
-                                                                        onPressed:
-                                                                            () {
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                          referenceNo =
-                                                                              ref;
-                                                                          setState(
-                                                                              () {});
-                                                                          setState2(
-                                                                              () {});
-                                                                        },
-                                                                        child: Text(
-                                                                            staticTextTranslate(
-                                                                                'Save'),
-                                                                            style:
-                                                                                TextStyle(
-                                                                              fontSize: getMediumFontSize,
-                                                                            ))),
-                                                              ),
-                                                            SizedBox(
-                                                              height: 45,
-                                                              width: 130,
-                                                              child:
-                                                                  ElevatedButton(
-                                                                      style: ElevatedButton.styleFrom(
-                                                                          backgroundColor: const Color(
-                                                                              0xffdddfe8),
-                                                                          shape: RoundedRectangleBorder(
-                                                                              borderRadius: BorderRadius.circular(
-                                                                                  4))),
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                      child:
-                                                                          Text(
-                                                                        staticTextTranslate(
-                                                                            'Cancel'),
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                getMediumFontSize,
-                                                                            color:
-                                                                                Colors.black),
+                                                        return Dialog(
+                                                          child: SizedBox(
+                                                            height: 220,
+                                                            width: 300,
+                                                            child: Column(
+                                                              children: [
+                                                                Container(
+                                                                  width: double
+                                                                      .maxFinite,
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          18,
+                                                                      vertical:
+                                                                          10),
+                                                                  decoration: const BoxDecoration(
+                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(4), topRight: Radius.circular(4)),
+                                                                      gradient: LinearGradient(
+                                                                          end: Alignment.bottomCenter,
+                                                                          colors: [
+                                                                            Color.fromARGB(
+                                                                                255,
+                                                                                66,
+                                                                                66,
+                                                                                66),
+                                                                            Color.fromARGB(
+                                                                                255,
+                                                                                0,
+                                                                                0,
+                                                                                0),
+                                                                          ],
+                                                                          begin: Alignment.topCenter)),
+                                                                  child: Text(
+                                                                      staticTextTranslate(
+                                                                          'Reference no'),
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize:
+                                                                            getMediumFontSize +
+                                                                                5,
                                                                       )),
+                                                                ),
+                                                                Expanded(
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        width:
+                                                                            250,
+                                                                        child: TextFormField(
+                                                                            autofocus: true,
+                                                                            initialValue: referenceNo,
+                                                                            enabled: !viewMode,
+                                                                            style: const TextStyle(fontSize: 16),
+                                                                            decoration: const InputDecoration(isDense: true, hintText: 'Reference No.', contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15), border: OutlineInputBorder()),
+                                                                            onChanged: (val) {
+                                                                              if (val.isNotEmpty) {
+                                                                                setState(() {
+                                                                                  ref = val;
+                                                                                });
+                                                                                setState2(() {});
+                                                                              }
+                                                                            }),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .bottomCenter,
+                                                                    child: Container(
+                                                                        width: 800,
+                                                                        decoration: const BoxDecoration(color: Color(0xffdddfe8), borderRadius: BorderRadius.only(bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6))),
+                                                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                                                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                                                                          Container(
+                                                                            decoration: BoxDecoration(
+                                                                                borderRadius: BorderRadius.circular(4),
+                                                                                gradient: const LinearGradient(
+                                                                                    end: Alignment.bottomCenter,
+                                                                                    colors: [
+                                                                                      Color(0xff092F53),
+                                                                                      Color(0xff284F70),
+                                                                                    ],
+                                                                                    begin: Alignment.topCenter)),
+                                                                            height:
+                                                                                45,
+                                                                            width:
+                                                                                130,
+                                                                            child: ElevatedButton(
+                                                                                style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
+                                                                                onPressed: () {
+                                                                                  Navigator.pop(context);
+                                                                                  referenceNo = ref;
+                                                                                  setState(() {});
+                                                                                  setState2(() {});
+                                                                                },
+                                                                                child: Text(staticTextTranslate('Save'),
+                                                                                    style: TextStyle(
+                                                                                      fontSize: getMediumFontSize,
+                                                                                    ))),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                45,
+                                                                            width:
+                                                                                130,
+                                                                            child: ElevatedButton(
+                                                                                style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
+                                                                                onPressed: () {
+                                                                                  Navigator.pop(context);
+                                                                                },
+                                                                                child: Text(
+                                                                                  staticTextTranslate('Cancel'),
+                                                                                  style: TextStyle(fontSize: getMediumFontSize, color: Colors.black),
+                                                                                )),
+                                                                          ),
+                                                                        ])))
+                                                              ],
                                                             ),
-                                                          ],
+                                                          ),
                                                         );
                                                       });
                                                     });
@@ -2211,241 +2235,242 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
               return Dialog(
                 backgroundColor: homeBgColor,
                 child: SizedBox(
-                    height: 340,
+                    height: 380,
                     width: 500,
                     child: dialogLoading
                         ? showLoading()
                         : Column(children: [
                             Expanded(
-                              child: SizedBox(
-                                width: 500,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0, horizontal: 15),
-                                      child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                                staticTextTranslate(
-                                                    'Product Import'),
-                                                style: TextStyle(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    // height: 55,
+                                    width: double.maxFinite,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 18, vertical: 10),
+                                    decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(4),
+                                            topRight: Radius.circular(4)),
+                                        gradient: LinearGradient(
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Color.fromARGB(255, 66, 66, 66),
+                                              Color.fromARGB(255, 0, 0, 0),
+                                            ],
+                                            begin: Alignment.topCenter)),
+                                    child: Text(
+                                      staticTextTranslate('Product Import'),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: getMediumFontSize + 5,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 15),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                  staticTextTranslate(
+                                                      'Download Sample file here.'),
+                                                  style: TextStyle(
                                                     fontSize: getMediumFontSize,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
+                                                  )),
+                                              TextButton(
+                                                onPressed: () async {
+                                                  setState(() {
+                                                    dialogLoading = true;
+                                                  });
+                                                  setState2(() {});
+                                                  final Workbook workbook =
+                                                      Workbook();
+
+                                                  final Worksheet sheet =
+                                                      workbook.worksheets[0];
+
+                                                  sheet
+                                                      .getRangeByName('A1')
+                                                      .setText('barcode');
+                                                  sheet
+                                                      .getRangeByName('B1')
+                                                      .setText('qty');
+                                                  sheet
+                                                      .getRangeByName('C1')
+                                                      .setText('price');
+
+                                                  final List<int> bytes =
+                                                      workbook.saveAsStream();
+
+                                                  workbook.dispose();
+                                                  await saveAndLaunchFile(
+                                                      bytes,
+                                                      fileExtension: 'xlsx',
+                                                      context);
+                                                  setState(() {
+                                                    dialogLoading = false;
+                                                  });
+                                                  setState2(() {});
+                                                },
+                                                child: Text(
                                                     staticTextTranslate(
-                                                        'Download Sample file here.'),
+                                                        'Download Now.'),
                                                     style: TextStyle(
                                                       fontSize:
                                                           getMediumFontSize,
+                                                      decoration: TextDecoration
+                                                          .underline,
                                                     )),
-                                                TextButton(
-                                                  onPressed: () async {
-                                                    setState(() {
-                                                      dialogLoading = true;
-                                                    });
-                                                    setState2(() {});
-                                                    final Workbook workbook =
-                                                        Workbook();
-
-                                                    final Worksheet sheet =
-                                                        workbook.worksheets[0];
-
-                                                    sheet
-                                                        .getRangeByName('A1')
-                                                        .setText('barcode');
-                                                    sheet
-                                                        .getRangeByName('B1')
-                                                        .setText('qty');
-                                                    sheet
-                                                        .getRangeByName('C1')
-                                                        .setText('price');
-
-                                                    final List<int> bytes =
-                                                        workbook.saveAsStream();
-
-                                                    workbook.dispose();
-                                                    await saveAndLaunchFile(
-                                                        bytes,
-                                                        fileExtension: 'xlsx',
-                                                        context);
-                                                    setState(() {
-                                                      dialogLoading = false;
-                                                    });
-                                                    setState2(() {});
-                                                  },
+                                              )
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(staticTextTranslate('File'),
+                                                  style: TextStyle(
+                                                    fontSize: getMediumFontSize,
+                                                  )),
+                                              const SizedBox(
+                                                width: 30,
+                                              ),
+                                              Expanded(
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              3),
+                                                      border: Border.all(
+                                                          color: Colors.grey)),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 5),
                                                   child: Text(
-                                                      staticTextTranslate(
-                                                          'Download Now.'),
+                                                      importItem != null
+                                                          ? importItem!.path
+                                                          : staticTextTranslate(
+                                                              'No path found'),
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                       style: TextStyle(
                                                         fontSize:
                                                             getMediumFontSize,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .underline,
                                                       )),
-                                                )
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                    staticTextTranslate('File'),
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          getMediumFontSize,
-                                                    )),
-                                                const SizedBox(
-                                                  width: 30,
                                                 ),
-                                                Expanded(
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(3),
-                                                        border: Border.all(
-                                                            color:
-                                                                Colors.grey)),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 5),
-                                                    child: Text(
-                                                        importItem != null
-                                                            ? importItem!.path
-                                                            : staticTextTranslate(
-                                                                'No path found'),
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              getMediumFontSize,
-                                                        )),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () async {
-                                                    setState(() {
-                                                      dialogLoading = true;
-                                                    });
-                                                    setState2(() {});
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  setState(() {
+                                                    dialogLoading = true;
+                                                  });
+                                                  setState2(() {});
 
-                                                    FilePickerResult? result =
-                                                        await FilePicker
-                                                            .platform
-                                                            .pickFiles(
-                                                                allowMultiple:
-                                                                    false,
-                                                                dialogTitle:
-                                                                    'Import Items',
-                                                                allowedExtensions: [
-                                                                  'xlsx'
-                                                                ],
-                                                                type: FileType
-                                                                    .custom);
-                                                    if (result != null &&
-                                                        result
-                                                            .paths.isNotEmpty) {
-                                                      importItem = File(
-                                                          result.paths.first!);
-                                                      var bytes = File(result
-                                                              .files
-                                                              .first
-                                                              .path!)
-                                                          .readAsBytesSync();
-                                                      var excel =
-                                                          Excel.decodeBytes(
-                                                              bytes);
+                                                  FilePickerResult? result =
+                                                      await FilePicker.platform
+                                                          .pickFiles(
+                                                              allowMultiple:
+                                                                  false,
+                                                              dialogTitle:
+                                                                  'Import Items',
+                                                              allowedExtensions: [
+                                                                'xlsx'
+                                                              ],
+                                                              type: FileType
+                                                                  .custom);
+                                                  if (result != null &&
+                                                      result.paths.isNotEmpty) {
+                                                    importItem = File(
+                                                        result.paths.first!);
+                                                    var bytes = File(result
+                                                            .files.first.path!)
+                                                        .readAsBytesSync();
+                                                    var excel =
+                                                        Excel.decodeBytes(
+                                                            bytes);
 
-                                                      uploadRes =
-                                                          localReceiptDataFromExcel(
-                                                              excel,
-                                                              allInventoryDataLst);
-                                                    }
-                                                    setState(() {
-                                                      dialogLoading = false;
-                                                    });
-                                                    setState2(() {});
-                                                  },
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(3),
-                                                        border: Border.all(
-                                                            color:
-                                                                Colors.grey)),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 5),
-                                                    child: Text(
-                                                        staticTextTranslate(
-                                                            'Select File'),
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              getMediumFontSize,
-                                                        )),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 25,
-                                            ),
-                                            Text(
-                                                uploadRes.isEmpty
-                                                    ? staticTextTranslate(
-                                                        'Items Found : 0')
-                                                    : '${staticTextTranslate("Items Found")} : ${uploadRes['localVoucherDataLst'].length}',
-                                                style: TextStyle(
-                                                  fontSize: getMediumFontSize,
-                                                )),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                    staticTextTranslate(
-                                                        'Note : '),
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          getMediumFontSize,
-                                                    )),
-                                                Text(
-                                                  uploadRes.isNotEmpty
-                                                      ? '${uploadRes['dublicate']} ${staticTextTranslate("Duplicate items found")}'
-                                                      : staticTextTranslate(
-                                                          '0 Duplicate items found'),
+                                                    uploadRes =
+                                                        localReceiptDataFromExcel(
+                                                            excel,
+                                                            allInventoryDataLst);
+                                                  }
+                                                  setState(() {
+                                                    dialogLoading = false;
+                                                  });
+                                                  setState2(() {});
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              3),
+                                                      border: Border.all(
+                                                          color: Colors.grey)),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 5),
+                                                  child: Text(
+                                                      staticTextTranslate(
+                                                          'Select File'),
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            getMediumFontSize,
+                                                      )),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 25,
+                                          ),
+                                          Text(
+                                              uploadRes.isEmpty
+                                                  ? staticTextTranslate(
+                                                      'Items Found : 0')
+                                                  : '${staticTextTranslate("Items Found")} : ${uploadRes['localVoucherDataLst'].length}',
+                                              style: TextStyle(
+                                                fontSize: getMediumFontSize,
+                                              )),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                  staticTextTranslate(
+                                                      'Note : '),
                                                   style: TextStyle(
-                                                      fontSize:
-                                                          getMediumFontSize,
-                                                      color: Colors.red[700]),
-                                                ),
-                                              ],
-                                            ),
-                                          ]),
-                                    ),
+                                                    fontSize: getMediumFontSize,
+                                                  )),
+                                              Text(
+                                                uploadRes.isNotEmpty
+                                                    ? '${uploadRes['dublicate']} ${staticTextTranslate("Duplicate items found")}'
+                                                    : staticTextTranslate(
+                                                        '0 Duplicate items found'),
+                                                style: TextStyle(
+                                                    fontSize: getMediumFontSize,
+                                                    color: Colors.red[700]),
+                                              ),
+                                            ],
+                                          ),
+                                        ]),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
                             Align(
@@ -2461,9 +2486,24 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                     horizontal: 30, vertical: 20),
                                 child: Row(
                                   children: [
-                                    SizedBox(
-                                      height: 45,
-                                      width: 150,
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          gradient: uploadRes.isEmpty ||
+                                                  uploadRes['localVoucherDataLst']
+                                                          .length ==
+                                                      0
+                                              ? null
+                                              : const LinearGradient(
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [
+                                                    Color(0xff092F53),
+                                                    Color(0xff284F70),
+                                                  ],
+                                                  begin: Alignment.topCenter)),
+                                      height: 42,
+                                      width: 133,
                                       child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                               backgroundColor: uploadRes
@@ -2472,11 +2512,11 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                               .length ==
                                                           0
                                                   ? Colors.grey
-                                                  : darkBlueColor,
+                                                  : Colors.transparent,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          8))),
+                                                          4))),
                                           onPressed: () async {
                                             if (uploadRes.isNotEmpty &&
                                                 uploadRes['localVoucherDataLst']
@@ -2550,7 +2590,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          8))),
+                                                          4))),
                                           onPressed: () {
                                             Navigator.pop(context);
                                           },

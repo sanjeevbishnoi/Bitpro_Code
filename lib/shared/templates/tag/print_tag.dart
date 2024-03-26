@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:barcode_image/barcode_image.dart';
 import 'package:bitpro_hive/shared/check_contain_arabic_letters.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pdf/pdf.dart';
@@ -68,6 +69,7 @@ void buildTagPrint({
   String copyType = 'normal_copy';
   int copies = 1;
   Printer? selectedPrinter;
+  GlobalKey _dropdownButtonKey = GlobalKey();
   // ignore: use_build_context_synchronously
   showDialog(
       context: context,
@@ -75,100 +77,116 @@ void buildTagPrint({
             return Dialog(
               backgroundColor: homeBgColor,
               child: SizedBox(
-                  height: 420,
+                  height: 500,
                   width: 550,
                   child: Column(children: [
                     Expanded(
-                        child: Card(
-                      margin: const EdgeInsets.all(10),
-                      color: Colors.white,
-                      child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 15),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                          Container(
+                            // height: 55,
+                            width: double.maxFinite,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 18, vertical: 10),
+                            decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(4),
+                                    topRight: Radius.circular(4)),
+                                gradient: LinearGradient(
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Color.fromARGB(255, 66, 66, 66),
+                                      Color.fromARGB(255, 0, 0, 0),
+                                    ],
+                                    begin: Alignment.topCenter)),
+                            child: Text(
+                              staticTextTranslate('Print Tag'),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: getMediumFontSize + 5,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 18,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Text(
+                                  staticTextTranslate(
+                                      'Selected record to print selected items tag. All listed record to print tag of all listed items here'),
+                                  style: TextStyle(
+                                    fontSize: getMediumFontSize - 1,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 17,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
+                                    Radio(
+                                        value: 1,
+                                        splashRadius: 15,
+                                        activeColor: darkBlueColor,
+                                        groupValue: printSelectedRecode,
+                                        onChanged: (value) {
+                                          printSelectedRecode = value as int;
+                                          setState2(() {});
+                                          // setState(() {});
+                                        }),
                                     Text(
-                                      staticTextTranslate('Print Tag'),
+                                      staticTextTranslate('Selected Record'),
                                       style: TextStyle(
-                                        fontSize: getMediumFontSize + 5,
-                                      ),
-                                    ),
-                                    Text(
-                                      staticTextTranslate(
-                                          'Selected record to print selected items tag'),
-                                      style: TextStyle(
-                                        fontSize: getMediumFontSize - 1,
-                                      ),
-                                    ),
-                                    Text(
-                                      staticTextTranslate(
-                                          'All listed record to print tag of all listed items here'),
-                                      style: TextStyle(
-                                        fontSize: getMediumFontSize - 1,
-                                      ),
+                                          fontSize: getMediumFontSize),
                                     ),
                                     const SizedBox(
-                                      height: 17,
+                                      width: 20,
                                     ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Radio(
-                                            value: 1,
-                                            splashRadius: 15,
-                                            activeColor: darkBlueColor,
-                                            groupValue: printSelectedRecode,
-                                            onChanged: (value) {
-                                              printSelectedRecode =
-                                                  value as int;
-                                              setState2(() {});
-                                              // setState(() {});
-                                            }),
-                                        Text(
-                                          staticTextTranslate(
-                                              'Selected Record'),
-                                          style: TextStyle(
-                                              fontSize: getMediumFontSize),
-                                        ),
-                                        const SizedBox(
-                                          width: 20,
-                                        ),
-                                        Radio(
-                                            value: 2,
-                                            groupValue: printSelectedRecode,
-                                            splashRadius: 15,
-                                            onChanged: (value) {
-                                              printSelectedRecode =
-                                                  value as int;
-                                              setState2(() {});
-                                              // setState(() {});
-                                            }),
-                                        Text(
-                                          staticTextTranslate(
-                                              'All Listed Record'),
-                                          style: TextStyle(
-                                              fontSize: getMediumFontSize),
-                                        ),
-                                      ],
+                                    Radio(
+                                        value: 2,
+                                        groupValue: printSelectedRecode,
+                                        splashRadius: 15,
+                                        onChanged: (value) {
+                                          printSelectedRecode = value as int;
+                                          setState2(() {});
+                                          // setState(() {});
+                                        }),
+                                    Text(
+                                      staticTextTranslate('All Listed Record'),
+                                      style: TextStyle(
+                                          fontSize: getMediumFontSize),
                                     ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
                                     Container(
                                       height: 37,
-                                      width: 490,
-                                      padding: const EdgeInsets.all(3),
+                                      width: 200,
+                                      padding: const EdgeInsets.only(left: 8),
                                       decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(4),
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(6),
+                                            bottomLeft: Radius.circular(6),
+                                          ),
                                           border: Border.all(
-                                              width: 0.5, color: Colors.grey)),
+                                            width: 0.5,
+                                            color: const Color.fromARGB(
+                                                255, 43, 43, 43),
+                                          )),
                                       child: DropdownButtonHideUnderline(
                                         child: DropdownButton<String>(
+                                          key: _dropdownButtonKey,
                                           hint: Text(
                                             staticTextTranslate(
                                                 'Select Printer'),
@@ -187,6 +205,11 @@ void buildTagPrint({
                                               ),
                                             );
                                           }).toList(),
+                                          padding: EdgeInsets.zero,
+                                          icon: SizedBox(),
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(6),
+                                              bottomLeft: Radius.circular(6)),
                                           value: selectedPrinter == null
                                               ? null
                                               : selectedPrinter!.name,
@@ -199,132 +222,147 @@ void buildTagPrint({
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.grey),
-                                          borderRadius:
-                                              BorderRadius.circular(4)),
-                                      padding: const EdgeInsets.all(8),
-                                      child: Column(
-                                        children: [
-                                          Row(children: [
-                                            Radio(
-                                                activeColor: darkBlueColor,
-                                                value: "onHandQuantity",
-                                                groupValue: copyType,
-                                                onChanged: (String? value) {
-                                                  if (value != null) {
-                                                    copyType = value;
-
-                                                    setState2(() {});
-                                                  }
-                                                }),
-                                            Text(
-                                                staticTextTranslate(
-                                                    'On Hand Quantity'),
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        getMediumFontSize)),
-                                          ]),
-                                          if (selectedPrintTagData.docQty != -1)
-                                            Row(children: [
-                                              Radio(
-                                                  activeColor: darkBlueColor,
-                                                  value: "doc_quantity",
-                                                  groupValue: copyType,
-                                                  onChanged: (String? value) {
-                                                    if (value != null) {
-                                                      copyType = value;
-                                                      setState2(() {});
-                                                    }
-                                                  }),
-                                              Text(staticTextTranslate(
-                                                  'Document Quantity')),
-                                            ]),
-                                          Row(children: [
-                                            Radio(
-                                                activeColor: darkBlueColor,
-                                                value: "normal_copy",
-                                                groupValue: copyType,
-                                                onChanged: (String? value) {
-                                                  if (value != null) {
-                                                    copyType = value;
-
-                                                    setState2(() {});
-                                                  }
-                                                }),
-                                            Text(
-                                              staticTextTranslate('Copy'),
-                                              style: TextStyle(
-                                                  fontSize: getMediumFontSize),
-                                            ),
-                                          ]),
-                                          const SizedBox(
-                                            height: 5,
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (p.isNotEmpty) {
+                                          _dropdownButtonKey.currentContext
+                                              ?.visitChildElements((element) {
+                                            if (element.widget is Semantics) {
+                                              element.visitChildElements(
+                                                  (element) {
+                                                if (element.widget is Actions) {
+                                                  element.visitChildElements(
+                                                      (element) {
+                                                    Actions.invoke(element,
+                                                        ActivateIntent());
+                                                  });
+                                                }
+                                              });
+                                            }
+                                          });
+                                        }
+                                      },
+                                      child: Container(
+                                          height: 37,
+                                          width: 37,
+                                          decoration: BoxDecoration(
+                                            color: const Color.fromARGB(
+                                                255, 43, 43, 43),
+                                            borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(6),
+                                                bottomRight:
+                                                    Radius.circular(6)),
                                           ),
-                                          if (copyType == 'normal_copy')
-                                            Row(children: [
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              SizedBox(
-                                                  height: 35,
-                                                  width: 130,
-                                                  child: TextFormField(
-                                                      scrollPadding:
-                                                          const EdgeInsets.all(
-                                                              0),
-                                                      initialValue: copies
-                                                          .toString(),
-                                                      autovalidateMode:
-                                                          AutovalidateMode
-                                                              .onUserInteraction,
-                                                      validator: (value) {
-                                                        if (int.tryParse(
-                                                                value!) ==
-                                                            null) {
-                                                          return staticTextTranslate(
-                                                              'Enter a valid number');
-                                                        }
-                                                        return null;
-                                                      },
-                                                      style: const TextStyle(
-                                                          fontSize: 16),
-                                                      decoration:
-                                                          const InputDecoration(
-                                                              errorStyle:
-                                                                  TextStyle(
-                                                                      fontSize:
-                                                                          12),
-                                                              isDense: true,
-                                                              border:
-                                                                  OutlineInputBorder()),
-                                                      onChanged: (val) {
-                                                        setState2(() {
-                                                          copies =
-                                                              int.parse(val);
-                                                        });
-                                                        setState2(() {});
-                                                      })),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                staticTextTranslate('Copies'),
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        getMediumFontSize),
-                                              ),
-                                            ]),
-                                        ],
-                                      ),
+                                          alignment: Alignment.center,
+                                          child: Icon(
+                                              Icons.arrow_drop_down_rounded,
+                                              color: Colors.white)),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(children: [
+                                  Radio(
+                                      activeColor: darkBlueColor,
+                                      value: "onHandQuantity",
+                                      groupValue: copyType,
+                                      onChanged: (String? value) {
+                                        if (value != null) {
+                                          copyType = value;
+
+                                          setState2(() {});
+                                        }
+                                      }),
+                                  Text(staticTextTranslate('On Hand Quantity'),
+                                      style: TextStyle(
+                                          fontSize: getMediumFontSize)),
+                                ]),
+                                if (selectedPrintTagData.docQty != -1)
+                                  Row(children: [
+                                    Radio(
+                                        activeColor: darkBlueColor,
+                                        value: "doc_quantity",
+                                        groupValue: copyType,
+                                        onChanged: (String? value) {
+                                          if (value != null) {
+                                            copyType = value;
+                                            setState2(() {});
+                                          }
+                                        }),
+                                    Text(staticTextTranslate(
+                                        'Document Quantity')),
+                                  ]),
+                                Row(children: [
+                                  Radio(
+                                      activeColor: darkBlueColor,
+                                      value: "normal_copy",
+                                      groupValue: copyType,
+                                      onChanged: (String? value) {
+                                        if (value != null) {
+                                          copyType = value;
+
+                                          setState2(() {});
+                                        }
+                                      }),
+                                  Text(
+                                    staticTextTranslate('Copy'),
+                                    style:
+                                        TextStyle(fontSize: getMediumFontSize),
+                                  ),
+                                ]),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                if (copyType == 'normal_copy')
+                                  Row(children: [
+                                    const SizedBox(
+                                      width: 8,
                                     ),
-                                  ]))),
-                    )),
+                                    SizedBox(
+                                        height: 35,
+                                        width: 130,
+                                        child: TextFormField(
+                                            scrollPadding:
+                                                const EdgeInsets.all(0),
+                                            initialValue: copies.toString(),
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
+                                            validator: (value) {
+                                              if (int.tryParse(value!) ==
+                                                  null) {
+                                                return staticTextTranslate(
+                                                    'Enter a valid number');
+                                              }
+                                              return null;
+                                            },
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                            decoration: const InputDecoration(
+                                                errorStyle:
+                                                    TextStyle(fontSize: 12),
+                                                isDense: true,
+                                                border: OutlineInputBorder()),
+                                            onChanged: (val) {
+                                              setState2(() {
+                                                copies = int.parse(val);
+                                              });
+                                              setState2(() {});
+                                            })),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      staticTextTranslate('Copies'),
+                                      style: TextStyle(
+                                          fontSize: getMediumFontSize),
+                                    ),
+                                  ]),
+                              ],
+                            ),
+                          ),
+                        ])),
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Container(
@@ -369,15 +407,24 @@ void buildTagPrint({
                                   )),
                             ),
                             const SizedBox(width: 10),
-                            SizedBox(
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  gradient: const LinearGradient(
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color(0xff092F53),
+                                        Color(0xff284F70),
+                                      ],
+                                      begin: Alignment.topCenter)),
                               height: 42,
                               width: 173,
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: darkBlueColor,
+                                      backgroundColor: Colors.transparent,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(5))),
+                                              BorderRadius.circular(4))),
                                   onPressed: () async {
                                     if (selectedPrinter != null) {
                                       if (printSelectedRecode == 1) {
@@ -412,11 +459,9 @@ void buildTagPrint({
                                       const SizedBox(
                                         width: 10,
                                       ),
-                                      Text(
-                                        staticTextTranslate('Print'),
-                                        style: TextStyle(
-                                            fontSize: getMediumFontSize),
-                                      ),
+                                      Text(staticTextTranslate('Print'),
+                                          style: TextStyle(
+                                              fontSize: getMediumFontSize)),
                                     ],
                                   )),
                             ),
