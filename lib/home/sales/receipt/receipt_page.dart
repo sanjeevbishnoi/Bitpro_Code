@@ -847,43 +847,19 @@ class _ReceiptPageState extends State<ReceiptPage> {
             border: Border.all(width: 0.5, color: Colors.grey),
             color: const Color.fromARGB(255, 255, 255, 255),
             borderRadius: BorderRadius.circular(4)),
-        padding: const EdgeInsets.only(right: 10, bottom: 3),
+        padding: const EdgeInsets.only(right: 3, bottom: 3),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
-              padding: const EdgeInsets.only(top: 2),
-              onPressed: () {
-                customerDataSource = CustomerDataSource(
-                    customerDataLst: customerDataLst,
-                    dbReceiptData: selectedStoreDocId == 'All'
-                        ? dbReceiptDataLst
-                        : dbReceiptDataLst
-                            .where((e) =>
-                                e.selectedStoreDocId == selectedStoreDocId)
-                            .toList(),
-                    allStoreDataLst: allStoreDataLst);
-                setState(() {});
-              },
-              splashRadius: 1,
-              icon: Icon(
-                  customerPhoneController.text.isEmpty
-                      ? CupertinoIcons.search
-                      : Icons.clear,
-                  size: 18,
-                  color: customerPhoneController.text.isEmpty
-                      ? Colors.grey[600]
-                      : Colors.black),
-            ),
+            
             Flexible(
                 child: Container(
-                    width: 200,
                     height: 30,
                     decoration: BoxDecoration(
                         color: const Color.fromARGB(255, 255, 255, 255),
                         borderRadius: BorderRadius.circular(8)),
-                    padding: const EdgeInsets.only(right: 10, left: 10),
+                    padding: const EdgeInsets.only(right: 3, left: 5, top: 5, bottom: 5),
                     child: DropdownButton<String>(
                       isExpanded: true,
                       value: selectedStoreDocId,
@@ -891,7 +867,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                       hint: Text(
                         staticTextTranslate('Stores'),
                         style: TextStyle(
-                          fontSize: getMediumFontSize + 2,
+                          fontSize: getMediumFontSize + 1,
                         ),
                       ),
                       items: <String>['All'].map((String value) {

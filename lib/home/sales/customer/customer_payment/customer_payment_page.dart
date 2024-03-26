@@ -9,6 +9,7 @@ import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:bitpro_hive/model/customer_data.dart';
@@ -248,7 +249,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                           ),
                           SideMenuButton(
                             label: 'Pay',
-                            iconPath: 'assets/icons/back.png',
+                            iconPath: 'assets/icons/payment.png',
                             buttonFunction: () async {
                               customerPayment(
                                   selectedCustomerData:
@@ -423,11 +424,13 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                         border: Border.all(width: 0.3)),
                                     child: SfDataGridTheme(
                                       data: SfDataGridThemeData(
-                                          headerColor: const Color(0xffF1F1F1),
-                                          sortIcon: const Icon(
-                                              Icons.arrow_drop_down_rounded),
-                                          headerHoverColor:
-                                              const Color(0xffdddfe8),
+
+                                         headerColor:
+                                                const Color(0xffF1F1F1),
+                                            sortIcon: const Icon(
+                                                Icons.arrow_drop_down_rounded),
+                                            headerHoverColor:
+                                                const Color(0xffdddfe8),
                                           selectionColor: loginBgColor),
                                       child: SfDataGrid(
                                         isScrollbarAlwaysShown: true,
@@ -439,6 +442,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                         },
                                         rowHeight: 25,
                                         headerRowHeight: 25,
+                                        gridLinesVisibility: GridLinesVisibility.both,
                                         headerGridLinesVisibility:
                                             GridLinesVisibility.both,
                                         allowSorting: true,
@@ -476,10 +480,12 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                                   child: Text(
                                                       staticTextTranslate(
                                                           'Document'),
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            getMediumFontSize,
-                                                      )))),
+                                                      style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize:
+                                                              getMediumFontSize +
+                                                                  1,
+                                                        ),))),
                                           GridColumn(
                                               columnName: 'doc#',
                                               label: Container(
@@ -489,10 +495,12 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                                   child: Text(
                                                       staticTextTranslate(
                                                           'Document#'),
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            getMediumFontSize,
-                                                      )))),
+                                                      style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize:
+                                                              getMediumFontSize +
+                                                                  1,
+                                                        ),))),
                                           GridColumn(
                                               columnName: 'doc type',
                                               label: Container(
@@ -502,10 +510,12 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                                   child: Text(
                                                     staticTextTranslate(
                                                         'Doc Type'),
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          getMediumFontSize,
-                                                    ),
+                                                    style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize:
+                                                              getMediumFontSize +
+                                                                  1,
+                                                        ),
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                   ))),
@@ -518,10 +528,12 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                                   child: Text(
                                                       staticTextTranslate(
                                                           'Created Date'),
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            getMediumFontSize,
-                                                      )))),
+                                                      style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize:
+                                                              getMediumFontSize +
+                                                                  1,
+                                                        ),))),
                                           GridColumn(
                                               columnName: 'payment',
                                               label: Container(
@@ -531,10 +543,12 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                                   child: Text(
                                                       staticTextTranslate(
                                                           'Payment'),
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            getMediumFontSize,
-                                                      )))),
+                                                      style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize:
+                                                              getMediumFontSize +
+                                                                  1,
+                                                        ),))),
                                           GridColumn(
                                               columnName: 'comment',
                                               label: Container(
@@ -544,23 +558,28 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                                   child: Text(
                                                       staticTextTranslate(
                                                           'Comment'),
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            getMediumFontSize,
-                                                      )))),
+                                                      style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize:
+                                                              getMediumFontSize +
+                                                                  1,
+                                                        ),))),
                                           GridColumn(
+                                            maximumWidth: 200,
                                               columnName: 'purchased amount',
                                               label: Container(
                                                   padding:
-                                                      const EdgeInsets.all(2.0),
+                                                      const EdgeInsets.all(3.0),
                                                   alignment: Alignment.center,
                                                   child: Text(
                                                       staticTextTranslate(
                                                           'Purchased Amount'),
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            getMediumFontSize,
-                                                      )))),
+                                                      style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize:
+                                                              getMediumFontSize +
+                                                                  1,
+                                                        ),))),
                                           GridColumn(
                                               columnName: 'paid amount',
                                               label: Container(
@@ -570,10 +589,12 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                                   child: Text(
                                                       staticTextTranslate(
                                                           'Paid Amount'),
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            getMediumFontSize,
-                                                      )))),
+                                                      style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize:
+                                                              getMediumFontSize +
+                                                                  1,
+                                                        ),))),
                                         ],
                                       ),
                                     ),
@@ -581,55 +602,46 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                 ),
                               if (!loading)
                                 Container(
-                                  height: 110,
-                                  color: Colors.grey,
+                                  height: 70,
+                                  color: Colors.grey[400],
                                   width: double.maxFinite,
-                                  padding: const EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(3),
                                   child: Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        Column(
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            border: Border.all(width: 0.3),
+                                            borderRadius: BorderRadius.circular(4)
+                                          ),
+                                        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                                        child: Row(children: [
+                                          Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               staticTextTranslate(
                                                   'Total Sales Amt'),
-                                              style: TextStyle(
+                                              style: GoogleFonts.roboto(
                                                   fontSize:
-                                                      getMediumFontSize - 1),
+                                                      getMediumFontSize +1),
                                             ),
+                                            SizedBox(height: 5,),
                                             Text(
                                               calculateTotalSalesAmt(),
-                                              style: TextStyle(
-                                                fontSize: getMediumFontSize + 4,
-                                              ),
-                                            ),
-                                            const Expanded(
-                                              child: SizedBox(
-                                                height: 20,
-                                              ),
-                                            ),
-                                            Text(staticTextTranslate('Balance'),
-                                                style: TextStyle(
+                                              style: GoogleFonts.roboto(
+                                                fontWeight: FontWeight.bold,
                                                   fontSize:
-                                                      getMediumFontSize - 1,
-                                                )),
-                                            Text(
-                                              (double.parse(
-                                                          calculateTotalSalesAmt()) -
-                                                      double.parse(
-                                                          calculateTotalPaid()))
-                                                  .toStringAsFixed(2),
-                                              style: TextStyle(
-                                                fontSize: getMediumFontSize + 4,
-                                                color: Colors.red,
-                                              ),
+                                                      getMediumFontSize +4),
                                             ),
+                                            
+                                            
                                           ],
                                         ),
                                         const SizedBox(
-                                          width: 40,
+                                          width: 60,
                                         ),
                                         Column(
                                           crossAxisAlignment:
@@ -637,23 +649,45 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                           children: [
                                             Text(
                                               staticTextTranslate('Total Paid'),
-                                              style: TextStyle(
-                                                fontSize: getMediumFontSize - 1,
-                                              ),
+                                              style: GoogleFonts.roboto(
+                                                  fontSize:
+                                                      getMediumFontSize +1),
                                             ),
+                                            SizedBox(height: 5,),
                                             Text(
                                               calculateTotalPaid(),
-                                              style: TextStyle(
+                                              style: GoogleFonts.roboto(
+                                                fontWeight: FontWeight.bold,
                                                 fontSize: getMediumFontSize + 4,
-                                                color: const Color.fromARGB(
-                                                    255, 23, 171, 31),
+                                                color: Color.fromARGB(255, 12, 104, 17),
                                               ),
                                             ),
                                           ],
                                         ),
                                         const SizedBox(
-                                          width: 20,
+                                          width: 60,
                                         ),
+                                        Column(children: [
+                                          Text(staticTextTranslate('Balance'),
+                                                style: GoogleFonts.roboto(
+                                                  fontSize:
+                                                      getMediumFontSize +1),),
+                                                      SizedBox(height: 5,),
+                                            Text(
+                                              (double.parse(
+                                                          calculateTotalSalesAmt()) -
+                                                      double.parse(
+                                                          calculateTotalPaid()))
+                                                  .toStringAsFixed(2),
+                                              style: GoogleFonts.roboto(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: getMediumFontSize + 4,
+                                                color: const Color.fromARGB(255, 161, 40, 31),
+                                              ),
+                                            ),
+                                        ],),
+                                       
+                                        ],),)
                                       ]),
                                 )
                             ],
@@ -1438,7 +1472,7 @@ class VendorPaymentDataSource extends DataGridSource {
         -1) isReturnVoucher = true;
     return DataGridRowAdapter(
         color: row.getCells()[0].value.isEven
-            ? const Color.fromARGB(255, 246, 247, 255)
+            ? const Color(0xffF1F1F1)
             : Colors.white,
         cells: row.getCells().map<Widget>((e) {
           return Container(
@@ -1446,8 +1480,8 @@ class VendorPaymentDataSource extends DataGridSource {
             padding: const EdgeInsets.all(3.0),
             child: Text(
               e.value.toString(),
-              style: TextStyle(
-                  fontSize: getMediumFontSize,
+              style: GoogleFonts.roboto(
+                  fontSize: getMediumFontSize +1,
                   color: isReturnVoucher ? Colors.red[700] : Colors.black,
                   fontWeight: FontWeight.w400),
             ),

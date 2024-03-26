@@ -3375,7 +3375,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
             return DropdownMenuItem<String>(
               value: value.docId,
               child: Text(staticTextTranslate(value.storeName),
-                  style: TextStyle(fontSize: getMediumFontSize + 2)),
+                  style: TextStyle(fontSize: getMediumFontSize + 1)),
             );
           }).toList(),
           onChanged: widget.viewMode && widget.selectedDbReceiptData != null

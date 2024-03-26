@@ -102,7 +102,7 @@ class _DepartmentCreatePageState extends State<DepartmentCreatePage> {
                             children: [
                               SizedBox(
                                 height: 380,
-                                width: 430,
+                                width: 450,
                                 child: loading
                                     ? showLoading()
                                     : OnPagePanel(

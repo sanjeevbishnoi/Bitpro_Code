@@ -202,398 +202,416 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                   ? showLoading()
                   : Form(
                       key: formKey,
-                      child: OnPagePanel(
-                          imagePickerWidget: imagePickerWidget(),
-                          columnForTextField: Column(
-                            children: [
-                              BTextField(
-                                textFieldReadOnly: false,
-                                label: 'Item Code / SKU',
-                                initialValue: itemCode,
-                                validator: ((value) {
-                                  if (value!.isEmpty) {
-                                    return staticTextTranslate(
-                                        'Enter item code');
-                                  } else if ((widget.edit &&
-                                          widget.selectedRowData!.itemCode !=
-                                              value) ||
-                                      !widget.edit) {
-                                    if (widget.inventoryDataLst
-                                        .where((e) => e.itemCode == value)
-                                        .isNotEmpty) {
-                                      return staticTextTranslate(
-                                          'Item code is already in use');
-                                    }
-                                  }
-                                  return null;
-                                }),
-                                onChanged: (val) => setState(() {
-                                  itemCode = val;
-                                }),
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text(
-                                        staticTextTranslate('Vendor'),
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 240,
-                                      child: TypeAheadFormField<VendorData>(
-                                        getImmediateSuggestions: false,
-                                        enabled: !widget.edit,
-                                        textFieldConfiguration:
-                                            TextFieldConfiguration(
-                                          style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400),
-                                          controller:
-                                              _vendorTypeAheadController,
-                                          decoration: InputDecoration(
-                                              isDense: true,
-                                              fillColor: Colors.white,
-                                              filled: true,
-                                              contentPadding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10,
-                                                      horizontal: 5),
-                                              hintStyle: TextStyle(
-                                                  color: Colors.grey[600]),
-                                              border:
-                                                  const OutlineInputBorder()),
-                                        ),
-                                        noItemsFoundBuilder: (context) {
-                                          return Padding(
-                                            padding: const EdgeInsets.all(5.0),
-                                            child: Text(
-                                                staticTextTranslate(
-                                                    'No Items Found!'),
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      getMediumFontSize - 1,
-                                                )),
-                                          );
-                                        },
-                                        validator: (val) {
-                                          if (val!.isEmpty) {
-                                            return staticTextTranslate(
-                                              'Select a vendor',
-                                            );
-                                          }
-                                          return null;
-                                        },
-                                        suggestionsCallback: (pattern) {
-                                          return allVendorDataLst
-                                              .where((e) => e.vendorName
-                                                  .toLowerCase()
-                                                  .contains(
-                                                      pattern.toLowerCase()))
-                                              .toList();
-                                        },
-                                        itemBuilder:
-                                            (context, VendorData suggestion) {
-                                          return ListTile(
-                                            title: Text(suggestion.vendorName,
-                                                style: TextStyle(
-                                                  fontSize: getMediumFontSize,
-                                                )),
-                                            subtitle: Text(
-                                                'Vendor Code: ${suggestion.vendorId}'),
-                                          );
-                                        },
-                                        transitionBuilder: (context,
-                                            suggestionsBox, controller) {
-                                          return suggestionsBox;
-                                        },
-                                        onSuggestionSelected:
-                                            (VendorData suggestion) {
-                                          _vendorTypeAheadController.text =
-                                              suggestion.vendorName;
-
-                                          setState(() {
-                                            selectedVendorId =
-                                                suggestion.vendorId;
-                                          });
-                                        },
-                                      ),
-                                    )
-                                  ]),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Row(
+                      child: Row(
+                        children: [
+                          OnPagePanel(
+                            widht: 750,
+                              imagePickerWidget: imagePickerWidget(),
+                              columnForTextField: Column(
                                 children: [
-                                  Expanded(
-                                    child: BTextField(
-                                      fieldWidth: 205,
-                                      textFieldReadOnly: false,
-                                      label: 'Product Name',
-                                      initialValue: englishProductName,
-                                      onChanged: (val) => setState(() {
-                                        if (val.isEmpty) {
-                                          cColor = Colors.red;
-                                          cIcon = Icons.warning;
-                                        } else {
-                                          cColor = Colors.green;
-                                          cIcon = Icons.done;
+                                  BTextField(
+                                    textFieldReadOnly: false,
+                                    label: 'Item Code / SKU',
+                                    initialValue: itemCode,
+                                    validator: ((value) {
+                                      if (value!.isEmpty) {
+                                        return staticTextTranslate(
+                                            'Enter item code');
+                                      } else if ((widget.edit &&
+                                              widget.selectedRowData!.itemCode !=
+                                                  value) ||
+                                          !widget.edit) {
+                                        if (widget.inventoryDataLst
+                                            .where((e) => e.itemCode == value)
+                                            .isNotEmpty) {
+                                          return staticTextTranslate(
+                                              'Item code is already in use');
                                         }
-                                        englishProductName = val;
-                                      }),
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                    ),
+                                      }
+                                      return null;
+                                    }),
+                                    onChanged: (val) => setState(() {
+                                      itemCode = val;
+                                    }),
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
                                   ),
-                                  Container(
-                                    width: 35,
-                                    height: 35,
-                                    decoration: BoxDecoration(
-                                        color: cColor,
-                                        borderRadius: const BorderRadius.only(
-                                          topRight: Radius.circular(4),
-                                          bottomRight: Radius.circular(4),
-                                        )),
-                                    child: Icon(
-                                      cIcon,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                ],
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text(
-                                        staticTextTranslate('Department'),
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 16,
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: BTextField(
+                                          bradius: 0,
+                                          fieldWidth: 205,
+                                          textFieldReadOnly: false,
+                                          label: 'Product Name',
+                                          initialValue: englishProductName,
+                                          onChanged: (val) => setState(() {
+                                            if (val.isEmpty) {
+                                              cColor = Colors.red;
+                                              cIcon = Icons.warning;
+                                            } else {
+                                              cColor = Colors.green;
+                                              cIcon = Icons.done;
+                                            }
+                                            englishProductName = val;
+                                          }),
+                                          autovalidateMode:
+                                              AutovalidateMode.onUserInteraction,
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: 240,
-                                      child: TypeAheadFormField(
-                                        getImmediateSuggestions: false,
-                                        enabled: !widget.edit,
-                                        validator: (val) {
-                                          if (val!.isEmpty) {
-                                            return staticTextTranslate(
-                                                'Select a department');
-                                          }
-                                          return null;
-                                        },
-                                        noItemsFoundBuilder: (context) {
-                                          return Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: Text(
-                                                staticTextTranslate(
-                                                    'No Items Found!'),
-                                                style: TextStyle(
-                                                  fontSize: getMediumFontSize,
-                                                )),
-                                          );
-                                        },
-                                        textFieldConfiguration:
-                                            TextFieldConfiguration(
-                                          controller:
-                                              _departmenttypeAheadController,
-                                          style: const TextStyle(
+                                      Container(
+                                        width: 35,
+                                        height: 35,
+                                        decoration: BoxDecoration(
+                                            color: cColor,
+                                            borderRadius: const BorderRadius.only(
+                                              topRight: Radius.circular(4),
+                                              bottomRight: Radius.circular(4),
+                                            )),
+                                        child: Icon(
+                                          cIcon,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 8.0),
+                                          child: Text(
+                                            staticTextTranslate('Vendor'),
+                                            style: GoogleFonts.roboto(
                                               fontSize: 16,
-                                              fontWeight: FontWeight.w400),
-                                          decoration: InputDecoration(
-                                              isDense: true,
-                                              fillColor: Colors.white,
-                                              filled: true,
-                                              contentPadding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10,
-                                                      horizontal: 5),
-                                              hintStyle: TextStyle(
-                                                  color: Colors.grey[600]),
-                                              border:
-                                                  const OutlineInputBorder()),
+                                            ),
+                                          ),
                                         ),
-                                        suggestionsCallback: (pattern) {
-                                          return allDepartmentDataLst
-                                              .where((e) => e.departmentName
-                                                  .toLowerCase()
-                                                  .contains(
-                                                      pattern.toLowerCase()))
-                                              .toList();
-                                        },
-                                        itemBuilder: (context,
-                                            DepartmentData suggestion) {
-                                          return ListTile(
-                                            title: Text(
-                                                suggestion.departmentName,
-                                                style: TextStyle(
-                                                  fontSize: getMediumFontSize,
-                                                )),
-                                          );
-                                        },
-                                        transitionBuilder: (context,
-                                            suggestionsBox, controller) {
-                                          return suggestionsBox;
-                                        },
-                                        onSuggestionSelected:
-                                            (DepartmentData suggestion) {
-                                          _departmenttypeAheadController.text =
-                                              suggestion.departmentName;
-                                          setState(() {
-                                            selectedDepartmentId =
-                                                suggestion.departmentId;
-                                          });
-                                        },
-                                      ),
-                                    )
-                                  ]),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              BTextField(
-                                textFieldReadOnly: false,
-                                label: 'Cost',
-                                initialValue: cost,
-                                validator: ((val) {
-                                  if (double.tryParse(val!) == null) {
-                                    return staticTextTranslate(
-                                        'Enter a number');
-                                  }
-                                  return null;
-                                }),
-                                onChanged: (val) => setState(() {
-                                  cost = val;
-                                  marginController.text = calculateMargin();
-                                }),
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              BTextField(
-                                textFieldReadOnly: false,
-                                label: 'Description',
-                                initialValue: description,
-                                onChanged: (val) => setState(() {
-                                  description = val;
-                                }),
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              BTextField(
-                                textFieldReadOnly: false,
-                                label: 'Price',
-                                controller: priceController,
-                                validator: (val) {
-                                  if (double.tryParse(val!) == null) {
-                                    return staticTextTranslate(
-                                        'Enter a number');
-                                  }
-                                  return null;
-                                },
-                                onChanged: (val) => setState(() {
-                                  marginController.text = calculateMargin();
-                                  priceWtController.text = calculatePriceWt();
-                                }),
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              BTextField(
-                                textFieldReadOnly: false,
-                                label: 'Margin',
-                                controller: marginController,
-                                onChanged: (val) => setState(() {
-                                  //  FocusScope.of(context)
-                                  //                                             .requestFocus(priceWtfocus);
-                                }),
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              BTextField(
-                                textFieldReadOnly: false,
-                                label: 'Price W/T',
-                                controller: priceWtController,
-                                onChanged: (val) => setState(() {
-                                  priceController.text = calculatePrice();
-
-                                  marginController.text = calculateMargin();
-                                }),
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              BTextField(
-                                textFieldReadOnly: false,
-                                label: 'Barcode',
-                                initialValue: barcode,
-                                onChanged: (val) => setState(() {
-                                  barcode = val;
-                                }),
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                children: [
-                                  Switch(
-                                    activeColor: darkBlueColor,
-                                    value: productPriceCanChange,
-                                    onChanged: (newValue) => setState(
-                                        () => productPriceCanChange = newValue),
+                                        SizedBox(
+                                          width: 240,
+                                          child: TypeAheadFormField<VendorData>(
+                                            getImmediateSuggestions: false,
+                                            enabled: !widget.edit,
+                                            textFieldConfiguration:
+                                                TextFieldConfiguration(
+                                              style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400),
+                                              controller:
+                                                  _vendorTypeAheadController,
+                                              decoration: InputDecoration(
+                                                  isDense: true,
+                                                  fillColor: Colors.white,
+                                                  filled: true,
+                                                  contentPadding:
+                                                      const EdgeInsets.symmetric(
+                                                          vertical: 10,
+                                                          horizontal: 5),
+                                                  hintStyle: TextStyle(
+                                                      color: Colors.grey[600]),
+                                                  border:
+                                                      const OutlineInputBorder()),
+                                            ),
+                                            noItemsFoundBuilder: (context) {
+                                              return Padding(
+                                                padding: const EdgeInsets.all(5.0),
+                                                child: Text(
+                                                    staticTextTranslate(
+                                                        'No Items Found!'),
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          getMediumFontSize - 1,
+                                                    )),
+                                              );
+                                            },
+                                            validator: (val) {
+                                              if (val!.isEmpty) {
+                                                return staticTextTranslate(
+                                                  'Select a vendor',
+                                                );
+                                              }
+                                              return null;
+                                            },
+                                            suggestionsCallback: (pattern) {
+                                              return allVendorDataLst
+                                                  .where((e) => e.vendorName
+                                                      .toLowerCase()
+                                                      .contains(
+                                                          pattern.toLowerCase()))
+                                                  .toList();
+                                            },
+                                            itemBuilder:
+                                                (context, VendorData suggestion) {
+                                              return ListTile(
+                                                title: Text(suggestion.vendorName,
+                                                    style: TextStyle(
+                                                      fontSize: getMediumFontSize,
+                                                    )),
+                                                subtitle: Text(
+                                                    'Vendor Code: ${suggestion.vendorId}'),
+                                              );
+                                            },
+                                            transitionBuilder: (context,
+                                                suggestionsBox, controller) {
+                                              return suggestionsBox;
+                                            },
+                                            onSuggestionSelected:
+                                                (VendorData suggestion) {
+                                              _vendorTypeAheadController.text =
+                                                  suggestion.vendorName;
+                          
+                                              setState(() {
+                                                selectedVendorId =
+                                                    suggestion.vendorId;
+                                              });
+                                            },
+                                          ),
+                                        )
+                                      ]),
+                                  SizedBox(
+                                    height: 5,
                                   ),
-                                  Text(staticTextTranslate('Price can change'),
-                                      style: TextStyle(
-                                        fontSize: getMediumFontSize,
-                                      ))
+                                  
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 8.0),
+                                          child: Text(
+                                            staticTextTranslate('Department'),
+                                            style: GoogleFonts.roboto(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 240,
+                                          child: TypeAheadFormField(
+                                            getImmediateSuggestions: false,
+                                            enabled: !widget.edit,
+                                            validator: (val) {
+                                              if (val!.isEmpty) {
+                                                return staticTextTranslate(
+                                                    'Select a department');
+                                              }
+                                              return null;
+                                            },
+                                            noItemsFoundBuilder: (context) {
+                                              return Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: Text(
+                                                    staticTextTranslate(
+                                                        'No Items Found!'),
+                                                    style: TextStyle(
+                                                      fontSize: getMediumFontSize,
+                                                    )),
+                                              );
+                                            },
+                                            textFieldConfiguration:
+                                                TextFieldConfiguration(
+                                              controller:
+                                                  _departmenttypeAheadController,
+                                              style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400),
+                                              decoration: InputDecoration(
+                                                  isDense: true,
+                                                  fillColor: Colors.white,
+                                                  filled: true,
+                                                  contentPadding:
+                                                      const EdgeInsets.symmetric(
+                                                          vertical: 10,
+                                                          horizontal: 5),
+                                                  hintStyle: TextStyle(
+                                                      color: Colors.grey[600]),
+                                                  border:
+                                                      const OutlineInputBorder()),
+                                            ),
+                                            suggestionsCallback: (pattern) {
+                                              return allDepartmentDataLst
+                                                  .where((e) => e.departmentName
+                                                      .toLowerCase()
+                                                      .contains(
+                                                          pattern.toLowerCase()))
+                                                  .toList();
+                                            },
+                                            itemBuilder: (context,
+                                                DepartmentData suggestion) {
+                                              return ListTile(
+                                                title: Text(
+                                                    suggestion.departmentName,
+                                                    style: TextStyle(
+                                                      fontSize: getMediumFontSize,
+                                                    )),
+                                              );
+                                            },
+                                            transitionBuilder: (context,
+                                                suggestionsBox, controller) {
+                                              return suggestionsBox;
+                                            },
+                                            onSuggestionSelected:
+                                                (DepartmentData suggestion) {
+                                              _departmenttypeAheadController.text =
+                                                  suggestion.departmentName;
+                                              setState(() {
+                                                selectedDepartmentId =
+                                                    suggestion.departmentId;
+                                              });
+                                            },
+                                          ),
+                                        )
+                                      ]),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  
+                                  BTextField(
+                                    textFieldReadOnly: false,
+                                    label: 'Description',
+                                    initialValue: description,
+                                    onChanged: (val) => setState(() {
+                                      description = val;
+                                    }),
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  BTextField(
+                                    textFieldReadOnly: false,
+                                    label: 'Cost',
+                                    initialValue: cost,
+                                    validator: ((val) {
+                                      if (double.tryParse(val!) == null) {
+                                        return staticTextTranslate(
+                                            'Enter a number');
+                                      }
+                                      return null;
+                                    }),
+                                    onChanged: (val) => setState(() {
+                                      cost = val;
+                                      marginController.text = calculateMargin();
+                                    }),
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  BTextField(
+                                    textFieldReadOnly: false,
+                                    label: 'Price',
+                                    controller: priceController,
+                                    validator: (val) {
+                                      if (double.tryParse(val!) == null) {
+                                        return staticTextTranslate(
+                                            'Enter a number');
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (val) => setState(() {
+                                      marginController.text = calculateMargin();
+                                      priceWtController.text = calculatePriceWt();
+                                    }),
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  BTextField(
+                                    textFieldReadOnly: false,
+                                    label: 'Margin',
+                                    controller: marginController,
+                                    onChanged: (val) => setState(() {
+                                      //  FocusScope.of(context)
+                                      //                                             .requestFocus(priceWtfocus);
+                                    }),
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  BTextField(
+                                    validator: (val) {
+                                      if (double.tryParse(val!) == null) {
+                                        return staticTextTranslate(
+                                            'Enter a number');
+                                      }
+                                      return null;
+                                    },
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    textFieldReadOnly: false,
+                                    label: 'Price W/T',
+                                    controller: priceWtController,
+                                    onChanged: (val) => setState(() {
+                                      priceController.text = calculatePrice();
+                          
+                                      marginController.text = calculateMargin();
+                                    }),
+                                    
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  BTextField(
+                                    textFieldReadOnly: false,
+                                    label: 'Barcode',
+                                    initialValue: barcode,
+                                    onChanged: (val) => setState(() {
+                                      barcode = val;
+                                    }),
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  SizedBox(
+                                    child: Row(
+                                      children: [
+                                        Switch(
+                                          activeColor: darkBlueColor,
+                                          value: productPriceCanChange,
+                                          onChanged: (newValue) => setState(
+                                              () => productPriceCanChange = newValue),
+                                        ),
+                                        Text(staticTextTranslate('Price can change'),
+                                            style: TextStyle(
+                                              fontSize: getMediumFontSize,
+                                            ))
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ],
-                          ),
-                          rowForButton: Row(
-                            children: [
-                              OnPageButton(
-                                icon: Iconsax.archive,
-                                label: 'Save',
-                                onPressed: () {
-                                  onTapSaveButton();
-                                },
+                              rowForButton: Row(
+                                children: [
+                                  OnPageButton(
+                                    icon: Iconsax.archive,
+                                    label: 'Save',
+                                    onPressed: () {
+                                      onTapSaveButton();
+                                    },
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          topLabel: 'Inventory Details'),
+                              topLabel: 'Inventory Details'),
+                        ],
+                      ),
                     ),
             )
           ]))
@@ -604,8 +622,8 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 14.0),
       child: SizedBox(
-        width: 280,
-        height: 280,
+        width: 220,
+        height: 220,
         child: Card(
           shape: RoundedRectangleBorder(
               side: const BorderSide(width: 0.5, color: Colors.grey),
@@ -650,7 +668,7 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                   PopupMenuItem<String>(
                                       value: 'cancel',
                                       child: Text(
-                                          staticTextTranslate('Cancel Image'),
+                                          staticTextTranslate('Remove Image'),
                                           style: TextStyle(
                                             fontSize: getMediumFontSize,
                                           ))),
@@ -679,26 +697,7 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                           }),
                     ],
                   ),
-                  Row(
-                    children: [
-                      Container(
-                        height: 5,
-                        width: 93,
-                        decoration: BoxDecoration(
-                            color: darkBlueColor,
-                            borderRadius: BorderRadius.circular(8)),
-                      ),
-                      Flexible(
-                        child: Container(
-                          height: 1,
-                          width: double.maxFinite,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              borderRadius: BorderRadius.circular(8)),
-                        ),
-                      ),
-                    ],
-                  ),
+                 
                   const SizedBox(
                     height: 0,
                   ),
@@ -709,21 +708,21 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                     if (File(widget.selectedRowData!.productImg).existsSync())
                       Image.file(
                         File(widget.selectedRowData!.productImg),
-                        width: 270,
-                        height: 195,
+                        width: 200,
+                        height: 140,
                         fit: BoxFit.contain,
                       ),
                   if (productImage != null)
                     Image.file(
                       productImage!,
-                      width: 270,
-                      height: 195,
+                      width: 200,
+                      height: 140,
                       fit: BoxFit.contain,
                     ),
                   if (!widget.edit && productImage == null)
                     SizedBox(
-                      width: 270,
-                      height: 195,
+                      width: 200,
+                      height: 140,
                       child: Icon(Icons.image,
                           size: 100, color: Colors.grey.shade200),
                     )
@@ -781,7 +780,7 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
     double c = double.parse(cost!);
     double p = double.parse(priceController.text);
 
-    return (((p - c) / c) * 100).toString();
+    return (((p - c) / c) * 100).toStringAsFixed(2);
   }
 
   String calculatePriceWt() {

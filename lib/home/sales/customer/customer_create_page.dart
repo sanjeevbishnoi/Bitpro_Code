@@ -122,181 +122,187 @@ class _CustomerCreateEditPageState extends State<CustomerCreateEditPage> {
                     Expanded(
                       child: loading
                           ? showLoading()
-                          : OnPagePanel(
-                              columnForTextField: Column(
-                                children: [
-                                  BTextField(
-                                    textFieldReadOnly: true,
-                                    label: 'Customer Id',
-                                    initialValue: customerId,
-                                    validator: ((value) {
-                                      if (value!.isEmpty) {
-                                        return staticTextTranslate(
-                                            'Enter customer id');
-                                      } else if ((widget.edit &&
-                                              widget.selectedRowData!
-                                                      .customerId !=
-                                                  value) ||
-                                          !widget.edit) {
-                                        if (widget.customerDataLst
-                                            .where((e) => e.customerId == value)
-                                            .isNotEmpty) {
-                                          return staticTextTranslate(
-                                              'ID is already in use');
-                                        }
-                                      }
-                                      return null;
-                                    }),
-                                    onChanged: (val) => setState(() {
-                                      customerId = val;
-                                    }),
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                          : Row(
+                            children: [
+                              OnPagePanel(
+                                widht: 450,
+                                  columnForTextField: Column(
                                     children: [
-                                      Expanded(
-                                        child: BTextField(
-                                          fieldWidth: 205,
-                                          label: 'Customer Name',
-                                          initialValue: customerName,
-                                          onChanged: (val) => setState(() {
-                                            if (val.isEmpty) {
-                                              cColor = Colors.red;
-                                              cIcon = Icons.warning;
-                                            } else {
-                                              cColor = Colors.green;
-                                              cIcon = Icons.done;
+                                      BTextField(
+                                        textFieldReadOnly: true,
+                                        label: 'Customer Id',
+                                        initialValue: customerId,
+                                        validator: ((value) {
+                                          if (value!.isEmpty) {
+                                            return staticTextTranslate(
+                                                'Enter customer id');
+                                          } else if ((widget.edit &&
+                                                  widget.selectedRowData!
+                                                          .customerId !=
+                                                      value) ||
+                                              !widget.edit) {
+                                            if (widget.customerDataLst
+                                                .where((e) => e.customerId == value)
+                                                .isNotEmpty) {
+                                              return staticTextTranslate(
+                                                  'ID is already in use');
                                             }
-                                            customerName = val;
-                                          }),
-                                        ),
+                                          }
+                                          return null;
+                                        }),
+                                        onChanged: (val) => setState(() {
+                                          customerId = val;
+                                        }),
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
                                       ),
-                                      Container(
-                                        width: 35,
-                                        height: 35,
-                                        decoration: BoxDecoration(
-                                            color: cColor,
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                              topRight: Radius.circular(4),
-                                              bottomRight: Radius.circular(4),
-                                            )),
-                                        child: Icon(
-                                          cIcon,
-                                          color: Colors.white,
-                                        ),
-                                      )
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: BTextField(
+                                              bradius: 0,
+                                              fieldWidth: 205,
+                                              label: 'Customer Name',
+                                              initialValue: customerName,
+                                              onChanged: (val) => setState(() {
+                                                if (val.isEmpty) {
+                                                  cColor = Colors.red;
+                                                  cIcon = Icons.warning;
+                                                } else {
+                                                  cColor = Colors.green;
+                                                  cIcon = Icons.done;
+                                                }
+                                                customerName = val;
+                                              }),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 35,
+                                            height: 35,
+                                            decoration: BoxDecoration(
+                                                color: cColor,
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topRight: Radius.circular(4),
+                                                  bottomRight: Radius.circular(4),
+                                                )),
+                                            child: Icon(
+                                              cIcon,
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      BTextField(
+                                        textFieldHeight: 3,
+                                        label: 'Address 1',
+                                        initialValue: address1,
+                                        onChanged: (val) => setState(() {
+                                          address1 = val;
+                                        }),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      BTextField(
+                                        label: 'Address 2',
+                                        initialValue: address2,
+                                        onChanged: (val) => setState(() {
+                                          address2 = val;
+                                        }),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      BTextField(
+                                        label: 'Phone 01',
+                                        initialValue: phone1,
+                                        onChanged: (val) => setState(() {
+                                          phone1 = val;
+                                        }),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      BTextField(
+                                        label: 'Phone 02',
+                                        initialValue: phone2,
+                                        onChanged: (val) => setState(() {
+                                          phone2 = val;
+                                        }),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      BTextField(
+                                        label: 'Email',
+                                        initialValue: email,
+                                        onChanged: (val) => setState(() {
+                                          email = val;
+                                        }),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      BTextField(
+                                        label: 'VAT Number',
+                                        initialValue: vatNumber,
+                                        onChanged: (val) => setState(() {
+                                          vatNumber = val;
+                                        }),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      BTextField(
+                                        label: 'Company Name',
+                                        initialValue: companyName,
+                                        onChanged: (val) => setState(() {
+                                          companyName = val;
+                                        }),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      BTextField(
+                                        label: 'Opening balance',
+                                        initialValue: openingBalance,
+                                        onChanged: (val) => setState(() {
+                                          openingBalance = val;
+                                        }),
+                                        validator: (val) {
+                                          if (val != null &&
+                                              double.tryParse(val) == null) {
+                                            return staticTextTranslate(
+                                                'Enter a valid number');
+                                          }
+                                          return null;
+                                        },
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                      ),
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: 5,
+                                  rowForButton: Row(
+                                    children: [
+                                      OnPageButton(
+                                        icon: Iconsax.archive,
+                                        label: 'Save',
+                                        onPressed: () => onTapSaveButton(),
+                                      ),
+                                    ],
                                   ),
-                                  BTextField(
-                                    textFieldHeight: 3,
-                                    label: 'Address 1',
-                                    initialValue: address1,
-                                    onChanged: (val) => setState(() {
-                                      address1 = val;
-                                    }),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  BTextField(
-                                    label: 'Address 2',
-                                    initialValue: address2,
-                                    onChanged: (val) => setState(() {
-                                      address2 = val;
-                                    }),
-                                  ),
-                                  const SizedBox(
-                                    height: 30,
-                                  ),
-                                  BTextField(
-                                    label: 'Phone 01',
-                                    initialValue: phone1,
-                                    onChanged: (val) => setState(() {
-                                      phone1 = val;
-                                    }),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  BTextField(
-                                    label: 'Phone 02',
-                                    initialValue: phone2,
-                                    onChanged: (val) => setState(() {
-                                      phone2 = val;
-                                    }),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  BTextField(
-                                    label: 'Email',
-                                    initialValue: email,
-                                    onChanged: (val) => setState(() {
-                                      email = val;
-                                    }),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  BTextField(
-                                    label: 'VAT Number',
-                                    initialValue: vatNumber,
-                                    onChanged: (val) => setState(() {
-                                      vatNumber = val;
-                                    }),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  BTextField(
-                                    label: 'Company Name',
-                                    initialValue: companyName,
-                                    onChanged: (val) => setState(() {
-                                      companyName = val;
-                                    }),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  BTextField(
-                                    label: 'Opening balance',
-                                    initialValue: openingBalance,
-                                    onChanged: (val) => setState(() {
-                                      openingBalance = val;
-                                    }),
-                                    validator: (val) {
-                                      if (val != null &&
-                                          double.tryParse(val) == null) {
-                                        return staticTextTranslate(
-                                            'Enter a valid number');
-                                      }
-                                      return null;
-                                    },
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                  ),
-                                ],
-                              ),
-                              rowForButton: Row(
-                                children: [
-                                  OnPageButton(
-                                    icon: Iconsax.archive,
-                                    label: 'Save',
-                                    onPressed: () => onTapSaveButton(),
-                                  ),
-                                ],
-                              ),
-                              topLabel: 'Customer Details'),
+                                  topLabel: 'Customer Details'),
+                            ],
+                          ),
                     )
                   ],
                 ),
