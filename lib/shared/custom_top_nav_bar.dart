@@ -9,12 +9,12 @@ customTopNavBar(child) {
   return Material(
     child: WindowBorder(
       width: 1,
-      color: homeBgColor,
+      color: homeBgColor, //background color
       child: Column(
         children: [
           WindowTitleBarBox(
             child: Container(
-              color: homeBgColor,
+              color: homeBgColor, //background color
               child: Row(
                 children: [
                   Expanded(child: MoveWindow()),
@@ -29,6 +29,19 @@ customTopNavBar(child) {
     ),
   );
 }
+
+final buttonColors = WindowButtonColors(
+    iconNormal: Colors.black,
+    mouseOver: Colors.grey[200],
+    mouseDown: Colors.grey[200],
+    iconMouseOver: const Color(0xFF805306),
+    iconMouseDown: const Color(0xFFFFD500));
+
+final closeButtonColors = WindowButtonColors(
+    mouseOver: const Color(0xFFD32F2F),
+    mouseDown: const Color(0xFFB71C1C),
+    iconNormal: Colors.black,
+    iconMouseOver: Colors.white);
 
 class WindowButtons extends StatefulWidget {
   const WindowButtons({Key? key}) : super(key: key);
@@ -116,16 +129,3 @@ class _WindowButtonsState extends State<WindowButtons> {
     );
   }
 }
-
-final buttonColors = WindowButtonColors(
-    iconNormal: Colors.black,
-    mouseOver: Colors.grey[200],
-    mouseDown: Colors.grey[200],
-    iconMouseOver: const Color(0xFF805306),
-    iconMouseDown: const Color(0xFFFFD500));
-
-final closeButtonColors = WindowButtonColors(
-    mouseOver: const Color(0xFFD32F2F),
-    mouseDown: const Color(0xFFB71C1C),
-    iconNormal: Colors.black,
-    iconMouseOver: Colors.white);
