@@ -491,7 +491,7 @@ salesReportPage(
                                             height: 4,
                                           ),
                                           pw.Text(
-                                              'Tax(${sortedDbReceiptDataLst.first.taxPer}%)',
+                                              'Tax(${sortedDbReceiptDataLst.isNotEmpty ? sortedDbReceiptDataLst.first.taxPer : ''}%)',
                                               style: pw.TextStyle(
                                                 fontSize: repFontSize,
                                               ))

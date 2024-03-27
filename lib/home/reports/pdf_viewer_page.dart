@@ -108,7 +108,7 @@ class _ReportPdfViewerState extends State<ReportPdfViewer> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: MediaQuery.of(context).size.height * 0.86,
+        height: (MediaQuery.of(context).size.height * 0.9) - 8,
         child: bytes == null
             ? const Center(
                 child: SizedBox(

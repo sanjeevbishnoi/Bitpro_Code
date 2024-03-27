@@ -34,18 +34,4 @@ class FbRegisterDbService {
     userData.openRegister = null;
     await FbUserDbService(context: context).addUpdateUser([userData]);
   }
-
-  Future<List<DbReceiptData>> closeRegisterData(
-      String username, DateTime openRegisterDate) async {
-    List<DbReceiptData> receiptLst =
-        await FbReceiptDbService(context: context).fetchAllReceiptData();
-
-    List<DbReceiptData> dbReceiptData =
-        receiptLst.where((element) => element.createdBy == username).toList();
-
-    return dbReceiptData
-        .where(
-            (element) => openRegisterDate.compareTo(element.createdDate) == -1)
-        .toList();
-  }
 }

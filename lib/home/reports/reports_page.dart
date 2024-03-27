@@ -1,3 +1,4 @@
+import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/model/voucher/local_voucher_data.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_merchandise/fb_inventory_db_service.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_sales/fb_receipt_db_service.dart';
@@ -5,6 +6,7 @@ import 'package:bitpro_hive/services/firestore_api/fb_vouchers/fb_voucher_db_ser
 import 'package:bitpro_hive/services/hive/hive_merchandise_db_service/inventory_db_service.dart';
 import 'package:bitpro_hive/services/hive/hive_sales_db_service/hive_receipt_db_service.dart';
 import 'package:bitpro_hive/services/hive/hive_voucher_db_service/hive_voucher_db_service.dart';
+import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:iconsax/iconsax.dart';
@@ -97,313 +99,263 @@ class _ReportsPageState extends State<ReportsPage> {
         body: SafeArea(
           child: Container(
             color: homeBgColor,
-            padding: const EdgeInsets.fromLTRB(5, 0, 5, 2),
-            child: Row(
+            child: Column(
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 0,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Colors.blue,
-                            darkBlueColor,
-                          ],
-                        ),
-                      ),
-                      margin: const EdgeInsets.only(left: 0),
-                      padding: const EdgeInsets.all(0),
-                      width: 170,
-                      height: 45,
-                      child: const Center(
-                        child: Text(
-                          'BitPro',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 28,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.back_square,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Back'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 170,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              size: 19,
-                              Iconsax.refresh5,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(staticTextTranslate('Refresh'),
-                                style: TextStyle(
-                                    fontSize: getMediumFontSize,
-                                    color: const Color.fromARGB(255, 0, 0, 0))),
-                          ],
-                        ),
-                        onPressed: () async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          await fbFetchData();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 0,
-                ),
+                TopBar(pageName: 'Reports'),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 0,
-                      ),
-                      SizedBox(
-                        height: 35,
-                        width: 370,
-                        child: Row(children: [
-                          const SizedBox(width: 10),
-                          const Icon(
-                            Iconsax.chart_1,
-                            size: 17,
+                  child: Container(
+                    color: homeBgColor,
+                    child: Row(
+                      children: [
+                        Container(
+                          color: const Color.fromARGB(255, 43, 43, 43),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 0,
+                              ),
+                              SideMenuButton(
+                                label: 'Back',
+                                iconPath: 'assets/icons/back.png',
+                                buttonFunction: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              SideMenuButton(
+                                label: 'Refresh',
+                                iconPath: 'assets/icons/refresh.png',
+                                buttonFunction: () async {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  await fbFetchData();
+                                },
+                              ),
+                            ],
                           ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            staticTextTranslate('Reports'),
-                            style: TextStyle(
-                              fontSize: getMediumFontSize,
-                              color: const Color.fromARGB(255, 0, 0, 0),
-                            ),
-                          )
-                        ]),
-                      ),
-                      const SizedBox(
-                        height: 0,
-                      ),
-                      Expanded(
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * .88,
-                          child: Card(
-                              shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                      width: 0.5, color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(4)),
-                              elevation: 0,
-                              color: Colors.white,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.9,
-                                    margin: const EdgeInsets.all(10),
-                                    width: 270,
-                                    decoration: BoxDecoration(
-                                        color: homeBgColor,
-                                        boxShadow: const [
-                                          BoxShadow(
-                                            color: Colors.grey,
-                                            blurRadius: 2.0,
-                                          ),
-                                        ],
-                                        borderRadius: BorderRadius.circular(4)),
-                                    child: Column(children: [
-                                      CustomExpansionTile(
-                                        iconColor: Colors.black,
-                                        collapsedIconColor: Colors.black,
-                                        leading: null,
-                                        trailing: const SizedBox(),
-                                        title: Text(
-                                          staticTextTranslate("Sales Report"),
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: getMediumFontSize + 2,
-                                          ),
-                                        ),
-                                        expandedAlignment: Alignment.centerLeft,
-                                        children: <Widget>[
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                selectedPage = 'Sales Summary';
-
-                                                showPageDetails = false;
-                                                fromDate = null;
-                                                toDate = null;
-                                              });
-                                            },
-                                            child: Container(
-                                              width: double.maxFinite,
-                                              padding: const EdgeInsets.only(
-                                                  left: 35, top: 0, bottom: 10),
-                                              child: Text(
-                                                staticTextTranslate(
-                                                    "Sales Summary"),
-                                                style: TextStyle(
-                                                    fontSize: getMediumFontSize,
-                                                    color: selectedPage ==
-                                                            "Sales Summary"
-                                                        ? Colors.blue
-                                                        : Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      CustomExpansionTile(
-                                        iconColor: Colors.black,
-                                        collapsedIconColor: Colors.black,
-                                        leading: null,
-                                        trailing: const SizedBox(),
-                                        title: Text(
-                                          staticTextTranslate(
-                                              "Purchase Report"),
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: getMediumFontSize + 2,
-                                          ),
-                                        ),
-                                        expandedAlignment: Alignment.centerLeft,
-                                        children: <Widget>[
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                selectedPage =
-                                                    "Purchase Summary";
-                                                showPageDetails = false;
-                                                fromDate = null;
-                                                toDate = null;
-                                              });
-                                            },
-                                            child: Container(
-                                              width: double.maxFinite,
-                                              padding: const EdgeInsets.only(
-                                                  left: 35, top: 0, bottom: 10),
-                                              child: Text(
-                                                staticTextTranslate(
-                                                    "Purchase Summary"),
-                                                style: TextStyle(
-                                                    fontSize: getMediumFontSize,
-                                                    color: selectedPage ==
-                                                            "Purchase Summary"
-                                                        ? Colors.blue
-                                                        : Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      CustomExpansionTile(
-                                        iconColor: Colors.black,
-                                        collapsedIconColor: Colors.black,
-                                        leading: null,
-                                        trailing: const SizedBox(),
-                                        title: Text(
-                                          staticTextTranslate("Tax Report"),
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: getMediumFontSize + 2,
-                                          ),
-                                        ),
-                                        expandedAlignment: Alignment.centerLeft,
-                                        children: <Widget>[
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                selectedPage = "Tax Summary";
-                                                showPageDetails = false;
-                                                fromDate = null;
-                                                toDate = null;
-                                              });
-                                            },
-                                            child: Container(
-                                              width: double.maxFinite,
-                                              padding: const EdgeInsets.only(
-                                                  left: 35, top: 5, bottom: 10),
-                                              child: Text(
-                                                staticTextTranslate(
-                                                    "Tax Summary"),
-                                                style: TextStyle(
-                                                    fontSize: getMediumFontSize,
-                                                    color: selectedPage ==
-                                                            "Tax Summary"
-                                                        ? Colors.blue
-                                                        : Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const Expanded(
-                                        child: SizedBox(
-                                          height: 10,
-                                        ),
-                                      )
-                                    ]),
-                                  ),
-                                  if (selectedPage.isNotEmpty)
-                                    Expanded(child: detailsScreen())
-                                ],
-                              )),
                         ),
-                      )
-                    ],
+                        const SizedBox(
+                          width: 0,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 0,
+                              ),
+                              Expanded(
+                                child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        side: const BorderSide(
+                                            width: 0.5, color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(4)),
+                                    elevation: 0,
+                                    color: Colors.white,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.9,
+                                          margin: const EdgeInsets.all(10),
+                                          width: 270,
+                                          decoration: BoxDecoration(
+                                              // color: homeBgColor,
+                                              color: const Color.fromARGB(
+                                                  255, 43, 43, 43),
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: Colors.grey,
+                                                  blurRadius: 2.0,
+                                                ),
+                                              ],
+                                              borderRadius:
+                                                  BorderRadius.circular(4)),
+                                          child: Column(children: [
+                                            CustomExpansionTile(
+                                              iconColor: Colors.white,
+                                              collapsedIconColor: Colors.white,
+                                              leading: null,
+                                              trailing: const SizedBox(),
+                                              title: Text(
+                                                staticTextTranslate(
+                                                    "Sales Report"),
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      getMediumFontSize + 2,
+                                                ),
+                                              ),
+                                              expandedAlignment:
+                                                  Alignment.centerLeft,
+                                              children: <Widget>[
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      selectedPage =
+                                                          'Sales Summary';
+
+                                                      showPageDetails = false;
+                                                      fromDate = null;
+                                                      toDate = null;
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    width: double.maxFinite,
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 35,
+                                                            top: 0,
+                                                            bottom: 10),
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          "Sales Summary"),
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                          color: selectedPage ==
+                                                                  "Sales Summary"
+                                                              ? Colors.blue
+                                                              : Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Divider(
+                                              color: Colors.grey,
+                                            ),
+                                            CustomExpansionTile(
+                                              iconColor: Colors.white,
+                                              collapsedIconColor: Colors.white,
+                                              leading: null,
+                                              trailing: const SizedBox(),
+                                              title: Text(
+                                                staticTextTranslate(
+                                                    "Purchase Report"),
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      getMediumFontSize + 2,
+                                                ),
+                                              ),
+                                              expandedAlignment:
+                                                  Alignment.centerLeft,
+                                              children: <Widget>[
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      selectedPage =
+                                                          "Purchase Summary";
+                                                      showPageDetails = false;
+                                                      fromDate = null;
+                                                      toDate = null;
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    width: double.maxFinite,
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 35,
+                                                            top: 0,
+                                                            bottom: 10),
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          "Purchase Summary"),
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                          color: selectedPage ==
+                                                                  "Purchase Summary"
+                                                              ? Colors.blue
+                                                              : Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Divider(
+                                              color: Colors.grey,
+                                            ),
+                                            CustomExpansionTile(
+                                              iconColor: Colors.white,
+                                              collapsedIconColor: Colors.white,
+                                              leading: null,
+                                              trailing: const SizedBox(),
+                                              title: Text(
+                                                staticTextTranslate(
+                                                    "Tax Report"),
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      getMediumFontSize + 2,
+                                                ),
+                                              ),
+                                              expandedAlignment:
+                                                  Alignment.centerLeft,
+                                              children: <Widget>[
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      selectedPage =
+                                                          "Tax Summary";
+                                                      showPageDetails = false;
+                                                      fromDate = null;
+                                                      toDate = null;
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    width: double.maxFinite,
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 35,
+                                                            top: 5,
+                                                            bottom: 10),
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          "Tax Summary"),
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                          color: selectedPage ==
+                                                                  "Tax Summary"
+                                                              ? Colors.blue
+                                                              : Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Divider(
+                                              color: Colors.grey,
+                                            ),
+                                            const Expanded(
+                                              child: SizedBox(
+                                                height: 10,
+                                              ),
+                                            )
+                                          ]),
+                                        ),
+                                        if (selectedPage.isNotEmpty)
+                                          Expanded(child: detailsScreen())
+                                      ],
+                                    )),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -431,6 +383,9 @@ class _ReportsPageState extends State<ReportsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 8,
+            ),
             if (!showPageDetails) selectDateDialog(),
             Directionality(
                 textDirection: TextDirection.ltr,
@@ -695,18 +650,33 @@ class _ReportsPageState extends State<ReportsPage> {
               ),
             ],
             borderRadius: BorderRadius.circular(8)),
-        height: 350,
+        height: 380,
         width: 500,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Container(
+            // height: 55,
+            width: double.maxFinite,
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(4), topRight: Radius.circular(4)),
+                gradient: LinearGradient(
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color.fromARGB(255, 66, 66, 66),
+                      Color.fromARGB(255, 0, 0, 0),
+                    ],
+                    begin: Alignment.topCenter)),
+            child: Text(
+              staticTextTranslate('Reports'),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: getMediumFontSize + 5,
+              ),
+            ),
+          ),
           const SizedBox(
             height: 30,
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 20.0),
-            child: Text(
-              'Reports',
-              style: TextStyle(fontSize: 20),
-            ),
           ),
           const Padding(
             padding: EdgeInsets.only(left: 20.0),
@@ -922,7 +892,7 @@ class _ReportsPageState extends State<ReportsPage> {
             alignment: Alignment.bottomCenter,
             child: Container(
               decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 245, 255, 255),
+                  color: Color(0xffdddfe8),
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(4),
                       bottomRight: Radius.circular(4))),
@@ -930,12 +900,21 @@ class _ReportsPageState extends State<ReportsPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  SizedBox(
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        gradient: const LinearGradient(
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Color(0xff092F53),
+                              Color(0xff284F70),
+                            ],
+                            begin: Alignment.topCenter)),
                     height: 45,
                     width: 120,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: darkBlueColor,
+                            backgroundColor: Colors.transparent,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4))),
                         onPressed: () async {

@@ -2,6 +2,8 @@ import 'package:bitpro_hive/home/sales/receipt/receipt_page.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_sales/fb_former_z_out_db_service.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_sales/fb_register_db_serivce.dart';
 import 'package:bitpro_hive/services/firestore_api/firebase_db_service.dart';
+import 'package:bitpro_hive/services/hive/hive_sales_db_service/hive_register_db_service.dart';
+import 'package:bitpro_hive/shared/constant_data.dart';
 import 'package:bitpro_hive/shared/toast.dart';
 import 'package:bitpro_hive/widget/string_related/get_id_number.dart';
 import 'package:flutter/material.dart';
@@ -310,6 +312,30 @@ class _SalesPageState extends State<SalesPage> {
                     child: dialogLoading
                         ? showLoading()
                         : Column(children: [
+                            Container(
+                              // height: 55,
+                              width: double.maxFinite,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 18, vertical: 10),
+                              decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(4),
+                                      topRight: Radius.circular(4)),
+                                  gradient: LinearGradient(
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color.fromARGB(255, 66, 66, 66),
+                                        Color.fromARGB(255, 0, 0, 0),
+                                      ],
+                                      begin: Alignment.topCenter)),
+                              child: Text(
+                                staticTextTranslate('Open Register'),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: getMediumFontSize + 5,
+                                ),
+                              ),
+                            ),
                             Expanded(
                                 child: SizedBox(
                               width: 600,
@@ -322,17 +348,6 @@ class _SalesPageState extends State<SalesPage> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              staticTextTranslate(
-                                                  'Open Register'),
-                                              style: TextStyle(
-                                                  fontSize:
-                                                      getLargeFontSize + 5,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
                                             const SizedBox(
                                               height: 10,
                                             ),
@@ -474,12 +489,23 @@ class _SalesPageState extends State<SalesPage> {
                                           )),
                                     ),
                                     const SizedBox(width: 10),
-                                    SizedBox(
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          gradient: const LinearGradient(
+                                              end: Alignment.bottomCenter,
+                                              colors: [
+                                                Color(0xff092F53),
+                                                Color(0xff284F70),
+                                              ],
+                                              begin: Alignment.topCenter)),
                                       height: 45,
                                       width: 170,
                                       child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                              backgroundColor: darkBlueColor,
+                                              backgroundColor:
+                                                  Colors.transparent,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -530,16 +556,18 @@ class _SalesPageState extends State<SalesPage> {
 
   String calculateCreditCardTotal(List<DbReceiptData> lst) {
     double t = 0;
-    for (var l in lst) {
-      t += double.tryParse(l.allPaymentMethodAmountsInfo['Credit Card']) ?? 0;
-    }
+    // for (var l in lst) {
+    //   t += double.tryParse(l.allPaymentMethodAmountsInfo['Credit Card']) ?? 0;
+    // }
     return t.toStringAsFixed(2);
   }
 
   String calculateCashTotal(List<DbReceiptData> lst) {
     double t = 0;
     for (var l in lst) {
-      var a = double.tryParse(l.allPaymentMethodAmountsInfo['Cash']) ?? 0;
+      var a = double.tryParse(
+              l.allPaymentMethodAmountsInfo[PaymentMethodKey().cash] ?? '0') ??
+          0;
       var b = double.tryParse(l.receiptBalance) ?? 0;
 
       t += a - b;
@@ -556,11 +584,35 @@ class _SalesPageState extends State<SalesPage> {
               return Dialog(
                 backgroundColor: homeBgColor,
                 child: SizedBox(
-                    height: 400,
+                    height: 450,
                     width: 600,
                     child: loading
                         ? showLoading()
                         : Column(children: [
+                            Container(
+                              // height: 55,
+                              width: double.maxFinite,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 18, vertical: 10),
+                              decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(4),
+                                      topRight: Radius.circular(4)),
+                                  gradient: LinearGradient(
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color.fromARGB(255, 66, 66, 66),
+                                        Color.fromARGB(255, 0, 0, 0),
+                                      ],
+                                      begin: Alignment.topCenter)),
+                              child: Text(
+                                staticTextTranslate('Register Closing'),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: getMediumFontSize + 5,
+                                ),
+                              ),
+                            ),
                             Expanded(
                                 child: SizedBox(
                               width: 600,
@@ -573,14 +625,14 @@ class _SalesPageState extends State<SalesPage> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              staticTextTranslate(
-                                                  'Register Closing'),
-                                              style: TextStyle(
-                                                fontSize: getLargeFontSize + 5,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
+                                            // Text(
+                                            //   staticTextTranslate(
+                                            //       'Register Closing'),
+                                            //   style: TextStyle(
+                                            //     fontSize: getLargeFontSize + 5,
+                                            //     fontWeight: FontWeight.w500,
+                                            //   ),
+                                            // ),
                                             const SizedBox(
                                               height: 10,
                                             ),
@@ -787,12 +839,23 @@ class _SalesPageState extends State<SalesPage> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    SizedBox(
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          gradient: const LinearGradient(
+                                              end: Alignment.bottomCenter,
+                                              colors: [
+                                                Color(0xff092F53),
+                                                Color(0xff284F70),
+                                              ],
+                                              begin: Alignment.topCenter)),
                                       height: 45,
                                       width: 173,
                                       child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                              backgroundColor: darkBlueColor,
+                                              backgroundColor:
+                                                  Colors.transparent,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -823,12 +886,23 @@ class _SalesPageState extends State<SalesPage> {
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    SizedBox(
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          gradient: const LinearGradient(
+                                              end: Alignment.bottomCenter,
+                                              colors: [
+                                                Color(0xff092F53),
+                                                Color(0xff284F70),
+                                              ],
+                                              begin: Alignment.topCenter)),
                                       height: 45,
                                       width: 170,
                                       child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                              backgroundColor: darkBlueColor,
+                                              backgroundColor:
+                                                  Colors.transparent,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -932,7 +1006,7 @@ class _SalesPageState extends State<SalesPage> {
         builder: (context) => StatefulBuilder(builder: (context, setState2) {
               if (dialogNo == 2) {
                 return FutureBuilder(
-                    future: FbRegisterDbService(context: context)
+                    future: HiveRegisterDbService(context: context)
                         .closeRegisterData(widget.userData.username,
                             widget.userData.openRegister!),
                     builder: (context, sp) {
@@ -950,6 +1024,32 @@ class _SalesPageState extends State<SalesPage> {
                               child: sp.hasData == false
                                   ? showLoading()
                                   : Column(children: [
+                                      Container(
+                                        // height: 55,
+                                        width: double.maxFinite,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 18, vertical: 10),
+                                        decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(4),
+                                                topRight: Radius.circular(4)),
+                                            gradient: LinearGradient(
+                                                end: Alignment.bottomCenter,
+                                                colors: [
+                                                  Color.fromARGB(
+                                                      255, 66, 66, 66),
+                                                  Color.fromARGB(255, 0, 0, 0),
+                                                ],
+                                                begin: Alignment.topCenter)),
+                                        child: Text(
+                                          staticTextTranslate(
+                                              'Register Closing'),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: getMediumFontSize + 5,
+                                          ),
+                                        ),
+                                      ),
                                       Expanded(
                                           child: SizedBox(
                                         width: 600,
@@ -965,17 +1065,17 @@ class _SalesPageState extends State<SalesPage> {
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      Text(
-                                                        staticTextTranslate(
-                                                            'Register Closing'),
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                getLargeFontSize +
-                                                                    4,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                      ),
+                                                      // Text(
+                                                      //   staticTextTranslate(
+                                                      //       'Register Closing'),
+                                                      //   style: TextStyle(
+                                                      //       fontSize:
+                                                      //           getLargeFontSize +
+                                                      //               4,
+                                                      //       fontWeight:
+                                                      //           FontWeight
+                                                      //               .w400),
+                                                      // ),
                                                       const SizedBox(
                                                         height: 10,
                                                       ),
@@ -1162,13 +1262,27 @@ class _SalesPageState extends State<SalesPage> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,
                                             children: [
-                                              SizedBox(
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
+                                                    gradient:
+                                                        const LinearGradient(
+                                                            end: Alignment
+                                                                .bottomCenter,
+                                                            colors: [
+                                                              Color(0xff092F53),
+                                                              Color(0xff284F70),
+                                                            ],
+                                                            begin: Alignment
+                                                                .topCenter)),
                                                 height: 45,
                                                 width: 173,
                                                 child: ElevatedButton(
                                                     style: ElevatedButton.styleFrom(
                                                         backgroundColor:
-                                                            darkBlueColor,
+                                                            Colors.transparent,
                                                         shape: RoundedRectangleBorder(
                                                             borderRadius:
                                                                 BorderRadius
@@ -1215,13 +1329,27 @@ class _SalesPageState extends State<SalesPage> {
                                               const SizedBox(
                                                 width: 10,
                                               ),
-                                              SizedBox(
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
+                                                    gradient:
+                                                        const LinearGradient(
+                                                            end: Alignment
+                                                                .bottomCenter,
+                                                            colors: [
+                                                              Color(0xff092F53),
+                                                              Color(0xff284F70),
+                                                            ],
+                                                            begin: Alignment
+                                                                .topCenter)),
                                                 height: 45,
                                                 width: 170,
                                                 child: ElevatedButton(
                                                     style: ElevatedButton.styleFrom(
                                                         backgroundColor:
-                                                            darkBlueColor,
+                                                            Colors.transparent,
                                                         shape: RoundedRectangleBorder(
                                                             borderRadius:
                                                                 BorderRadius
@@ -1269,6 +1397,30 @@ class _SalesPageState extends State<SalesPage> {
                       child: Form(
                         key: formKey,
                         child: Column(children: [
+                          Container(
+                            // height: 55,
+                            width: double.maxFinite,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 18, vertical: 10),
+                            decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(4),
+                                    topRight: Radius.circular(4)),
+                                gradient: LinearGradient(
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Color.fromARGB(255, 66, 66, 66),
+                                      Color.fromARGB(255, 0, 0, 0),
+                                    ],
+                                    begin: Alignment.topCenter)),
+                            child: Text(
+                              staticTextTranslate('Register Closing'),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: getMediumFontSize + 5,
+                              ),
+                            ),
+                          ),
                           Expanded(
                               child: SizedBox(
                             width: 600,
@@ -1281,13 +1433,13 @@ class _SalesPageState extends State<SalesPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            staticTextTranslate(
-                                                'Register Closing'),
-                                            style: TextStyle(
-                                                fontSize: getLargeFontSize + 5,
-                                                fontWeight: FontWeight.w500),
-                                          ),
+                                          // Text(
+                                          //   staticTextTranslate(
+                                          //       'Register Closing'),
+                                          //   style: TextStyle(
+                                          //       fontSize: getLargeFontSize + 5,
+                                          //       fontWeight: FontWeight.w500),
+                                          // ),
                                           const SizedBox(
                                             height: 0,
                                           ),
@@ -1398,12 +1550,21 @@ class _SalesPageState extends State<SalesPage> {
                                         )),
                                   ),
                                   const SizedBox(width: 10),
-                                  SizedBox(
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        gradient: const LinearGradient(
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Color(0xff092F53),
+                                              Color(0xff284F70),
+                                            ],
+                                            begin: Alignment.topCenter)),
                                     height: 45,
                                     width: 173,
                                     child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                            backgroundColor: darkBlueColor,
+                                            backgroundColor: Colors.transparent,
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(4))),
@@ -1455,6 +1616,39 @@ class _SalesPageState extends State<SalesPage> {
                     height: 400,
                     width: 600,
                     child: Column(children: [
+                      Container(
+                        // height: 55,
+                        width: double.maxFinite,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 18, vertical: 10),
+                        decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(4),
+                                topRight: Radius.circular(4)),
+                            gradient: LinearGradient(
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Color.fromARGB(255, 66, 66, 66),
+                                  Color.fromARGB(255, 0, 0, 0),
+                                ],
+                                begin: Alignment.topCenter)),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(Iconsax.danger,
+                                size: 20, color: Colors.white),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            Text(
+                              staticTextTranslate('Register Open / Close'),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: getMediumFontSize + 5),
+                            ),
+                          ],
+                        ),
+                      ),
                       Expanded(
                           child: SizedBox(
                         width: 600,
@@ -1467,16 +1661,16 @@ class _SalesPageState extends State<SalesPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        staticTextTranslate(
-                                            'Register Open / Close'),
-                                        style: TextStyle(
-                                            fontSize: getLargeFontSize + 5,
-                                            fontWeight: FontWeight.w500),
-                                      ),
+                                      // const SizedBox(
+                                      //   height: 5,
+                                      // ),
+                                      // Text(
+                                      //   staticTextTranslate(
+                                      //       'Register Open / Close'),
+                                      //   style: TextStyle(
+                                      //       fontSize: getLargeFontSize + 5,
+                                      //       fontWeight: FontWeight.w500),
+                                      // ),
                                       const SizedBox(
                                         height: 10,
                                       ),
@@ -1514,7 +1708,18 @@ class _SalesPageState extends State<SalesPage> {
                                       ),
                                       Row(
                                         children: [
-                                          SizedBox(
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                gradient: const LinearGradient(
+                                                    end: Alignment.bottomCenter,
+                                                    colors: [
+                                                      Color(0xff092F53),
+                                                      Color(0xff284F70),
+                                                    ],
+                                                    begin:
+                                                        Alignment.topCenter)),
                                             height: 45,
                                             width: 170,
                                             child: ElevatedButton(
@@ -1523,7 +1728,7 @@ class _SalesPageState extends State<SalesPage> {
                                                                 .userData
                                                                 .openRegister ==
                                                             null
-                                                        ? darkBlueColor
+                                                        ? Colors.transparent
                                                         : Colors.grey,
                                                     shape:
                                                         RoundedRectangleBorder(
@@ -1564,7 +1769,18 @@ class _SalesPageState extends State<SalesPage> {
                                           const SizedBox(
                                             width: 10,
                                           ),
-                                          SizedBox(
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                gradient: const LinearGradient(
+                                                    end: Alignment.bottomCenter,
+                                                    colors: [
+                                                      Color(0xff092F53),
+                                                      Color(0xff284F70),
+                                                    ],
+                                                    begin:
+                                                        Alignment.topCenter)),
                                             height: 45,
                                             width: 170,
                                             child: ElevatedButton(
@@ -1574,7 +1790,7 @@ class _SalesPageState extends State<SalesPage> {
                                                                 .openRegister ==
                                                             null
                                                         ? Colors.grey
-                                                        : darkBlueColor,
+                                                        : Colors.transparent,
                                                     shape:
                                                         RoundedRectangleBorder(
                                                             borderRadius:
