@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:bitpro_hive/shared/global_variables/color.dart';
 import 'package:path/path.dart' as p;
 import 'package:bitpro_hive/shared/loading.dart';
 import 'package:bitpro_hive/shared/toast.dart';
@@ -30,14 +29,14 @@ class _BackupAndRestoreState extends State<BackupAndRestore> {
       children: [
         Container(
           decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                gradient: const LinearGradient(
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xff092F53),
-                      Color(0xff284F70),
-                    ],
-                    begin: Alignment.topCenter)),
+              borderRadius: BorderRadius.circular(4),
+              gradient: const LinearGradient(
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xff092F53),
+                    Color(0xff284F70),
+                  ],
+                  begin: Alignment.topCenter)),
           height: 45,
           width: 160,
           child: ElevatedButton(
@@ -99,14 +98,14 @@ class _BackupAndRestoreState extends State<BackupAndRestore> {
         ),
         Container(
           decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                gradient: const LinearGradient(
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xff092F53),
-                      Color(0xff284F70),
-                    ],
-                    begin: Alignment.topCenter)),
+              borderRadius: BorderRadius.circular(4),
+              gradient: const LinearGradient(
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xff092F53),
+                    Color(0xff284F70),
+                  ],
+                  begin: Alignment.topCenter)),
           height: 45,
           width: 150,
           child: ElevatedButton(
@@ -150,15 +149,14 @@ class _BackupAndRestoreState extends State<BackupAndRestore> {
         ),
         Container(
           decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                gradient: const LinearGradient(
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xff092F53),
-                      Color(0xff284F70),
-                      
-                    ],
-                    begin: Alignment.topCenter)),
+              borderRadius: BorderRadius.circular(4),
+              gradient: const LinearGradient(
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xff092F53),
+                    Color(0xff284F70),
+                  ],
+                  begin: Alignment.topCenter)),
           height: 45,
           width: 190,
           child: ElevatedButton(

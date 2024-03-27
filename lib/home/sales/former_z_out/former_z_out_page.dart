@@ -148,7 +148,7 @@ class _FormerZOutPageState extends State<FormerZOutPage> {
             color: homeBgColor,
             child: Column(
               children: [
-                TopBar(
+                const TopBar(
                   pageName: 'Former ZOut',
                 ),
                 Expanded(

@@ -9,8 +9,6 @@ import 'package:bitpro_hive/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:printing/printing.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
@@ -81,8 +79,8 @@ class _SettingStoreTabState extends State<SettingStoreTab> {
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(4),
-              border:
-                  Border.all(color: Color.fromARGB(255, 0, 0, 0), width: 0.3)),
+              border: Border.all(
+                  color: const Color.fromARGB(255, 0, 0, 0), width: 0.3)),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -90,7 +88,7 @@ class _SettingStoreTabState extends State<SettingStoreTab> {
                 'assets/icons/update.png',
                 width: 30,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 15,
               ),
               Expanded(
@@ -190,7 +188,7 @@ class _SettingStoreTabState extends State<SettingStoreTab> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
                 color: Colors.white,

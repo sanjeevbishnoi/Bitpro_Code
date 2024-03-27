@@ -8,7 +8,6 @@ import 'package:bitpro_hive/services/firestore_api/fb_vouchers/fb_voucher_db_ser
 import 'package:bitpro_hive/services/firestore_api/firebase_db_service.dart';
 import 'package:bitpro_hive/services/hive/hive_merchandise_db_service/inventory_db_service.dart';
 import 'package:bitpro_hive/services/hive/hive_settings/hive_store_db_service.dart';
-import 'package:bitpro_hive/widget/string_related/get_id_number.dart';
 import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:excel/excel.dart' hide Border;
 
@@ -346,7 +345,7 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                       child: Container(
                         child: Column(
                           children: [
-                            TopBar(pageName: 'Voucher'),
+                            const TopBar(pageName: 'Voucher'),
                             Expanded(
                               child: Row(
                                 children: [
@@ -384,9 +383,10 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                                   int index = localVoucherData
                                                       .indexWhere((e) =>
                                                           e.barcode == b);
-                                                  if (index != -1)
+                                                  if (index != -1) {
                                                     localVoucherData
                                                         .removeAt(index);
+                                                  }
                                                 }
                                                 dataGridController
                                                     .selectedRows = [];
@@ -406,7 +406,7 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                               }
                                             },
                                           ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 20,
                                         ),
                                         SideMenuButton(
@@ -779,7 +779,7 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                                                                           ),
                                                                                         ))),
                                                                                 GridColumn(
-                                                                                  width: 100,
+                                                                                    width: 100,
                                                                                     allowEditing: false,
                                                                                     columnName: 'barcode',
                                                                                     label: Container(
@@ -792,7 +792,7 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                                                                           ),
                                                                                         ))),
                                                                                 GridColumn(
-                                                                                  width: 100,
+                                                                                    width: 100,
                                                                                     allowEditing: false,
                                                                                     columnName: 'itemCode',
                                                                                     label: Container(
@@ -820,7 +820,7 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                                                                           overflow: TextOverflow.ellipsis,
                                                                                         ))),
                                                                                 GridColumn(
-                                                                                  width: 100,
+                                                                                    width: 100,
                                                                                     allowEditing: true,
                                                                                     columnName: 'qty',
                                                                                     label: Container(
@@ -846,7 +846,7 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                                                                           ),
                                                                                         ))),
                                                                                 GridColumn(
-                                                                                  maximumWidth: 230,
+                                                                                    maximumWidth: 230,
                                                                                     width: 100,
                                                                                     allowEditing: true,
                                                                                     columnName: 'price',
@@ -972,8 +972,9 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                                                 .only(
                                                                 bottom: 5),
                                                         child: Container(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
                                                                   vertical: 5,
                                                                   horizontal:
                                                                       16),
@@ -984,7 +985,8 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                                                           0.3),
                                                               color: const Color(
                                                                   0xffE2E2E2),
-                                                              borderRadius: BorderRadius.only(
+                                                              borderRadius: const BorderRadius
+                                                                  .only(
                                                                   bottomLeft: Radius
                                                                       .circular(
                                                                           3),
@@ -1814,7 +1816,7 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                                                               2,
                                                                     ),
                                                                   ),
-                                                                  SizedBox(
+                                                                  const SizedBox(
                                                                     height: 5,
                                                                   ),
                                                                   Row(
@@ -1845,7 +1847,7 @@ class _CreateEditVoucherPageState extends State<CreateEditVoucherPage> {
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                  SizedBox(
+                                                                  const SizedBox(
                                                                     height: 13,
                                                                   ),
                                                                   // SizedBox(
@@ -2928,7 +2930,7 @@ class VoucherDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         color: row.getCells()[0].value.isEven
-              ? const Color(0xffF1F1F1)
+            ? const Color(0xffF1F1F1)
             : Colors.white,
         cells: row.getCells().map<Widget>((e) {
           return Container(
@@ -2938,7 +2940,7 @@ class VoucherDataSource extends DataGridSource {
               e.value.toString(),
               style: GoogleFonts.roboto(
                   fontSize: getMediumFontSize + 1,
-                  color:  Colors.black,
+                  color: Colors.black,
                   fontWeight: FontWeight.w400),
             ),
           );

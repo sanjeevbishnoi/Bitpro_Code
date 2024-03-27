@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_sales/fb_promo_code_db_service.dart';
 import 'package:bitpro_hive/services/firestore_api/firebase_db_service.dart';
@@ -98,242 +97,227 @@ class _PromoCodePageState extends State<PromoCodePage> {
       Scaffold(
         backgroundColor: homeBgColor,
         body: SafeArea(
-          child: Container(
-            child: Column(
-              children: [
-                TopBar(
-                  pageName: 'Promotions',
-                ),
-                Expanded(
-                  child: Row(
-                    children: [
-                      Container(
-                        color: const Color.fromARGB(255, 43, 43, 43),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SideMenuButton(
-                              label: 'Back',
-                              iconPath: 'assets/icons/back.png',
-                              buttonFunction: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            SideMenuButton(
-                              label: 'Create',
-                              iconPath: 'assets/icons/plus.png',
-                              buttonFunction: () async {
-                                importBarcodeData();
-                              },
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            SideMenuButton(
-                              label: 'Refresh',
-                              iconPath: 'assets/icons/refresh.png',
-                              buttonFunction: () async {
-                                setState(() {
-                                  loading = true;
-                                });
-                                await fbFetchData();
-                              },
-                            ),
-                            SideMenuButton(
-                              label: 'Delete All',
-                              iconPath: 'assets/icons/view.png',
-                              buttonFunction: () {
-                                if (allPromotionDataLst.isNotEmpty) {
-                                  deleteAllConfirmation();
-                                }
-                              },
-                            ),
-                          ],
-                        ),
+          child: Column(
+            children: [
+              const TopBar(
+                pageName: 'Promotions',
+              ),
+              Expanded(
+                child: Row(
+                  children: [
+                    Container(
+                      color: const Color.fromARGB(255, 43, 43, 43),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SideMenuButton(
+                            label: 'Back',
+                            iconPath: 'assets/icons/back.png',
+                            buttonFunction: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          SideMenuButton(
+                            label: 'Create',
+                            iconPath: 'assets/icons/plus.png',
+                            buttonFunction: () async {
+                              importBarcodeData();
+                            },
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          SideMenuButton(
+                            label: 'Refresh',
+                            iconPath: 'assets/icons/refresh.png',
+                            buttonFunction: () async {
+                              setState(() {
+                                loading = true;
+                              });
+                              await fbFetchData();
+                            },
+                          ),
+                          SideMenuButton(
+                            label: 'Delete All',
+                            iconPath: 'assets/icons/view.png',
+                            buttonFunction: () {
+                              if (allPromotionDataLst.isNotEmpty) {
+                                deleteAllConfirmation();
+                              }
+                            },
+                          ),
+                        ],
                       ),
-                      const SizedBox(
-                        width: 0,
-                      ),
-                      Expanded(
-                        child: Card(
-                            shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                    color: Colors.grey, width: 0.5),
-                                borderRadius: BorderRadius.circular(4)),
-                            elevation: 0,
-                            color: Colors.white,
-                            child: Column(
-                              children: [
-                                //filters
-                                filterWidget(),
-                                if (loading) Expanded(child: showLoading()),
-                                if (!loading)
-                                  Expanded(
-                                    child: Container(
-                                      margin: const EdgeInsets.all(6),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(width: 0.3)),
-                                      child: SfDataGridTheme(
-                                        data: SfDataGridThemeData(
-                                          headerColor: const Color(0xffF1F1F1),
-                                          sortIcon: const Icon(
-                                              Icons.arrow_drop_down_rounded),
-                                          headerHoverColor:
-                                              const Color(0xffdddfe8),
-                                        ),
-                                        child: Expanded(
-                                          child: SfDataGrid(
-                                            gridLinesVisibility:
-                                                GridLinesVisibility.both,
-                                            headerGridLinesVisibility:
-                                                GridLinesVisibility.both,
-                                            isScrollbarAlwaysShown: true,
-                                            onQueryRowHeight: (details) {
-                                              // Set the row height as 70.0 to the column header row.
-                                              return details.rowIndex == 0
-                                                  ? 25.0
-                                                  : 25.0;
-                                            },
-                                            rowHeight: 25,
-                                            headerRowHeight: 25,
-                                            allowSorting: true,
-                                            allowTriStateSorting: true,
-                                            controller: dataGridController,
-                                            selectionMode: SelectionMode.single,
-                                            source: promoDataSource!,
-                                            columnWidthMode:
-                                                ColumnWidthMode.fill,
-                                            onSelectionChanged:
-                                                (addedRows, removedRows) {
-                                              setState(() {});
-                                            },
-                                            columns: <GridColumn>[
-                                              GridColumn(
-                                                  columnName:
+                    ),
+                    const SizedBox(
+                      width: 0,
+                    ),
+                    Expanded(
+                      child: Card(
+                          shape: RoundedRectangleBorder(
+                              side: const BorderSide(
+                                  color: Colors.grey, width: 0.5),
+                              borderRadius: BorderRadius.circular(4)),
+                          elevation: 0,
+                          color: Colors.white,
+                          child: Column(
+                            children: [
+                              //filters
+                              filterWidget(),
+                              if (loading) Expanded(child: showLoading()),
+                              if (!loading)
+                                Expanded(
+                                  child: Container(
+                                    margin: const EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(width: 0.3)),
+                                    child: SfDataGridTheme(
+                                      data: SfDataGridThemeData(
+                                        headerColor: const Color(0xffF1F1F1),
+                                        sortIcon: const Icon(
+                                            Icons.arrow_drop_down_rounded),
+                                        headerHoverColor:
+                                            const Color(0xffdddfe8),
+                                      ),
+                                      child: Expanded(
+                                        child: SfDataGrid(
+                                          gridLinesVisibility:
+                                              GridLinesVisibility.both,
+                                          headerGridLinesVisibility:
+                                              GridLinesVisibility.both,
+                                          isScrollbarAlwaysShown: true,
+                                          onQueryRowHeight: (details) {
+                                            // Set the row height as 70.0 to the column header row.
+                                            return details.rowIndex == 0
+                                                ? 25.0
+                                                : 25.0;
+                                          },
+                                          rowHeight: 25,
+                                          headerRowHeight: 25,
+                                          allowSorting: true,
+                                          allowTriStateSorting: true,
+                                          controller: dataGridController,
+                                          selectionMode: SelectionMode.single,
+                                          source: promoDataSource!,
+                                          columnWidthMode: ColumnWidthMode.fill,
+                                          onSelectionChanged:
+                                              (addedRows, removedRows) {
+                                            setState(() {});
+                                          },
+                                          columns: <GridColumn>[
+                                            GridColumn(
+                                                columnName:
+                                                    'serialNumberForStyleColor',
+                                                visible: false,
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            0.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
                                                       'serialNumberForStyleColor',
-                                                  visible: false,
-                                                  label: Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              0.0),
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Text(
-                                                        'serialNumberForStyleColor',
-                                                        style:
-                                                            GoogleFonts.roboto(
-                                                          fontSize:
-                                                              getMediumFontSize +
-                                                                  2,
-                                                        ),
-                                                      ))),
-                                              GridColumn(
-                                                  columnName: 'promo#',
-                                                  label: Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              1.0),
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Text(
-                                                        staticTextTranslate(
-                                                            'Promo#'),
-                                                        style:
-                                                            GoogleFonts.roboto(
-                                                          fontSize:
-                                                              getMediumFontSize +
-                                                                  2,
-                                                        ),
-                                                      ))),
-                                              GridColumn(
-                                                  columnName: 'barcode',
-                                                  label: Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              2.0),
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Text(
-                                                        staticTextTranslate(
-                                                            'Barcode'),
-                                                        style:
-                                                            GoogleFonts.roboto(
-                                                          fontSize:
-                                                              getMediumFontSize +
-                                                                  2,
-                                                        ),
-                                                      ))),
-                                              GridColumn(
-                                                  columnName: 'percentage',
-                                                  label: Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              2.0),
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Text(
-                                                        staticTextTranslate(
-                                                            'Percentage'),
-                                                        style:
-                                                            GoogleFonts.roboto(
-                                                          fontSize:
-                                                              getMediumFontSize +
-                                                                  2,
-                                                        ),
-                                                      ))),
-                                              GridColumn(
-                                                  columnName: 'start date/time',
-                                                  label: Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              2.0),
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Text(
-                                                        staticTextTranslate(
-                                                            'Start Date/Time'),
-                                                        style:
-                                                            GoogleFonts.roboto(
-                                                          fontSize:
-                                                              getMediumFontSize +
-                                                                  2,
-                                                        ),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ))),
-                                              GridColumn(
-                                                  columnName: 'end date/time',
-                                                  label: Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              2.0),
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Text(
-                                                        staticTextTranslate(
-                                                            'End Date/Time'),
-                                                        style:
-                                                            GoogleFonts.roboto(
-                                                          fontSize:
-                                                              getMediumFontSize +
-                                                                  2,
-                                                        ),
-                                                      ))),
-                                            ],
-                                          ),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                2,
+                                                      ),
+                                                    ))),
+                                            GridColumn(
+                                                columnName: 'promo#',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            1.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Promo#'),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                2,
+                                                      ),
+                                                    ))),
+                                            GridColumn(
+                                                columnName: 'barcode',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Barcode'),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                2,
+                                                      ),
+                                                    ))),
+                                            GridColumn(
+                                                columnName: 'percentage',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Percentage'),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                2,
+                                                      ),
+                                                    ))),
+                                            GridColumn(
+                                                columnName: 'start date/time',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'Start Date/Time'),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                2,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ))),
+                                            GridColumn(
+                                                columnName: 'end date/time',
+                                                label: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      staticTextTranslate(
+                                                          'End Date/Time'),
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize:
+                                                            getMediumFontSize +
+                                                                2,
+                                                      ),
+                                                    ))),
+                                          ],
                                         ),
                                       ),
                                     ),
-                                  )
-                              ],
-                            )),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
+                                  ),
+                                )
+                            ],
+                          )),
+                    )
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),

@@ -11,7 +11,7 @@ staticTextTranslate(String txt) {
     case 'Items Not Found':
       return 'لم يتم العثور على العناصر';
 
-      //old
+    //old
     case 'Price can change':
       return 'السعر يمكن أن يتغير';
     case 'Submit':
@@ -654,8 +654,6 @@ staticTextTranslate(String txt) {
     case "Item code is already in use":
       return 'كود البند قيد الاستخدام بالفعل';
 
-    case "Product Name":
-      return "اسم المنتج";
     case "Enter product name":
       return "أدخل اسم المنتج";
 

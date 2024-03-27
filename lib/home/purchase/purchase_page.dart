@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:bitpro_hive/home/purchase/voucher/voucher_page.dart';
-import 'package:bitpro_hive/shared/global_variables/color.dart';
 import 'package:bitpro_hive/model/user_data.dart';
 import 'package:bitpro_hive/model/user_group_data.dart';
 import '../../shared/global_variables/font_sizes.dart';
@@ -28,7 +27,7 @@ class _PurchasePageState extends State<PurchasePage> {
       children: [
         if (widget.currentUserRole.purchaseVoucher)
           Container(
-             decoration: BoxDecoration(
+            decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
                 gradient: const LinearGradient(
                     end: Alignment.bottomCenter,

@@ -3,7 +3,7 @@ import 'package:bitpro_hive/model/vendor_data.dart';
 import 'package:bitpro_hive/widget/string_related/get_random_barcode_string.dart';
 import 'package:excel/excel.dart';
 import 'package:hive/hive.dart';
-import 'package:bitpro_hive/home/purchase/purchase_page.dart';
+
 import '../../../model/inventory_data.dart';
 
 //inventory update quantity
@@ -85,8 +85,6 @@ Map<String, dynamic> inventoryDataFromExcel(
   int? vendorIdIndex;
 
   List<InventoryData> inventoryDataLst = [];
-  int dublicateInLst = 0;
-  int dublicateInOldData = 0;
   int wrongVendorIdOrDepartmentId = 0;
   for (var table in excel.tables.keys) {
     for (int j = 0; j < excel.tables[table]!.rows.length; j++) {
@@ -97,9 +95,6 @@ Map<String, dynamic> inventoryDataFromExcel(
             var d = row.elementAt(i)!.value.toString().toLowerCase();
 
             switch (d) {
-              // case 'barcode':
-              //   barcodeIndex = i;
-              //   break;
               case 'productname':
                 productNameIndex = i;
                 break;

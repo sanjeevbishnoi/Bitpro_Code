@@ -5,7 +5,6 @@ import 'package:bitpro_hive/shared/check_contain_arabic_letters.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:bitpro_hive/model/user_data.dart';
-import 'package:bitpro_hive/shared/global_variables/color.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;

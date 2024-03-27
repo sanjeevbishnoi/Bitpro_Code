@@ -101,7 +101,7 @@ class _ReportsPageState extends State<ReportsPage> {
             color: homeBgColor,
             child: Column(
               children: [
-                TopBar(pageName: 'Reports'),
+                const TopBar(pageName: 'Reports'),
                 Expanded(
                   child: Container(
                     color: homeBgColor,
@@ -230,7 +230,7 @@ class _ReportsPageState extends State<ReportsPage> {
                                                 ),
                                               ],
                                             ),
-                                            Divider(
+                                            const Divider(
                                               color: Colors.grey,
                                             ),
                                             CustomExpansionTile(
@@ -282,7 +282,7 @@ class _ReportsPageState extends State<ReportsPage> {
                                                 ),
                                               ],
                                             ),
-                                            Divider(
+                                            const Divider(
                                               color: Colors.grey,
                                             ),
                                             CustomExpansionTile(
@@ -334,7 +334,7 @@ class _ReportsPageState extends State<ReportsPage> {
                                                 ),
                                               ],
                                             ),
-                                            Divider(
+                                            const Divider(
                                               color: Colors.grey,
                                             ),
                                             const Expanded(
@@ -383,7 +383,7 @@ class _ReportsPageState extends State<ReportsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             if (!showPageDetails) selectDateDialog(),

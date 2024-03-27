@@ -4,10 +4,8 @@ import 'package:bitpro_hive/services/firestore_api/fb_user_db_service.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import '../shared/global_variables/font_sizes.dart';
 import '../shared/loading.dart';
@@ -154,11 +152,15 @@ class _LoginPageState extends State<LoginPage> {
                                               ),
                                               border:
                                                   const OutlineInputBorder(),
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      width: 1,
-                                                      color: Color.fromARGB(
-                                                          255, 19, 101, 148))),
+                                              focusedBorder:
+                                                  const OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          width: 1,
+                                                          color: Color.fromARGB(
+                                                              255,
+                                                              19,
+                                                              101,
+                                                              148))),
                                               enabledBorder:
                                                   const OutlineInputBorder(
                                                       borderSide: BorderSide(
@@ -189,11 +191,15 @@ class _LoginPageState extends State<LoginPage> {
                                               hintStyle: GoogleFonts.roboto(
                                                   fontSize: 18,
                                                   color: Colors.grey[700]),
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      width: 1,
-                                                      color: Color.fromARGB(
-                                                          255, 19, 101, 148))),
+                                              focusedBorder:
+                                                  const OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          width: 1,
+                                                          color: Color.fromARGB(
+                                                              255,
+                                                              19,
+                                                              101,
+                                                              148))),
                                               enabledBorder:
                                                   const OutlineInputBorder(
                                                       borderSide: BorderSide(
@@ -208,8 +214,10 @@ class _LoginPageState extends State<LoginPage> {
                                                     });
                                                   },
                                                   icon: obscurePassword
-                                                      ? Icon(Icons.show_chart)
-                                                      : Icon(Icons.hide_image)),
+                                                      ? const Icon(
+                                                          Icons.show_chart)
+                                                      : const Icon(
+                                                          Icons.hide_image)),
                                               hintText: staticTextTranslate(
                                                   'Password'),
                                               border:

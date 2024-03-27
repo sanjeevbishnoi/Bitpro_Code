@@ -43,25 +43,6 @@ class HiveVoucherDbService {
         Map merchandisInventory = box.get('Merchandise Inventory') ?? {};
         merchandisInventory[dId] = d.toMap();
         await box.put('Merchandise Inventory', merchandisInventory);
-        // await FirebaseFirestore.instance
-        //     .collection('Merchandise Inventory')
-        //     .doc(allInventoryDataLst.elementAt(i).docId)
-        //     .set({
-        //   'itemCode': d.itemCode,
-        //   'selectedVendorId': d.selectedVendorId,
-        //   'productName': d.productName,
-        //   'selectedDepartmentId': d.selectedDepartmentId,
-        //   'cost': v['cost'].toString(),
-        //   'description': d.description,
-        //   'price': v['price'].toString(),
-        //   'margin': d.margin,
-        //   'priceWT': v['priceWt'].toString(),
-        //   'productImgUrl': d.productImg,
-        //   'createdDate': d.createdDate.toString(),
-        //   'createdBy': d.createdBy,
-        //   'barcode': d.barcode,
-        //   'ohQty': ohQty.toString(),
-        // });
       }
     }
 
@@ -70,11 +51,6 @@ class HiveVoucherDbService {
     purchaseVoucher[dId] = voucherData.toMap();
 
     await box.put('Purchase Voucher', purchaseVoucher);
-
-    // await FirebaseFirestore.instance
-    //     .collection('Purchase Voucher')
-    //     .doc()
-    //     .set(voucherData.toMap());
   }
 
   Future<List<DbVoucherData>> fetchAllVoucherData() async {
@@ -85,26 +61,5 @@ class HiveVoucherDbService {
     return purchaseVoucher.values.map((v) {
       return DbVoucherData.fromMap(v);
     }).toList();
-    // var qs =
-    //     await FirebaseFirestore.instance.collection('Purchase Voucher').get();
-
-    // return qs.docs.map((d) {
-    //   return DbVoucherData(
-    //       createdDate:
-    //           DateTime.fromMillisecondsSinceEpoch(d.get('createdDate')),
-    //       selectedItems: d.get('selectedItems'),
-    //       discountPercentage: d.get('discountPercentage'),
-    //       discountValue: d.get('discountValue'),
-    //       note: d.get('note'),
-    //       tax: d.get('tax'),
-    //       voucherNo: d.get('voucherNo'),
-    //       type: d.get('type'),
-    //       vendor: d.get('vendor'),
-    //       qtyRecieved: d.get('qtyRecieved'),
-    //       voucherTotal: d.get('voucherTotal'),
-    //       purchaseInvoice: d.get('purchaseInvoice'),
-    //       purchaseInvoiceDate: d.get('purchaseInvoiceDate'),
-    //       createdBy: d.get('createdBy'));
-    // }).toList();
   }
 }

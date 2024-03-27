@@ -5,9 +5,7 @@ import 'package:bitpro_hive/shared/constant_data.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-
 import 'package:bitpro_hive/model/receipt/db_receipt_data.dart';
-import 'package:bitpro_hive/shared/global_variables/color.dart';
 import 'package:bitpro_hive/shared/templates/receipt_templates/e_invoice_generator.dart';
 import 'package:bitpro_hive/shared/templates/receipt_templates/print_receipt.dart';
 

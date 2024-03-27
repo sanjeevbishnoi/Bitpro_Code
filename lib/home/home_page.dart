@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:bitpro_hive/home/purchase/purchase_page.dart';
 import 'package:bitpro_hive/home/employess/employees_page.dart';
 import 'package:bitpro_hive/home/reports/reports_page.dart';
@@ -162,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                   SafeArea(
                     child: Column(
                       children: [
-                        TopBar(),
+                        const TopBar(),
                         Expanded(
                           child: Container(
                             color: Colors.grey,
@@ -181,8 +180,8 @@ class _HomePageState extends State<HomePage> {
                                       children: [
                                         Expanded(
                                           child: Container(
-                                            color:
-                                                Color.fromARGB(255, 43, 43, 43),
+                                            color: const Color.fromARGB(
+                                                255, 43, 43, 43),
                                             child: Column(
                                               children: [
                                                 const SizedBox(
@@ -592,11 +591,9 @@ class _HomePageState extends State<HomePage> {
                                                       decoration: BoxDecoration(
                                                           color: selectedTabIndex ==
                                                                   7
-                                                              ? Color.fromARGB(
-                                                                  255,
-                                                                  75,
-                                                                  75,
-                                                                  75)
+                                                              ? const Color
+                                                                  .fromARGB(255,
+                                                                  75, 75, 75)
                                                               : Colors
                                                                   .transparent,
                                                           borderRadius:
@@ -720,9 +717,9 @@ class _HomePageState extends State<HomePage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Container(
-                                        padding: EdgeInsets.all(5),
+                                        padding: const EdgeInsets.all(5),
                                         height: 23,
-                                        child: Row(
+                                        child: const Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
                                           children: [

@@ -162,7 +162,7 @@ class _CustomerPageState extends State<CustomerPage> {
             color: homeBgColor,
             child: Column(
               children: [
-                TopBar(pageName: 'Customers'),
+                const TopBar(pageName: 'Customers'),
                 Expanded(
                   child: Container(
                     color: homeBgColor,

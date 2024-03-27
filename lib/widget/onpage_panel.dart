@@ -7,22 +7,21 @@ class OnPagePanel extends StatelessWidget {
   final Widget rowForButton;
   final double widht;
   final Widget? imagePickerWidget;
-  const OnPagePanel(
-      {super.key,
-      required this.columnForTextField,
-      required this.rowForButton,
-      required this.topLabel,
-      this.imagePickerWidget,
-      this.widht = double.infinity,
-      });
+  const OnPagePanel({
+    super.key,
+    required this.columnForTextField,
+    required this.rowForButton,
+    required this.topLabel,
+    this.imagePickerWidget,
+    this.widht = double.infinity,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        
-              width: widht,
+        width: widht,
         decoration: BoxDecoration(
             border: Border.all(width: 0.3),
             color: const Color(0xffE2E2E2),
@@ -61,8 +60,8 @@ class OnPagePanel extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Container(width: 400, child: columnForTextField),
+                    padding: const EdgeInsets.all(16),
+                    child: SizedBox(width: 400, child: columnForTextField),
                   ),
                   if (imagePickerWidget != null) imagePickerWidget!,
                 ],
@@ -73,7 +72,7 @@ class OnPagePanel extends StatelessWidget {
               child: Container(
                 height: 60,
                 width: double.maxFinite,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.grey,
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(3),

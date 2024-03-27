@@ -5,9 +5,7 @@ import 'package:bitpro_hive/widget/bTextField.dart';
 import 'package:bitpro_hive/widget/onpage_button.dart';
 import 'package:bitpro_hive/widget/onpage_panel.dart';
 import 'package:bitpro_hive/widget/top_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:iconsax/iconsax.dart';
@@ -117,7 +115,7 @@ class _CreateEditEmployeesPageState extends State<CreateEditEmployeesPage> {
                                 child: Row(
                                   children: [
                                     OnPagePanel(
-                                      widht: 450,
+                                        widht: 450,
                                         columnForTextField: Column(
                                           children: [
                                             BTextField(
@@ -143,11 +141,11 @@ class _CreateEditEmployeesPageState extends State<CreateEditEmployeesPage> {
                                                 }
                                                 return null;
                                               }),
-                                              onChanged: (val) => setState(() {}),
+                                              onChanged: (val) =>
+                                                  setState(() {}),
                                               autovalidateMode: AutovalidateMode
                                                   .onUserInteraction,
                                             ),
-                                            
                                             const SizedBox(
                                               height: 5,
                                             ),
@@ -203,7 +201,6 @@ class _CreateEditEmployeesPageState extends State<CreateEditEmployeesPage> {
                                             const SizedBox(
                                               height: 5,
                                             ),
-                                            
                                             BTextField(
                                               textFieldReadOnly: false,
                                               label: 'Last Name',
@@ -246,7 +243,8 @@ class _CreateEditEmployeesPageState extends State<CreateEditEmployeesPage> {
                                                   return staticTextTranslate(
                                                       'Re enter your password');
                                                 }
-                                                if (password != confirmPassword) {
+                                                if (password !=
+                                                    confirmPassword) {
                                                   return staticTextTranslate(
                                                       'Please make sure your passwords match.');
                                                 }
@@ -264,13 +262,15 @@ class _CreateEditEmployeesPageState extends State<CreateEditEmployeesPage> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      top: 8.0),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 8.0),
                                                   child: Text(
                                                     staticTextTranslate(
                                                         'User Role'),
@@ -285,13 +285,15 @@ class _CreateEditEmployeesPageState extends State<CreateEditEmployeesPage> {
                                                   decoration: BoxDecoration(
                                                       color: Colors.white,
                                                       border: Border.all(
-                                                        color: const Color.fromARGB(
+                                                        color: const Color
+                                                            .fromARGB(
                                                             255, 43, 43, 43),
                                                       ),
                                                       borderRadius:
-                                                          BorderRadius.circular(4)),
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 5),
+                                                          BorderRadius.circular(
+                                                              4)),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 5),
                                                   child: DropdownButton<String>(
                                                     underline: const SizedBox(),
                                                     isExpanded: true,
@@ -301,13 +303,16 @@ class _CreateEditEmployeesPageState extends State<CreateEditEmployeesPage> {
                                                           'Select Role'),
                                                       style: TextStyle(
                                                           fontSize:
-                                                              getMediumFontSize + 2,
+                                                              getMediumFontSize +
+                                                                  2,
                                                           fontWeight:
                                                               FontWeight.w400),
                                                     ),
                                                     value: userRole,
-                                                    items: widget.userGroupsDataLst
-                                                        .map((UserGroupData value) {
+                                                    items: widget
+                                                        .userGroupsDataLst
+                                                        .map((UserGroupData
+                                                            value) {
                                                       return DropdownMenuItem<
                                                           String>(
                                                         value: value.name,
@@ -318,13 +323,15 @@ class _CreateEditEmployeesPageState extends State<CreateEditEmployeesPage> {
                                                                   getMediumFontSize +
                                                                       2,
                                                               fontWeight:
-                                                                  FontWeight.w400),
+                                                                  FontWeight
+                                                                      .w400),
                                                         ),
                                                       );
                                                     }).toList(),
                                                     onChanged: (val) {
                                                       setState(() {
-                                                        showDropDownError = false;
+                                                        showDropDownError =
+                                                            false;
                                                         userRole = val;
                                                       });
                                                     },
@@ -351,10 +358,12 @@ class _CreateEditEmployeesPageState extends State<CreateEditEmployeesPage> {
                                               label: 'Max Discount %',
                                               initialValue: maxDiscount,
                                               validator: ((val) {
-                                                if (double.tryParse(val!) == null) {
+                                                if (double.tryParse(val!) ==
+                                                    null) {
                                                   return staticTextTranslate(
                                                       'Enter a valid number');
-                                                } else if (double.parse(val) < 0 ||
+                                                } else if (double.parse(val) <
+                                                        0 ||
                                                     double.parse(val) > 110) {
                                                   return staticTextTranslate(
                                                       'Enter a value between 0 - 100%');

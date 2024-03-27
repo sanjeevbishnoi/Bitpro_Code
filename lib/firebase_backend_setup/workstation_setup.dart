@@ -521,11 +521,11 @@ class _WorkstationSetupPageState extends State<WorkstationSetupPage> {
     //if worksation number already exist in fb then, don't need to update
     if (addWorkstationInFb) {
       StoreData temp = selectedStoreData!;
-      print(temp.workstationInfo);
+
       if (temp.workstationInfo.contains(newWorkStationNumber) == false) {
         temp.workstationInfo.add(newWorkStationNumber);
       }
-      print(temp.workstationInfo);
+
       await FbStoreDbService(context: context).addStoreData([temp]);
     }
 

@@ -313,7 +313,6 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
               selectedLocalReceiptData.isEmpty) {
             getLocalReceiptDataFromBarcode();
           }
-          print(MediaQuery.of(context).size.width);
 
           return customTopNavBar(
             Shortcuts(
@@ -343,7 +342,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                           color: const Color(0xffE2E2E2),
                           child: Column(
                             children: [
-                              TopBar(
+                              const TopBar(
                                 pageName: 'Receipt',
                               ),
                               Expanded(
@@ -385,12 +384,12 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                         style: TextStyle(
                                                             fontSize:
                                                                 getMediumFontSize,
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    235,
-                                                                    235,
-                                                                    235))),
+                                                            color: const Color
+                                                                .fromARGB(
+                                                                255,
+                                                                235,
+                                                                235,
+                                                                235))),
                                                   ],
                                                 ),
                                                 onPressed: () {
@@ -1052,7 +1051,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                     child:
                                                                         Padding(
                                                                       padding:
-                                                                          EdgeInsets
+                                                                          const EdgeInsets
                                                                               .symmetric(
                                                                         horizontal:
                                                                             10,
@@ -1112,13 +1111,13 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                                     ),
                                                                                   ],
                                                                                 ),
-                                                                                SizedBox(
+                                                                                const SizedBox(
                                                                                   width: 0,
                                                                                 ),
                                                                                 Row(
                                                                                   children: [
                                                                                     regularReturnFilter(),
-                                                                                    SizedBox(
+                                                                                    const SizedBox(
                                                                                       width: 10,
                                                                                     ),
                                                                                     storeFilterWidget(),
@@ -1428,9 +1427,9 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                               ),
                                                               Padding(
                                                                 padding:
-                                                                    EdgeInsets
+                                                                    const EdgeInsets
                                                                         .all(
-                                                                            10),
+                                                                        10),
                                                                 child: Column(
                                                                   crossAxisAlignment:
                                                                       CrossAxisAlignment
@@ -1594,7 +1593,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                     .circular(
                                                                         4),
                                                           ),
-                                                          child: Column(
+                                                          child: const Column(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
                                                                     .center,
@@ -1602,7 +1601,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                           ),
                                                         ),
                                                       ),
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         height: 5,
                                                       ),
                                                       Container(
@@ -1693,7 +1692,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                         ),
                                                                       ],
                                                                     ),
-                                                                    SizedBox(
+                                                                    const SizedBox(
                                                                       height:
                                                                           10,
                                                                     ),
@@ -1717,7 +1716,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                         ),
                                                                       ],
                                                                     ),
-                                                                    SizedBox(
+                                                                    const SizedBox(
                                                                       height:
                                                                           10,
                                                                     ),
@@ -1745,7 +1744,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                         ),
                                                                       ],
                                                                     ),
-                                                                    SizedBox(
+                                                                    const SizedBox(
                                                                       height:
                                                                           10,
                                                                     ),
@@ -1773,7 +1772,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                         ),
                                                                       ],
                                                                     ),
-                                                                    SizedBox(
+                                                                    const SizedBox(
                                                                       height:
                                                                           10,
                                                                     ),
@@ -1804,7 +1803,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                         ),
                                                                       ],
                                                                     ),
-                                                                    SizedBox(
+                                                                    const SizedBox(
                                                                       height: 5,
                                                                     ),
                                                                     Text(
@@ -1816,7 +1815,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                           fontWeight:
                                                                               FontWeight.w500),
                                                                     ),
-                                                                    SizedBox(
+                                                                    const SizedBox(
                                                                       height: 5,
                                                                     ),
                                                                     Row(
@@ -1846,7 +1845,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                                                         ),
                                                                       ],
                                                                     ),
-                                                                    SizedBox(
+                                                                    const SizedBox(
                                                                       height:
                                                                           10,
                                                                     ),
@@ -2896,7 +2895,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                         child: Container(
                           width: double.maxFinite,
                           child: Padding(
-                            padding: EdgeInsets.all(15),
+                            padding: const EdgeInsets.all(15),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
@@ -2911,7 +2910,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 10,
                                       ),
                                       Container(
@@ -2929,7 +2928,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Container(
@@ -2943,7 +2942,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 10,
                                       ),
                                       Container(
@@ -2962,7 +2961,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Container(
@@ -2976,7 +2975,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 10,
                                       ),
                                       Container(
@@ -3122,7 +3121,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
                 begin: Alignment.topCenter)),
         height: 42,
         width: 220,
-        margin: EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.only(bottom: 10),
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
                 backgroundColor: viewMode ? Colors.grey : Colors.transparent,
@@ -3146,7 +3145,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
     } else if (key == PaymentMethodKey().creditCard &&
         paymentTypeList[key] != 0) {
       return Container(
-        margin: EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
             gradient: const LinearGradient(
@@ -3180,7 +3179,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
       );
     } else if (key == PaymentMethodKey().tamara && paymentTypeList[key] != 0) {
       return Container(
-        margin: EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
             gradient: const LinearGradient(
@@ -3216,7 +3215,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
       );
     } else if (key == PaymentMethodKey().tabby && paymentTypeList[key] != 0) {
       return Container(
-        margin: EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
             gradient: const LinearGradient(
@@ -3251,7 +3250,7 @@ class _CreateEditReceiptPageState extends State<CreateEditReceiptPage> {
             )),
       );
     }
-    return SizedBox();
+    return const SizedBox();
   }
 
   // String getLastItemImagePath() {

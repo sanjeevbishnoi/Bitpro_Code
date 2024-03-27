@@ -33,18 +33,5 @@ class HiveDepartmentDbService {
 
       return DepartmentData.fromMap(ud);
     }).toList();
-
-    // var qs = await FirebaseFirestore.instance
-    //     .collection('Merchandise Departments')
-    //     .get();
-
-    // return qs.docs.map((d) {
-    //   return DepartmentData(
-    //       docId: d.id,
-    //       createdDate: DateTime.parse(d.get('createdDate')),
-    //       createdBy: d.get('createdBy'),
-    //       departmentId: d.get('departmentId'),
-    //       departmentName: d.get('departmentName'));
-    // }).toList();
   }
 }

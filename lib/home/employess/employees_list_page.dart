@@ -1,4 +1,3 @@
-import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_user_db_service.dart';
 import 'package:bitpro_hive/services/hive/hive_user_db_service.dart';
@@ -10,7 +9,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:bitpro_hive/home/employess/create_edit_employess_page.dart';
 import 'package:bitpro_hive/model/user_data.dart';
@@ -172,7 +170,7 @@ class _EmployeesListPageState extends State<EmployeesListPage> {
             // padding: const EdgeInsets.fromLTRB(5, 0, 5, 2),
             child: Column(
               children: [
-                TopBar(pageName: 'Employees'),
+                const TopBar(pageName: 'Employees'),
                 Expanded(
                   child: Container(
                     color: homeBgColor,

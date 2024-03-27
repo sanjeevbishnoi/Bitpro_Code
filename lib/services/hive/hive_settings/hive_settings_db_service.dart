@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:bitpro_hive/model/store_data.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 

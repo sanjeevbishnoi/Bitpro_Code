@@ -1,8 +1,5 @@
-import 'package:bitpro_hive/services/firestore_api/fb_user_group_db_service.dart';
-import 'package:bitpro_hive/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:bitpro_hive/shared/global_variables/color.dart';
 import 'package:bitpro_hive/home/merchandise/department/department_page.dart';
 import 'package:bitpro_hive/home/merchandise/inventory/inventory_page.dart';
 import 'package:bitpro_hive/home/merchandise/vendor/vendor_page.dart';
@@ -31,7 +28,7 @@ class _MerchandisePageState extends State<MerchandisePage> {
       children: [
         if (widget.currentUserRole.inventory)
           Container(
-             decoration: BoxDecoration(
+            decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
                 gradient: const LinearGradient(
                     end: Alignment.bottomCenter,
@@ -73,7 +70,7 @@ class _MerchandisePageState extends State<MerchandisePage> {
           ),
         if (widget.currentUserRole.vendors)
           Container(
-             decoration: BoxDecoration(
+            decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
                 gradient: const LinearGradient(
                     end: Alignment.bottomCenter,
@@ -116,7 +113,7 @@ class _MerchandisePageState extends State<MerchandisePage> {
           ),
         if (widget.currentUserRole.departments)
           Container(
-             decoration: BoxDecoration(
+            decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
                 gradient: const LinearGradient(
                     end: Alignment.bottomCenter,
@@ -159,7 +156,7 @@ class _MerchandisePageState extends State<MerchandisePage> {
           ),
         if (widget.currentUserRole.adjustment)
           Container(
-             decoration: BoxDecoration(
+            decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
                 gradient: const LinearGradient(
                     end: Alignment.bottomCenter,

@@ -40,7 +40,6 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  
   final bool setFullScreen;
   const MyApp({Key? key, this.setFullScreen = false}) : super(key: key);
 
@@ -80,31 +79,25 @@ class _MyAppState extends State<MyApp> {
           title: 'Bitpro',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            scrollbarTheme: ScrollbarThemeData(
-              
-              crossAxisMargin: 2.0,
-          mainAxisMargin: 2.0,
-                thickness: MaterialStateProperty.all(12),
-                radius: const Radius.circular(0),
-                
-                thumbColor: MaterialStateProperty.all(
-                  Colors.grey[700]
-                ),
-                interactive: true,
-                
-                trackVisibility: MaterialStateProperty.all(true),
-
-                trackColor: MaterialStateProperty.all(Colors.grey[300]),
-                thumbVisibility: MaterialStateProperty.all(true)),
-            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-              backgroundColor: Colors.white,
-              selectedItemColor: Color.fromARGB(255, 59, 6, 80),
-              unselectedItemColor: Color.fromARGB(255, 39, 39, 39),
-            ),
+              scrollbarTheme: ScrollbarThemeData(
+                  crossAxisMargin: 2.0,
+                  mainAxisMargin: 2.0,
+                  thickness: MaterialStateProperty.all(12),
+                  radius: const Radius.circular(0),
+                  thumbColor: MaterialStateProperty.all(Colors.grey[700]),
+                  interactive: true,
+                  trackVisibility: MaterialStateProperty.all(true),
+                  trackColor: MaterialStateProperty.all(Colors.grey[300]),
+                  thumbVisibility: MaterialStateProperty.all(true)),
+              bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                backgroundColor: Colors.white,
+                selectedItemColor: Color.fromARGB(255, 59, 6, 80),
+                unselectedItemColor: Color.fromARGB(255, 39, 39, 39),
+              ),
               useMaterial3: false,
               primarySwatch: Colors.blueGrey,
               fontFamily: 'Cisco'),
-          home: customTopNavBar(Wrapper()),
+          home: customTopNavBar(const Wrapper()),
           builder: (context, child) {
             return Directionality(
                 textDirection:

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:barcode_image/barcode_image.dart';
 import 'package:bitpro_hive/shared/check_contain_arabic_letters.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pdf/pdf.dart';
@@ -115,7 +114,7 @@ void buildTagPrint({
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
+                                const SizedBox(
                                   height: 15,
                                 ),
                                 Text(
@@ -175,7 +174,7 @@ void buildTagPrint({
                                       width: 200,
                                       padding: const EdgeInsets.only(left: 8),
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
+                                          borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(6),
                                             bottomLeft: Radius.circular(6),
                                           ),
@@ -206,13 +205,11 @@ void buildTagPrint({
                                             );
                                           }).toList(),
                                           padding: EdgeInsets.zero,
-                                          icon: SizedBox(),
-                                          borderRadius: BorderRadius.only(
+                                          icon: const SizedBox(),
+                                          borderRadius: const BorderRadius.only(
                                               topLeft: Radius.circular(6),
                                               bottomLeft: Radius.circular(6)),
-                                          value: selectedPrinter == null
-                                              ? null
-                                              : selectedPrinter!.name,
+                                          value: selectedPrinter?.name,
                                           onChanged: (value) {
                                             selectedPrinter = p.firstWhere(
                                                 (element) =>
@@ -234,7 +231,7 @@ void buildTagPrint({
                                                   element.visitChildElements(
                                                       (element) {
                                                     Actions.invoke(element,
-                                                        ActivateIntent());
+                                                        const ActivateIntent());
                                                   });
                                                 }
                                               });
@@ -245,16 +242,16 @@ void buildTagPrint({
                                       child: Container(
                                           height: 37,
                                           width: 37,
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromARGB(
-                                                255, 43, 43, 43),
+                                          decoration: const BoxDecoration(
+                                            color:
+                                                Color.fromARGB(255, 43, 43, 43),
                                             borderRadius: BorderRadius.only(
                                                 topRight: Radius.circular(6),
                                                 bottomRight:
                                                     Radius.circular(6)),
                                           ),
                                           alignment: Alignment.center,
-                                          child: Icon(
+                                          child: const Icon(
                                               Icons.arrow_drop_down_rounded,
                                               color: Colors.white)),
                                     )

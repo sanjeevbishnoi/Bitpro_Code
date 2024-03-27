@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:bitpro_hive/model/department_data.dart';
 import 'package:bitpro_hive/model/store_data.dart';
@@ -11,12 +10,9 @@ import 'package:bitpro_hive/services/hive/hive_merchandise_db_service/inventory_
 import 'package:bitpro_hive/services/hive/hive_merchandise_db_service/vendors_db_service.dart';
 import 'package:bitpro_hive/services/hive/hive_settings/hive_store_db_service.dart';
 import 'package:bitpro_hive/widget/string_related/get_id_number.dart';
-import 'package:bitpro_hive/widget/string_related/get_random_string.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:hive/hive.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:bitpro_hive/home/merchandise/inventory/inventory_create_edit.dart';
 import 'package:bitpro_hive/model/inventory_data.dart';
@@ -27,11 +23,7 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:bitpro_hive/shared/global_variables/color.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../../model/vendor_data.dart';
-import '../../../services/hive/import_data_exel/inventory_datat_excel.dart';
-import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Row, Border;
 import '../../../shared/global_variables/font_sizes.dart';
-import '../../../shared/save_file_and_launch.dart';
-import 'package:excel/excel.dart' hide Border;
 import '../../../shared/global_variables/static_text_translate.dart';
 import '../../../widget/bitpro_logo_widget.dart';
 
@@ -142,41 +134,6 @@ class _SelectInventoryItemPageState extends State<SelectInventoryItemPage> {
       loading = false;
     });
   }
-  // fetchData() async {
-  //   inventoryDataLst =
-  //       await FbInventoryDbService(context: context).fetchAllInventoryData();
-  //   allVendorDataLst =
-  //       await FbVendorDbService(context: context).fetchAllVendorsData();
-
-  //   allDepartmentDataLst =
-  //       await FbDepartmentDbService(context: context).fetchAllDepartmentsData();
-  //   filteredInventoryDataLst = inventoryDataLst;
-  //   filteredInventoryDataLst
-  //       .sort((b, a) => a.createdDate.compareTo(b.createdDate));
-
-  //   inventoryDataSource = EmployeeDataSource(
-  //       inventoryData: inventoryDataLst,
-  //       selectedStoreDocId: selectedStoreDocId);
-
-  //   //stores data filter
-  //   allStoreDataLst =
-  //       await FbStoreDbService(context: context).fetchAllStoresData();
-
-  //   //getting default selected store
-  //   int selectedStoreCode = await HiveStoreDbService().getStoreCode();
-  //   int index = allStoreDataLst.indexWhere(
-  //       (element) => element.storeCode == selectedStoreCode.toString());
-
-  //   if (index != -1) {
-  //     selectedStoreDocId = allStoreDataLst.elementAt(index).docId;
-  //   } else {
-  //     selectedStoreDocId = allStoreDataLst.first.docId;
-  //   }
-
-  //   setState(() {
-  //     loading = false;
-  //   });
-  // }
 
   searchByBarcodeAndItemCode(String txt) {
     filteredInventoryDataLst = [];

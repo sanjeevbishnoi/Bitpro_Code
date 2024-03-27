@@ -14,23 +14,23 @@ Future<String?> showTendorAmountDialog(context,
       context: context,
       builder: (context) => StatefulBuilder(builder: (context2, setState2) {
             return Dialog(
-              child: Container(
+              child: SizedBox(
                 width: 350,
                 height: paymentMathodKey == PaymentMethodKey().cash ? 250 : 200,
                 child: Column(
                   children: [
                     if (paymentMathodKey == PaymentMethodKey().cash)
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       )
                     else
-                      Expanded(
+                      const Expanded(
                         child: SizedBox(
                           height: 10,
                         ),
                       ),
                     Padding(
-                      padding: EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(12),
                       child: BTextField(
                         autoFoucs: true,
                         label: 'Amount',
@@ -44,7 +44,7 @@ Future<String?> showTendorAmountDialog(context,
                         onChanged: (val) => setState2(() {}),
                       ),
                     ),
-                    Expanded(
+                    const Expanded(
                       child: SizedBox(
                         height: 10,
                       ),
@@ -94,15 +94,15 @@ Future<String?> showTendorAmountDialog(context,
                                   .toList()),
                         ),
                       ),
-                    Expanded(
+                    const Expanded(
                       child: SizedBox(
                         height: 10,
                       ),
                     ),
                     Container(
                       height: 60,
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
+                      padding: const EdgeInsets.all(12),
+                      decoration: const BoxDecoration(
                           color: Colors.grey,
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(5),
@@ -111,7 +111,7 @@ Future<String?> showTendorAmountDialog(context,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Tendor ' + paymentMathodKey,
+                            'Tendor $paymentMathodKey',
                             style: GoogleFonts.roboto(fontSize: 18),
                           ),
                           Container(

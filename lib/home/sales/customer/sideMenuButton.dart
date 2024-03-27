@@ -21,6 +21,7 @@ class SideMenuButton extends StatelessWidget {
         style: TextButton.styleFrom(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
+        onPressed: buttonFunction,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -34,10 +35,9 @@ class SideMenuButton extends StatelessWidget {
             Text(staticTextTranslate(label),
                 style: TextStyle(
                     fontSize: getMediumFontSize,
-                    color: Color.fromARGB(255, 255, 255, 255))),
+                    color: const Color.fromARGB(255, 255, 255, 255))),
           ],
         ),
-        onPressed: buttonFunction,
       ),
     );
   }

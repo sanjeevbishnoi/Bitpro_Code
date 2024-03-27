@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/model/department_data.dart';
 import 'package:bitpro_hive/model/store_data.dart';
@@ -23,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:bitpro_hive/home/merchandise/inventory/inventory_create_edit.dart';
 import 'package:bitpro_hive/model/inventory_data.dart';
@@ -241,7 +239,7 @@ class _InventoryPageState extends State<InventoryPage> {
         body: SafeArea(
           child: Column(
             children: [
-              TopBar(pageName: 'Inventory'),
+              const TopBar(pageName: 'Inventory'),
               Expanded(
                 child: Container(
                   color: homeBgColor,
@@ -980,7 +978,6 @@ class _InventoryPageState extends State<InventoryPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                
                 Flexible(
                     child: Container(
                         height: 30,
@@ -1616,7 +1613,6 @@ class _InventoryPageState extends State<InventoryPage> {
                                                         inventoryDataLst,
                                                         allVendorDataLst,
                                                         allDepartmentDataLst);
-                                                print(uploadRes);
                                               }
                                               setState(() {
                                                 dialogLoading = false;

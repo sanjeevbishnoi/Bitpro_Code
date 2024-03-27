@@ -2,7 +2,6 @@ import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/model/store_data.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_settings/fb_store_db_service.dart';
 import 'package:bitpro_hive/services/firestore_api/firebase_db_service.dart';
-import 'package:bitpro_hive/services/hive/hive_settings/hive_store_db_service.dart';
 import 'package:bitpro_hive/widget/bTextField.dart';
 import 'package:bitpro_hive/widget/onpage_button.dart';
 import 'package:bitpro_hive/widget/onpage_panel.dart';
@@ -134,7 +133,7 @@ class _AddEditStoreState extends State<AddEditStore> {
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   BTextField(
@@ -154,7 +153,7 @@ class _AddEditStoreState extends State<AddEditStore> {
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   BTextField(
@@ -174,7 +173,7 @@ class _AddEditStoreState extends State<AddEditStore> {
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   BTextField(
@@ -187,7 +186,7 @@ class _AddEditStoreState extends State<AddEditStore> {
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   BTextField(
@@ -200,7 +199,7 @@ class _AddEditStoreState extends State<AddEditStore> {
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   BTextField(
@@ -213,7 +212,7 @@ class _AddEditStoreState extends State<AddEditStore> {
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   BTextField(
@@ -226,7 +225,7 @@ class _AddEditStoreState extends State<AddEditStore> {
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   BTextField(
@@ -239,7 +238,7 @@ class _AddEditStoreState extends State<AddEditStore> {
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   BTextField(
@@ -252,7 +251,7 @@ class _AddEditStoreState extends State<AddEditStore> {
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   BTextField(
@@ -265,7 +264,7 @@ class _AddEditStoreState extends State<AddEditStore> {
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   BTextField(
@@ -278,7 +277,7 @@ class _AddEditStoreState extends State<AddEditStore> {
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   BTextField(
@@ -293,88 +292,6 @@ class _AddEditStoreState extends State<AddEditStore> {
                                   ),
                                 ]))),
                   ),
-                  // Align(
-                  //   alignment: Alignment.bottomCenter,
-                  //   child: Container(
-                  //     height: 62,
-                  //     width: double.maxFinite,
-                  //     color: const Color(0xffdddfe8),
-                  //     child: Row(
-                  //       mainAxisAlignment: MainAxisAlignment.end,
-                  //       children: [
-                  //         const SizedBox(
-                  //           width: 10,
-                  //         ),
-                  //         SizedBox(
-                  //           height: 42,
-                  //           width: 173,
-                  //           child: ElevatedButton(
-                  //               style: ElevatedButton.styleFrom(
-                  //                   backgroundColor: Colors.white,
-                  //                   shape: RoundedRectangleBorder(
-                  //                       borderRadius:
-                  //                           BorderRadius.circular(4))),
-                  //               onPressed: () {
-                  //                 showDiscardChangesDialog(context);
-                  //               },
-                  //               child: Row(
-                  //                 mainAxisAlignment: MainAxisAlignment.center,
-                  //                 children: [
-                  //                   Image.asset(
-                  //                     'assets/icons/cross-circle.png',
-                  //                     height: 18,
-                  //                   ),
-                  //                   const SizedBox(
-                  //                     width: 10,
-                  //                   ),
-                  //                   Text(
-                  //                     staticTextTranslate('Cancel'),
-                  //                     style: TextStyle(
-                  //                         fontSize: getMediumFontSize,
-                  //                         color: Colors.black),
-                  //                   ),
-                  //                 ],
-                  //               )),
-                  //         ),
-                  //         const SizedBox(
-                  //           width: 10,
-                  //         ),
-                  //         SizedBox(
-                  //           height: 42,
-                  //           width: 173,
-                  //           child: ElevatedButton(
-                  //               style: ElevatedButton.styleFrom(
-                  //                   backgroundColor: darkBlueColor,
-                  //                   shape: RoundedRectangleBorder(
-                  //                       borderRadius:
-                  //                           BorderRadius.circular(4))),
-                  //               onPressed: () async {
-                  //
-                  //               },
-                  //               child: Row(
-                  //                 mainAxisAlignment: MainAxisAlignment.center,
-                  //                 children: [
-                  //                   const Icon(
-                  //                     Iconsax.archive,
-                  //                     size: 20,
-                  //                   ),
-                  //                   const SizedBox(
-                  //                     width: 10,
-                  //                   ),
-                  //                   Text(staticTextTranslate('Save'),
-                  //                       style: TextStyle(
-                  //                         fontSize: getMediumFontSize,
-                  //                       )),
-                  //                 ],
-                  //               )),
-                  //         ),
-                  //         const SizedBox(
-                  //           width: 10,
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // )
                 ],
               )),
         ),

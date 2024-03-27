@@ -1,4 +1,3 @@
-import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_merchandise/fb_department_db_service.dart';
 import 'package:bitpro_hive/services/hive/hive_merchandise_db_service/department_db_service.dart';
@@ -9,7 +8,6 @@ import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:bitpro_hive/home/merchandise/department/department_create.dart';
 import 'package:bitpro_hive/model/department_data.dart';
@@ -565,11 +563,10 @@ class DepartmentDataSource extends DataGridSource {
             padding: const EdgeInsets.all(1.0),
             child: Text(
               e.value.toString(),
-               style: GoogleFonts.roboto(
+              style: GoogleFonts.roboto(
                   fontSize: getMediumFontSize + 1,
-                  color:  Colors.black,
+                  color: Colors.black,
                   fontWeight: FontWeight.w400),
-
             ),
           );
         }).toList());

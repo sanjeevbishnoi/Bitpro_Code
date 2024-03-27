@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 class BTextField extends StatelessWidget {
   final String label;
-  
   final double bradius;
   final String? initialValue;
   final Function(String input) onChanged;
@@ -14,13 +13,10 @@ class BTextField extends StatelessWidget {
   final double fieldWidth;
   final AutovalidateMode autovalidateMode;
   final int textFieldHeight;
-  // final double boxHeigt;
   final bool textFieldReadOnly;
   final TextEditingController? controller;
   final WidgetBuilder? noItemsBuilder;
-  // final bool enabled;
   final bool autoFoucs;
-
   final bool obscureText;
   const BTextField({
     super.key,
@@ -30,11 +26,9 @@ class BTextField extends StatelessWidget {
     this.validator,
     this.autovalidate = false,
     this.autoFoucs = false,
-    // this.enabled = true,
     this.fieldWidth = 240,
     this.autovalidateMode = AutovalidateMode.disabled,
     this.textFieldHeight = 1,
-    // this.boxHeigt = 35,
     this.textFieldReadOnly = false,
     this.obscureText = false,
     this.controller,
@@ -58,12 +52,10 @@ class BTextField extends StatelessWidget {
           ),
         ),
         SizedBox(
-          // height: boxHeigt,
           width: fieldWidth,
           child: TextFormField(
             autofocus: autoFoucs,
             obscureText: obscureText,
-            // enabled: enabled,
             controller: controller,
             readOnly: textFieldReadOnly,
             autovalidateMode: autovalidateMode,
@@ -74,33 +66,31 @@ class BTextField extends StatelessWidget {
               fontSize: getMediumFontSize + 2,
             ),
             validator: validator,
-            decoration:  InputDecoration(
-                fillColor: Colors.white,
-                filled: true,
-                isDense: true,
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10, horizontal: 5, ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 0.3),
-                  
-                    borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(bradius),
-                        topRight: Radius.circular(bradius),
-                        bottomLeft: Radius.circular(4),
-                        topLeft: Radius.circular(4)
-                        ),
-                        ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(width: 0.3),
-                  
-                    borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(bradius),
-                        topRight: Radius.circular(bradius),
-                        bottomLeft: Radius.circular(4),
-                        topLeft: Radius.circular(4)
-                        ),
-                        ),
-                        ),
+            decoration: InputDecoration(
+              fillColor: Colors.white,
+              filled: true,
+              isDense: true,
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 10,
+                horizontal: 5,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(width: 0.3),
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(bradius),
+                    topRight: Radius.circular(bradius),
+                    bottomLeft: const Radius.circular(4),
+                    topLeft: const Radius.circular(4)),
+              ),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(width: 0.3),
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(bradius),
+                    topRight: Radius.circular(bradius),
+                    bottomLeft: const Radius.circular(4),
+                    topLeft: const Radius.circular(4)),
+              ),
+            ),
             onChanged: onChanged,
           ),
         )

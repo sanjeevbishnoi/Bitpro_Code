@@ -6,7 +6,6 @@ import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:bitpro_hive/home/employess/user_groups/create_edit_user_groups_page.dart';
 import 'package:bitpro_hive/model/user_data.dart';
@@ -347,9 +346,10 @@ class _UserGroupPageState extends State<UserGroupPage> {
                                                   alignment: Alignment.center,
                                                   child: Text(
                                                     'serialNumberForStyleColor',
-                                                     style: GoogleFonts.roboto(
-                fontSize: getMediumFontSize + 1,
-              ),
+                                                    style: GoogleFonts.roboto(
+                                                      fontSize:
+                                                          getMediumFontSize + 1,
+                                                    ),
                                                   ))),
                                           GridColumn(
                                               columnName: staticTextTranslate(
@@ -359,11 +359,13 @@ class _UserGroupPageState extends State<UserGroupPage> {
                                                       const EdgeInsets.all(3.0),
                                                   alignment: Alignment.center,
                                                   child: Text(
-                                                      staticTextTranslate(
-                                                          'Group Name'),
-                                                       style: GoogleFonts.roboto(
-                fontSize: getMediumFontSize + 1,
-              ),))),
+                                                    staticTextTranslate(
+                                                        'Group Name'),
+                                                    style: GoogleFonts.roboto(
+                                                      fontSize:
+                                                          getMediumFontSize + 1,
+                                                    ),
+                                                  ))),
                                           GridColumn(
                                               columnName: staticTextTranslate(
                                                   'Group Description'),
@@ -372,11 +374,13 @@ class _UserGroupPageState extends State<UserGroupPage> {
                                                       const EdgeInsets.all(3.0),
                                                   alignment: Alignment.center,
                                                   child: Text(
-                                                      staticTextTranslate(
-                                                          'Group Description'),
-                                                       style: GoogleFonts.roboto(
-                fontSize: getMediumFontSize + 1,
-              ),))),
+                                                    staticTextTranslate(
+                                                        'Group Description'),
+                                                    style: GoogleFonts.roboto(
+                                                      fontSize:
+                                                          getMediumFontSize + 1,
+                                                    ),
+                                                  ))),
                                           GridColumn(
                                               columnName: staticTextTranslate(
                                                   'Created Date'),
@@ -385,11 +389,13 @@ class _UserGroupPageState extends State<UserGroupPage> {
                                                       const EdgeInsets.all(3.0),
                                                   alignment: Alignment.center,
                                                   child: Text(
-                                                      staticTextTranslate(
-                                                          'Created Date'),
-                                                      style: GoogleFonts.roboto(
-                fontSize: getMediumFontSize + 1,
-              ),))),
+                                                    staticTextTranslate(
+                                                        'Created Date'),
+                                                    style: GoogleFonts.roboto(
+                                                      fontSize:
+                                                          getMediumFontSize + 1,
+                                                    ),
+                                                  ))),
                                           GridColumn(
                                               columnName: staticTextTranslate(
                                                   'Created by'),
@@ -398,11 +404,13 @@ class _UserGroupPageState extends State<UserGroupPage> {
                                                       const EdgeInsets.all(3.0),
                                                   alignment: Alignment.center,
                                                   child: Text(
-                                                      staticTextTranslate(
-                                                          'Created by'),
-                                                       style: GoogleFonts.roboto(
-                fontSize: getMediumFontSize + 1,
-              ),))),
+                                                    staticTextTranslate(
+                                                        'Created by'),
+                                                    style: GoogleFonts.roboto(
+                                                      fontSize:
+                                                          getMediumFontSize + 1,
+                                                    ),
+                                                  ))),
                                         ],
                                       ),
                                     ),

@@ -29,13 +29,13 @@ taxReportPage(
       pageFormat: PdfPageFormat.a4.landscape,
       margin: const pw.EdgeInsets.all(10),
       footer: (c) {
-          return pw.Row(children: [
-            pw.Expanded(child: pw.SizedBox(width: 5)),
-            pw.Text('Page ${c.pageNumber} of ${c.pagesCount}',
-                style: pw.TextStyle( fontSize: 9)),
-            pw.SizedBox(width: 20)
-          ]);
-        },
+        return pw.Row(children: [
+          pw.Expanded(child: pw.SizedBox(width: 5)),
+          pw.Text('Page ${c.pageNumber} of ${c.pagesCount}',
+              style: const pw.TextStyle(fontSize: 9)),
+          pw.SizedBox(width: 20)
+        ]);
+      },
       build: (pw.Context context) {
         return [
           pw.Container(
@@ -371,32 +371,32 @@ taxReportPage(
                                     ],
                                   )),
                               pw.Container(
-                                  height: 40,
-                                  // child: pw.Column(
-                                  //   mainAxisAlignment:
-                                  //       pw.MainAxisAlignment.center,
-                                  //   crossAxisAlignment:
-                                  //       pw.CrossAxisAlignment.start,
-                                  //   children: [
-                                  //     pw.Text(
-                                  //       'الضريبة %',
-                                  //       textDirection: pw.TextDirection.rtl,
-                                  //       style: pw.TextStyle(
-                                  //           fontSize: ArabicPrintFonts()
-                                  //               .extraSmallFontSize,
-                                  //           font: arabicNormalFont),
-                                  //     ),
-                                  //     pw.SizedBox(
-                                  //       height: 1,
-                                  //     ),
-                                  //     pw.Text('Vat %',
-                                  //         style: pw.TextStyle(
-                                  //           fontSize: EnglishPrintFonts()
-                                  //               .extraSmallFontSize,
-                                  //         ))
-                                  //   ],
-                                  // )
-                                  ),
+                                height: 40,
+                                // child: pw.Column(
+                                //   mainAxisAlignment:
+                                //       pw.MainAxisAlignment.center,
+                                //   crossAxisAlignment:
+                                //       pw.CrossAxisAlignment.start,
+                                //   children: [
+                                //     pw.Text(
+                                //       'الضريبة %',
+                                //       textDirection: pw.TextDirection.rtl,
+                                //       style: pw.TextStyle(
+                                //           fontSize: ArabicPrintFonts()
+                                //               .extraSmallFontSize,
+                                //           font: arabicNormalFont),
+                                //     ),
+                                //     pw.SizedBox(
+                                //       height: 1,
+                                //     ),
+                                //     pw.Text('Vat %',
+                                //         style: pw.TextStyle(
+                                //           fontSize: EnglishPrintFonts()
+                                //               .extraSmallFontSize,
+                                //         ))
+                                //   ],
+                                // )
+                              ),
                               pw.Container(
                                   height: 40,
                                   child: pw.Column(
@@ -463,22 +463,22 @@ taxReportPage(
                                     ],
                                   )),
                               pw.Container(
-                                  height: 30,
-                                  // child:
-                                  //  pw.Column(
-                                  //   mainAxisAlignment:
-                                  //       pw.MainAxisAlignment.center,
-                                  //   crossAxisAlignment:
-                                  //       pw.CrossAxisAlignment.start,
-                                  //   children: [
-                                  //     pw.Text('$taxPer%',
-                                  //         style: pw.TextStyle(
-                                  //           fontSize: EnglishPrintFonts()
-                                  //               .extraSmallFontSize,
-                                  //         ))
-                                  //   ],
-                                  // )
-                                  ),
+                                height: 30,
+                                // child:
+                                //  pw.Column(
+                                //   mainAxisAlignment:
+                                //       pw.MainAxisAlignment.center,
+                                //   crossAxisAlignment:
+                                //       pw.CrossAxisAlignment.start,
+                                //   children: [
+                                //     pw.Text('$taxPer%',
+                                //         style: pw.TextStyle(
+                                //           fontSize: EnglishPrintFonts()
+                                //               .extraSmallFontSize,
+                                //         ))
+                                //   ],
+                                // )
+                              ),
                               pw.Container(
                                   height: 30,
                                   child: pw.Column(

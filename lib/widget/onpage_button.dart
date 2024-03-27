@@ -1,7 +1,6 @@
 import 'package:bitpro_hive/shared/global_variables/font_sizes.dart';
 import 'package:bitpro_hive/shared/global_variables/static_text_translate.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
 class OnPageButton extends StatelessWidget {
   final Function() onPressed;
@@ -38,7 +37,7 @@ class OnPageButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-               Icon(
+              Icon(
                 icon,
                 size: 20,
               ),

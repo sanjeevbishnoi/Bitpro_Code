@@ -1,5 +1,3 @@
-import 'package:bitpro_hive/services/firestore_api/fb_sales/fb_receipt_db_service.dart';
-import 'package:bitpro_hive/wrapper.dart';
 import 'package:hive/hive.dart';
 import 'package:bitpro_hive/model/inventory_data.dart';
 import 'package:bitpro_hive/model/receipt/db_receipt_data.dart';
@@ -23,8 +21,6 @@ class HiveReceiptDbService {
         int newOhQty = dbReceiptData.receiptType == 'Regular'
             ? oldOhQty - int.parse(v['qty'])
             : oldOhQty + int.parse(v['qty']);
-        print('newOhQty $newOhQty');
-        print('oldOhQty $oldOhQty');
 
         //updating oh quantity
         inventoryData

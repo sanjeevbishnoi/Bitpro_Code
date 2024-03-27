@@ -1,8 +1,6 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/model/department_data.dart';
-import 'package:bitpro_hive/model/store_data.dart';
 import 'package:bitpro_hive/model/vendor_data.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_merchandise/fb_department_db_service.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_merchandise/fb_inventory_db_service.dart';
@@ -65,8 +63,9 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
   bool loading = true;
   File? productImage;
   final GlobalKey _menuKey = GlobalKey();
-  TextEditingController _vendorTypeAheadController = TextEditingController();
-  TextEditingController _departmenttypeAheadController =
+  final TextEditingController _vendorTypeAheadController =
+      TextEditingController();
+  final TextEditingController _departmenttypeAheadController =
       TextEditingController();
   TextEditingController marginController = TextEditingController(text: '0');
   TextEditingController priceWtController = TextEditingController(text: '0');
@@ -174,7 +173,7 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
         backgroundColor: homeBgColor,
         body: SafeArea(
             child: Column(children: [
-          TopBar(pageName: 'Inventory'),
+          const TopBar(pageName: 'Inventory'),
           Expanded(
               child: Row(children: [
             Container(
@@ -205,7 +204,7 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                       child: Row(
                         children: [
                           OnPagePanel(
-                            widht: 750,
+                              widht: 750,
                               imagePickerWidget: imagePickerWidget(),
                               columnForTextField: Column(
                                 children: [
@@ -218,7 +217,8 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                         return staticTextTranslate(
                                             'Enter item code');
                                       } else if ((widget.edit &&
-                                              widget.selectedRowData!.itemCode !=
+                                              widget.selectedRowData!
+                                                      .itemCode !=
                                                   value) ||
                                           !widget.edit) {
                                         if (widget.inventoryDataLst
@@ -258,8 +258,8 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                             }
                                             englishProductName = val;
                                           }),
-                                          autovalidateMode:
-                                              AutovalidateMode.onUserInteraction,
+                                          autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
                                         ),
                                       ),
                                       Container(
@@ -267,7 +267,8 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                         height: 35,
                                         decoration: BoxDecoration(
                                             color: cColor,
-                                            borderRadius: const BorderRadius.only(
+                                            borderRadius:
+                                                const BorderRadius.only(
                                               topRight: Radius.circular(4),
                                               bottomRight: Radius.circular(4),
                                             )),
@@ -278,16 +279,18 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                       )
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.only(top: 8.0),
+                                          padding:
+                                              const EdgeInsets.only(top: 8.0),
                                           child: Text(
                                             staticTextTranslate('Vendor'),
                                             style: GoogleFonts.roboto(
@@ -312,7 +315,8 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                                   fillColor: Colors.white,
                                                   filled: true,
                                                   contentPadding:
-                                                      const EdgeInsets.symmetric(
+                                                      const EdgeInsets
+                                                          .symmetric(
                                                           vertical: 10,
                                                           horizontal: 5),
                                                   hintStyle: TextStyle(
@@ -322,7 +326,8 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                             ),
                                             noItemsFoundBuilder: (context) {
                                               return Padding(
-                                                padding: const EdgeInsets.all(5.0),
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
                                                 child: Text(
                                                     staticTextTranslate(
                                                         'No Items Found!'),
@@ -344,17 +349,19 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                               return allVendorDataLst
                                                   .where((e) => e.vendorName
                                                       .toLowerCase()
-                                                      .contains(
-                                                          pattern.toLowerCase()))
+                                                      .contains(pattern
+                                                          .toLowerCase()))
                                                   .toList();
                                             },
-                                            itemBuilder:
-                                                (context, VendorData suggestion) {
+                                            itemBuilder: (context,
+                                                VendorData suggestion) {
                                               return ListTile(
-                                                title: Text(suggestion.vendorName,
-                                                    style: TextStyle(
-                                                      fontSize: getMediumFontSize,
-                                                    )),
+                                                title:
+                                                    Text(suggestion.vendorName,
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              getMediumFontSize,
+                                                        )),
                                                 subtitle: Text(
                                                     'Vendor Code: ${suggestion.vendorId}'),
                                               );
@@ -367,7 +374,7 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                                 (VendorData suggestion) {
                                               _vendorTypeAheadController.text =
                                                   suggestion.vendorName;
-                          
+
                                               setState(() {
                                                 selectedVendorId =
                                                     suggestion.vendorId;
@@ -376,17 +383,18 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                           ),
                                         )
                                       ]),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
-                                  
                                   Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.only(top: 8.0),
+                                          padding:
+                                              const EdgeInsets.only(top: 8.0),
                                           child: Text(
                                             staticTextTranslate('Department'),
                                             style: GoogleFonts.roboto(
@@ -408,12 +416,14 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                             },
                                             noItemsFoundBuilder: (context) {
                                               return Padding(
-                                                padding: const EdgeInsets.all(10.0),
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
                                                 child: Text(
                                                     staticTextTranslate(
                                                         'No Items Found!'),
                                                     style: TextStyle(
-                                                      fontSize: getMediumFontSize,
+                                                      fontSize:
+                                                          getMediumFontSize,
                                                     )),
                                               );
                                             },
@@ -429,7 +439,8 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                                   fillColor: Colors.white,
                                                   filled: true,
                                                   contentPadding:
-                                                      const EdgeInsets.symmetric(
+                                                      const EdgeInsets
+                                                          .symmetric(
                                                           vertical: 10,
                                                           horizontal: 5),
                                                   hintStyle: TextStyle(
@@ -441,8 +452,8 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                               return allDepartmentDataLst
                                                   .where((e) => e.departmentName
                                                       .toLowerCase()
-                                                      .contains(
-                                                          pattern.toLowerCase()))
+                                                      .contains(pattern
+                                                          .toLowerCase()))
                                                   .toList();
                                             },
                                             itemBuilder: (context,
@@ -451,7 +462,8 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                                 title: Text(
                                                     suggestion.departmentName,
                                                     style: TextStyle(
-                                                      fontSize: getMediumFontSize,
+                                                      fontSize:
+                                                          getMediumFontSize,
                                                     )),
                                               );
                                             },
@@ -461,7 +473,8 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                             },
                                             onSuggestionSelected:
                                                 (DepartmentData suggestion) {
-                                              _departmenttypeAheadController.text =
+                                              _departmenttypeAheadController
+                                                      .text =
                                                   suggestion.departmentName;
                                               setState(() {
                                                 selectedDepartmentId =
@@ -471,10 +484,9 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                           ),
                                         )
                                       ]),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
-                                  
                                   BTextField(
                                     textFieldReadOnly: false,
                                     label: 'Description',
@@ -485,7 +497,7 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   BTextField(
@@ -506,7 +518,7 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   BTextField(
@@ -522,12 +534,13 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                     },
                                     onChanged: (val) => setState(() {
                                       marginController.text = calculateMargin();
-                                      priceWtController.text = calculatePriceWt();
+                                      priceWtController.text =
+                                          calculatePriceWt();
                                     }),
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   BTextField(
@@ -541,7 +554,7 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   BTextField(
@@ -559,12 +572,11 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                     controller: priceWtController,
                                     onChanged: (val) => setState(() {
                                       priceController.text = calculatePrice();
-                          
+
                                       marginController.text = calculateMargin();
                                     }),
-                                    
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   BTextField(
@@ -577,7 +589,7 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   SizedBox(
@@ -587,9 +599,12 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                                           activeColor: darkBlueColor,
                                           value: productPriceCanChange,
                                           onChanged: (newValue) => setState(
-                                              () => productPriceCanChange = newValue),
+                                              () => productPriceCanChange =
+                                                  newValue),
                                         ),
-                                        Text(staticTextTranslate('Price can change'),
+                                        Text(
+                                            staticTextTranslate(
+                                                'Price can change'),
                                             style: TextStyle(
                                               fontSize: getMediumFontSize,
                                             ))
@@ -697,7 +712,6 @@ class _CreateEditInventoryPageState extends State<CreateEditInventoryPage> {
                           }),
                     ],
                   ),
-                 
                   const SizedBox(
                     height: 0,
                   ),

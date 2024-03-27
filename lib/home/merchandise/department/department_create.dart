@@ -14,7 +14,6 @@ import 'package:bitpro_hive/model/user_data.dart';
 import 'package:bitpro_hive/shared/loading.dart';
 import '../../../shared/custom_top_nav_bar.dart';
 import '../../../shared/dialogs/discard_changes_dialog.dart';
-import '../../../shared/global_variables/font_sizes.dart';
 import '../../../shared/global_variables/static_text_translate.dart';
 
 class DepartmentCreatePage extends StatefulWidget {
@@ -69,7 +68,7 @@ class _DepartmentCreatePageState extends State<DepartmentCreatePage> {
               key: formKey,
               child: Column(
                 children: [
-                  TopBar(pageName: 'Department'),
+                  const TopBar(pageName: 'Department'),
                   Expanded(
                     child: Row(
                       children: [
@@ -137,7 +136,7 @@ class _DepartmentCreatePageState extends State<DepartmentCreatePage> {
                                                   .onUserInteraction,
                                               onChanged: (val) {},
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                             Row(
@@ -195,7 +194,7 @@ class _DepartmentCreatePageState extends State<DepartmentCreatePage> {
                                                       context);
                                                 },
                                                 icon: Iconsax.redo),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 10,
                                             ),
                                             OnPageButton(

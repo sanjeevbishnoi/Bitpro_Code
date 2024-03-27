@@ -3,8 +3,7 @@ import 'dart:typed_data';
 import 'package:barcode_image/barcode_image.dart';
 import 'package:bitpro_hive/model/store_data.dart';
 import 'package:bitpro_hive/services/hive/hive_settings/hive_store_db_service.dart';
-import 'package:bitpro_hive/shared/templates/receipt_templates/ecs_pos_printer.dart';
-import 'package:bitpro_hive/shared/templates/receipt_templates/usb_printer.dart';
+
 import 'package:hive/hive.dart';
 import 'package:bitpro_hive/model/receipt/db_receipt_data.dart';
 import 'package:bitpro_hive/model/user_data.dart';
@@ -27,16 +26,8 @@ Future<void> printReceipt(
     DbReceiptData dbReceiptData,
     String taxValue,
     CustomerData? selectedCustomerData,
-    // Printer printer,
     String tenderAmount,
     String changeAmount) async {
-  //   await Printing.layoutPdf(
-  // onLayout: (PdfPageFormat format) async => await Printing.convertHtml(
-  //       format: format,
-  //       html: '<html><body><p>Hello!</p></body></html>',
-  //     ));
-
-  // return ;
   var box = Hive.box('bitpro_app');
   List<Printer> p = await Printing.listPrinters();
 

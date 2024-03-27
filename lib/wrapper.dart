@@ -1,7 +1,6 @@
 import 'package:bitpro_hive/firebase_backend_setup/firebase_backend_setup.dart';
 import 'package:bitpro_hive/firebase_backend_setup/workstation_setup.dart';
 import 'package:bitpro_hive/home/license_module/license_module.dart';
-import 'package:bitpro_hive/shared/constant_data.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:bitpro_hive/auth/login_page.dart';

@@ -3,9 +3,7 @@ import 'package:bitpro_hive/shared/global_variables/color.dart';
 import 'package:bitpro_hive/shared/global_variables/font_sizes.dart';
 import 'package:bitpro_hive/shared/global_variables/static_text_translate.dart';
 import 'package:bitpro_hive/shared/loading.dart';
-import 'package:bitpro_hive/widget/onpage_button.dart';
 import 'package:bitpro_hive/widget/onpage_panel.dart';
-import 'package:bitpro_hive/wrapper.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,7 +49,7 @@ class _FirebaseBackendSetupPageState extends State<FirebaseBackendSetupPage> {
         body: isLoading
             ? showLoading()
             : SafeArea(
-                child: Container(
+                child: SizedBox(
                     height: 400,
                     child: Center(
                       child: SizedBox(
@@ -71,9 +69,8 @@ class _FirebaseBackendSetupPageState extends State<FirebaseBackendSetupPage> {
                                             borderSide: BorderSide(
                                                 color: Color.fromARGB(
                                                     255, 13, 82, 139))),
-                                        contentPadding:
-                                            EdgeInsets.symmetric(
-                                                vertical: 5, horizontal: 8),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 5, horizontal: 8),
                                         fillColor: Colors.white,
                                         filled: true,
                                         alignLabelWithHint: true,
@@ -117,9 +114,8 @@ class _FirebaseBackendSetupPageState extends State<FirebaseBackendSetupPage> {
                                             borderSide: BorderSide(
                                                 color: Color.fromARGB(
                                                     255, 13, 82, 139))),
-                                        contentPadding:
-                                            EdgeInsets.symmetric(
-                                                vertical: 5, horizontal: 8),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 5, horizontal: 8),
                                         fillColor: Colors.white,
                                         filled: true,
                                         alignLabelWithHint: true,
@@ -160,9 +156,8 @@ class _FirebaseBackendSetupPageState extends State<FirebaseBackendSetupPage> {
                                             borderSide: BorderSide(
                                                 color: Color.fromARGB(
                                                     255, 13, 82, 139))),
-                                        contentPadding:
-                                            EdgeInsets.symmetric(
-                                                vertical: 5, horizontal: 8),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 5, horizontal: 8),
                                         fillColor: Colors.white,
                                         filled: true,
                                         alignLabelWithHint: true,
@@ -195,22 +190,22 @@ class _FirebaseBackendSetupPageState extends State<FirebaseBackendSetupPage> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                SizedBox(height: 5,),
+                                const SizedBox(
+                                  height: 5,
+                                ),
                                 Text(
-                                        errMsg,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.red.shade800,
-                                            fontSize: 16),
-                                      )
+                                  errMsg,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.red.shade800, fontSize: 16),
+                                )
                               ],
                             ),
                             rowForButton: Row(
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(4),
+                                      borderRadius: BorderRadius.circular(4),
                                       gradient: const LinearGradient(
                                           end: Alignment.bottomCenter,
                                           colors: [
@@ -221,9 +216,9 @@ class _FirebaseBackendSetupPageState extends State<FirebaseBackendSetupPage> {
                                   height: 45,
                                   width: 163,
                                   child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.transparent,
-                                    ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                      ),
                                       onPressed: () async {
                                         if (widget.isMergeDatabase ||
                                             widget.isChangeDatabase) {
@@ -233,9 +228,9 @@ class _FirebaseBackendSetupPageState extends State<FirebaseBackendSetupPage> {
                                             isLoading = true;
                                           });
                                           var box = Hive.box('bitpro_app');
-                        
-                                          await box.put(
-                                              'firebase_backend_data', {
+
+                                          await box
+                                              .put('firebase_backend_data', {
                                             'setupSkipped': true,
                                             'workstationSetupDone': false,
                                             'projectId': projectId,
@@ -254,10 +249,8 @@ class _FirebaseBackendSetupPageState extends State<FirebaseBackendSetupPage> {
                                           Icon(
                                             widget.isMergeDatabase ||
                                                     widget.isChangeDatabase
-                                                ? Icons
-                                                    .navigate_before_outlined
-                                                : Icons
-                                                    .navigate_next_outlined,
+                                                ? Icons.navigate_before_outlined
+                                                : Icons.navigate_next_outlined,
                                             color: Colors.white,
                                           ),
                                           const SizedBox(
@@ -266,8 +259,7 @@ class _FirebaseBackendSetupPageState extends State<FirebaseBackendSetupPage> {
                                           Text(
                                               staticTextTranslate(widget
                                                           .isMergeDatabase ||
-                                                      widget
-                                                          .isChangeDatabase
+                                                      widget.isChangeDatabase
                                                   ? 'Back'
                                                   : 'Skip'),
                                               style: TextStyle(
@@ -281,8 +273,7 @@ class _FirebaseBackendSetupPageState extends State<FirebaseBackendSetupPage> {
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(4),
+                                      borderRadius: BorderRadius.circular(4),
                                       gradient: const LinearGradient(
                                           end: Alignment.bottomCenter,
                                           colors: [
@@ -299,7 +290,7 @@ class _FirebaseBackendSetupPageState extends State<FirebaseBackendSetupPage> {
                                           showProjectIdError = true;
                                           canCallApi = false;
                                         }
-                        
+
                                         if (apiKey.isEmpty) {
                                           showApiKeyError = true;
                                           canCallApi = false;
@@ -308,7 +299,7 @@ class _FirebaseBackendSetupPageState extends State<FirebaseBackendSetupPage> {
                                           showDatabaseError = true;
                                           canCallApi = false;
                                         }
-                        
+
                                         if (canCallApi) {
                                           setState(() {
                                             isLoading = true;

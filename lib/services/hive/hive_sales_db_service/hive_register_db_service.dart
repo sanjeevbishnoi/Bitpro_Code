@@ -1,10 +1,8 @@
 import 'package:bitpro_hive/services/firestore_api/fb_sales/fb_receipt_db_service.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-
 import 'package:bitpro_hive/model/receipt/db_receipt_data.dart';
 import 'package:bitpro_hive/model/user_data.dart';
-import 'package:bitpro_hive/services/firestore_api/fb_sales/fb_register_db_serivce.dart';
 
 class HiveRegisterDbService {
   final BuildContext context;

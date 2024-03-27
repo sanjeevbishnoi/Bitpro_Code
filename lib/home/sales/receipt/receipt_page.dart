@@ -1,4 +1,3 @@
-import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:bitpro_hive/home/sales/customer/sideMenuButton.dart';
 import 'package:bitpro_hive/model/store_data.dart';
 import 'package:bitpro_hive/services/firestore_api/fb_sales/fb_customer_db_service.dart';
@@ -15,7 +14,6 @@ import 'package:bitpro_hive/widget/top_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:bitpro_hive/home/sales/receipt/receipt_create_edit_page.dart';
 import 'package:bitpro_hive/model/customer_data.dart';
@@ -65,7 +63,6 @@ class _ReceiptPageState extends State<ReceiptPage> {
   }
 
   commonInit() async {
-    print('comment ${dbReceiptDataLst.length}');
     dbReceiptDataLst.sort((b, a) => a.createdDate.compareTo(b.createdDate));
     //getting default selected store
     int selectedStoreCode = await HiveStoreDbService().getSelectedStoreCode();
@@ -291,7 +288,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                                 } else {
                                   String newReceiptId = await getIdNumber(
                                       dbReceiptDataLst.length + 1);
-                                  print(newReceiptId);
+
                                   bool? res = await Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -852,14 +849,14 @@ class _ReceiptPageState extends State<ReceiptPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            
             Flexible(
                 child: Container(
                     height: 30,
                     decoration: BoxDecoration(
                         color: const Color.fromARGB(255, 255, 255, 255),
                         borderRadius: BorderRadius.circular(8)),
-                    padding: const EdgeInsets.only(right: 3, left: 5, top: 5, bottom: 5),
+                    padding: const EdgeInsets.only(
+                        right: 3, left: 5, top: 5, bottom: 5),
                     child: DropdownButton<String>(
                       isExpanded: true,
                       value: selectedStoreDocId,
@@ -896,11 +893,6 @@ class _ReceiptPageState extends State<ReceiptPage> {
                         if (val != null) {
                           selectedStoreDocId = val;
 
-                          print(val);
-
-                          print(dbReceiptDataLst
-                              .map((element) => element.selectedStoreDocId)
-                              .toList());
                           customerDataSource = CustomerDataSource(
                               customerDataLst: customerDataLst,
                               dbReceiptData: val == 'All'
